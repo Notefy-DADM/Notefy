@@ -6,6 +6,7 @@ import android.location.Location;
 import androidx.annotation.ColorInt;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Note {
     private String title;
@@ -15,14 +16,14 @@ public class Note {
 
     private String userID;
 
+    private ArrayList<Block> blocks;
+
     private boolean isFavorite;
 
     @ColorInt
     private int color;
 
     private NoteState state;
-
-    public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
 
     // TODO: Add location system for notes
     private Location createdLocation;
@@ -38,6 +39,10 @@ public class Note {
         // This requires minimum API 26
         LocalDateTime currentDateTime = LocalDateTime.now();
         creationDate = lastModifiedDate = currentDateTime;
+    }
+
+    public ArrayList<Block> getBlocks() {
+        return blocks;
     }
 
     public String getTitle() {
@@ -83,4 +88,6 @@ public class Note {
     public Location getCreatedLocation() {
         return createdLocation;
     }
+
+    public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
 }
