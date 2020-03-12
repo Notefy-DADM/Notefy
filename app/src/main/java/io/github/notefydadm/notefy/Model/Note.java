@@ -1,5 +1,6 @@
 package io.github.notefydadm.notefy.Model;
 
+import android.graphics.Color;
 import android.location.Location;
 
 import androidx.annotation.ColorInt;
@@ -23,11 +24,20 @@ public class Note {
 
     public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
 
+    // TODO: Add location system
     private Location createdLocation;
 
     public Note(String title, String userID) {
         this.title = title;
         this.userID = userID;
+
+        state = NoteState.DRAFT;
+        isFavorite = false;
+        color = Color.WHITE;
+
+        // This requires minimum API 26
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        creationDate = lastModifiedDate = currentDateTime;
     }
 
     public String getTitle() {
