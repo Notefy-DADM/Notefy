@@ -24,7 +24,7 @@ public class Note {
 
     public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
 
-    // TODO: Add location system
+    // TODO: Add location system for notes
     private Location createdLocation;
 
     public Note(String title, String userID) {
