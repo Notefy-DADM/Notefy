@@ -1,9 +1,9 @@
 package io.github.notefydadm.notefy.Model;
 
-public class Theme {
+public class Topic {
     private String name;
 
-    public Theme(String name) {
+    public Topic(String name) {
         this.name = name;
     }
 

@@ -1,6 +1,6 @@
 package io.github.notefydadm.notefy.Model;
 
-public abstract class TextBlock implements Block {
+public class TextBlock implements Block {
     private String text;
     private String fontFamily;
     private String fontSize;
