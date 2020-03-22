@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".View.Fragments.NoteTextFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <EditText
+        android:id="@+id/textEditor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Esto es un texto de prueba" />
+        android:gravity="center"
+        android:hint="@string/hint_noteText"></EditText>
 
 </FrameLayout>

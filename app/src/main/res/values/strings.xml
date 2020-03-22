@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Notefy</string>
 
+    <!--fragment_note_text-->
+    <string name="hint_noteText">This note is empty. Start typing!</string>
+
 </resources>
