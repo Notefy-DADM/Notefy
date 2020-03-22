@@ -3,6 +3,7 @@ package io.github.notefydadm.notefy.View.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -26,7 +27,10 @@ public class NoteListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private RecyclerView recycler;
+    private View myView;
+    private RecyclerView myRecyclerView;
+    private RecyclerView.Adapter myAdapter;
+    private RecyclerView.LayoutManager myLayoutManager;
 
     public NoteListFragment() {
         // Required empty public constructor
@@ -57,12 +61,31 @@ public class NoteListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_note_list, container, false);
+        myView = inflater.inflate(R.layout.fragment_note_list, container, false);
+        myRecyclerView = myView.findViewById(R.id.myRecycler);
+
+        //  We need to have an Adapter for the RecyclerView
+        //myAdapter =
+
+        try {
+            //  You can't cast a Fragment to a Context.
+            myLayoutManager = new LinearLayoutManager(getContext());
+            myRecyclerView.setLayoutManager(myLayoutManager);
+            //  We need to have an Adapter for the RecyclerView
+            //myRecyclerView.setAdapter(myAdapter);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return myView;
     }
 }

@@ -7,12 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".View.Activities.MainActivity">
 
-    <!--<androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:scrollbars="vertical"/>-->
-
     <fragment
         android:id="@+id/fragNoteList"
         android:name="io.github.notefydadm.notefy.View.Fragments.NoteListFragment"
