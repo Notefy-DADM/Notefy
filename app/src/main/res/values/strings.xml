@@ -2,6 +2,7 @@
     <string name="app_name">Notefy</string>
 
     <!--fragment_note_text-->
+    <string name="notSelected_noteText">Please, select a note!</string>
     <string name="hint_noteText">This note is empty. Start typing!</string>
 
 </resources>

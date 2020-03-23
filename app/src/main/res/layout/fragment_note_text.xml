@@ -3,13 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
     tools:context=".View.Fragments.NoteTextFragment">
 
     <EditText
         android:id="@+id/textEditor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:hint="@string/hint_noteText"></EditText>
+        android:background="@android:color/background_light"
+        android:gravity="top"
+        android:layout_margin="4dp"
+        android:inputType="textAutoCorrect|textMultiLine"
+        android:hint="@string/hint_noteText"
+        android:autofillHints="" />
 
 </FrameLayout>

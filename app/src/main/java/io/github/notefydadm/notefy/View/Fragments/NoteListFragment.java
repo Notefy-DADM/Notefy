@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.notefydadm.notefy.Adapter.NoteListAdapter;
@@ -24,6 +27,7 @@ import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
  * create an instance of this fragment.
  */
 public class NoteListFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -104,8 +108,10 @@ public class NoteListFragment extends Fragment {
 
         try {
             //  You can't cast a Fragment to a Context.
-            myLayoutManager = new LinearLayoutManager(getContext());
+            myLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
             myRecyclerView.setLayoutManager(myLayoutManager);
+            //RecyclerView.ItemDecoration separator = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+            //myRecyclerView.addItemDecoration(separator);
             //  We need to have an Adapter for the RecyclerView
             myRecyclerView.setAdapter(myAdapter);
         }catch(Exception e){

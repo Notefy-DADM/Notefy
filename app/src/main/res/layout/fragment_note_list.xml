@@ -10,6 +10,8 @@
         android:id="@+id/myRecycler"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:padding="4dp"
+        android:background="@android:color/darker_gray"/>
 
 </FrameLayout>
