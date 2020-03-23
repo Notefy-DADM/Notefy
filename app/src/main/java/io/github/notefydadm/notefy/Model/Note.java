@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.location.Location;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class Note {
         state = NoteState.DRAFT;
         isFavorite = false;
         color = Color.WHITE;
+
+        blocks = new ArrayList<>();
 
         // This requires minimum API 26
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -90,4 +93,18 @@ public class Note {
     }
 
     public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
+
+    public String getContent() {
+        StringBuilder content = new StringBuilder();
+        for (Block block : this.blocks) {
+            content.append(block.getContent());
+        }
+        return content.toString();
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.title;
+    }
 }

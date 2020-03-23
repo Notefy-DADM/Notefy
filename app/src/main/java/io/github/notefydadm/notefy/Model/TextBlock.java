@@ -5,6 +5,10 @@ public class TextBlock implements Block {
     private String fontFamily;
     private String fontSize;
 
+    public TextBlock(String text) {
+        this(text, "Arial", "12");
+    }
+
     public TextBlock(String text, String fontFamily, String fontSize) {
         this.text = text;
         this.fontFamily = fontFamily;
@@ -33,5 +37,10 @@ public class TextBlock implements Block {
 
     public void setFontSize(String fontSize) {
         this.fontSize = fontSize;
+    }
+
+    @Override
+    public String getContent() {
+        return this.getText();
     }
 }
