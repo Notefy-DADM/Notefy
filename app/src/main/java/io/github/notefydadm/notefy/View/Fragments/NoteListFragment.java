@@ -1,5 +1,6 @@
 package io.github.notefydadm.notefy.View.Fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,8 +73,6 @@ public class NoteListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
-
     }
 
     @Override
@@ -101,8 +100,19 @@ public class NoteListFragment extends Fragment {
         noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
             @Override
             public void onChanged(Note note) {
-                // TODO: Add behavior when a note is selected
-                System.out.println("Selected note: " + note);
+                //  Check orientation
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    // landscape
+                    System.out.println("Selected note landscape: " + note);
+                    
+                }
+                else{
+                    // portrait
+                    System.out.println("Selected note portrait: " + note);
+
+                }
+
+
             }
         });
 
@@ -112,6 +122,7 @@ public class NoteListFragment extends Fragment {
             myRecyclerView.setLayoutManager(myLayoutManager);
             //RecyclerView.ItemDecoration separator = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
             //myRecyclerView.addItemDecoration(separator);
+
             //  We need to have an Adapter for the RecyclerView
             myRecyclerView.setAdapter(myAdapter);
         }catch(Exception e){
@@ -120,4 +131,5 @@ public class NoteListFragment extends Fragment {
 
         return myView;
     }
+
 }

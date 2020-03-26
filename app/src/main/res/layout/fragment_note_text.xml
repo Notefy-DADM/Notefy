@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/background_light"
         android:gravity="top"
-        android:layout_margin="4dp"
+        android:layout_margin="7dp"
         android:inputType="textAutoCorrect|textMultiLine"
         android:hint="@string/hint_noteText"
         android:autofillHints="" />

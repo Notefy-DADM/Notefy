@@ -1,5 +1,7 @@
 <resources>
+    <!--Manifest-->
     <string name="app_name">Notefy</string>
+    <string name="label_textEditor">Editor</string>
 
     <!--fragment_note_text-->
     <string name="notSelected_noteText">Please, select a note!</string>
