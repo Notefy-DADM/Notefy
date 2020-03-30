@@ -7,4 +7,14 @@
     <string name="notSelected_noteText">Please, select a note!</string>
     <string name="hint_noteText">This note is empty. Start typing!</string>
 
+    <!--drawer_menu.xml (NavigationDrawer)-->
+    <string name="nav_settings">Settings</string>
+    <!--nav_header.xml (NavegationDrawer Header)-->
+    <!--TEMPORAL-->
+    <string name="username">Pepe García Martinez</string>
+    <string name="email">pepegm@gmail.com</string>
+
+    <!--MainActivity-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

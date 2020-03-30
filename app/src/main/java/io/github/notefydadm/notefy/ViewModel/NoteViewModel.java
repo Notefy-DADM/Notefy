@@ -1,8 +1,13 @@
 package io.github.notefydadm.notefy.ViewModel;
 
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +18,7 @@ import io.github.notefydadm.notefy.Model.TextBlock;
 public class NoteViewModel extends ViewModel {
     private MutableLiveData<List<Note>> notes;
     private MutableLiveData<Note> selectedNote = new MutableLiveData<>();
+    private MutableLiveData<CharSequence> text = new MutableLiveData<>();
 
     public LiveData<List<Note>> getNotes() {
         if (notes == null) {
@@ -50,5 +56,23 @@ public class NoteViewModel extends ViewModel {
         selectedNote.postValue(note);
     }
 
+    ///////
+    public void setText(CharSequence input){
+        text.setValue(input);
+    }
+
+    public LiveData<CharSequence> getText(){
+        return text;
+    }
+    /*public class NoteListFragment extends Fragment {
+        //private noteSelector;
+        private NoteViewModel model;
+        public void onCreate(Bundle savedInstanceState){
+            super.onCreate(savedInstanceState);
+            model = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
+            .setOnClickistener(item ->
+            })
+        }
+    }*/
 
 }

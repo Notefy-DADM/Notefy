@@ -6,6 +6,10 @@
     android:background="@android:color/darker_gray"
     tools:context=".View.Fragments.NoteTextFragment">
 
+    <!--<data>
+        <variable android:name="note" android:type="io.github.notefydadm.notefy.Model.Note" />
+    </data>-->
+
     <EditText
         android:id="@+id/textEditor"
         android:layout_width="match_parent"

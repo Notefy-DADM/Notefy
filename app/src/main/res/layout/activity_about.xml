@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".View.Activities.AboutActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:id="@+id/text_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="about"
+            app:layout_constraintTop_toTopOf="@id/alejandro_about" />
+        <TextView
+            android:id="@+id/alejandro_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="alejandro"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="@id/andres_about"/>
+        <TextView
+            android:id="@+id/andres_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="andres"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/marcos_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="marcos"
+            android:gravity="center"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

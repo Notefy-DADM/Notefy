@@ -3,4 +3,6 @@
     <string name="app_name">Notefy</string>
     <string name="hint_noteText">La nota está vacía. ¡Empieza a escribir!</string>
     <string name="notSelected_noteText">¡Por favor, selecciona una nota!</string>
+    <string name="label_textEditor">Editor</string>
+    <string name="nav_settings">Ajustes</string>
 </resources>

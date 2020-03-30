@@ -104,15 +104,13 @@ public class NoteListFragment extends Fragment {
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                     // landscape
                     System.out.println("Selected note landscape: " + note);
-                    
+                     note.getContent();
                 }
                 else{
                     // portrait
                     System.out.println("Selected note portrait: " + note);
 
                 }
-
-
             }
         });
 
