@@ -64,15 +64,5 @@ public class NoteViewModel extends ViewModel {
     public LiveData<CharSequence> getText(){
         return text;
     }
-    /*public class NoteListFragment extends Fragment {
-        //private noteSelector;
-        private NoteViewModel model;
-        public void onCreate(Bundle savedInstanceState){
-            super.onCreate(savedInstanceState);
-            model = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
-            .setOnClickistener(item ->
-            })
-        }
-    }*/
 
 }

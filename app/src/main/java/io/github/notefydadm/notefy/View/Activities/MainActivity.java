@@ -8,8 +8,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Intent intent = null;
         switch (menuItem.getItemId()){
-            case R.id.nav_settings:
+            case R.id.nav_about:
                 intent = new Intent(this, AboutActivity.class);
                 break;
         }
@@ -79,5 +80,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else{
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_toolbar:
+                System.out.println("Add item selected");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

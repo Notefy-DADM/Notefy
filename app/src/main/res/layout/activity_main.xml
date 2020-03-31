@@ -14,14 +14,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:id="@+id/toolbar"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
-            app:popupTheme="@style/Theme.AppCompat.Light"
-            android:elevation="4dp"/>
+        <include
+            layout="@layout/toolbar"
+            android:id="@+id/toolbar"/>
 
         <FrameLayout
             android:id="@+id/fragmentPortraitContainer"
@@ -51,4 +46,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>-->
+</androidx.constraintlayout.widget.ConstraintLayout>
+asdasasdasd
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:id="@+id/toolbar"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+            app:popupTheme="@style/Theme.AppCompat.Light"
+            android:elevation="4dp"/>
+
+-->
+
