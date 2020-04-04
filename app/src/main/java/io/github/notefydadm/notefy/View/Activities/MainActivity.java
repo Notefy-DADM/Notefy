@@ -6,28 +6,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
+
+import io.github.notefydadm.notefy.Adapter.NoteListAdapter;
+import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.View.Fragments.NoteListFragment;
 import io.github.notefydadm.notefy.View.Fragments.NoteTextFragment;
+import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+
     NoteListFragment noteListFragment;
     NoteTextFragment noteTextFragment;
+
+    Bundle saved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        saved = savedInstanceState;
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -55,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteListFragment.setArguments(getIntent().getExtras());
         //  Replace the Fragment on the 'fragmentContainer' FrameLayout
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).addToBackStack(null).commit();
+
     }
 
     @Override
@@ -98,4 +113,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

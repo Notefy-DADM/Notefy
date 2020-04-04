@@ -11,14 +11,18 @@ import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.Model.TextBlock;
+import io.github.notefydadm.notefy.View.Fragments.NoteTextFragment;
 
 public class NoteViewModel extends ViewModel {
     private MutableLiveData<List<Note>> notes;
     private MutableLiveData<Note> selectedNote = new MutableLiveData<>();
     private MutableLiveData<CharSequence> text = new MutableLiveData<>();
+
+    private NoteTextFragment noteTextFragment = new NoteTextFragment();
 
     public LiveData<List<Note>> getNotes() {
         if (notes == null) {
@@ -28,7 +32,7 @@ public class NoteViewModel extends ViewModel {
         return notes;
     }
 
-    private void loadNotes() {
+    public void loadNotes() {
         ArrayList<Note> loadedNotes = new ArrayList<>();
         // TODO: Do an asynchronous operation to fetch notes from database
         // For now, we will use mock notes
@@ -56,9 +60,10 @@ public class NoteViewModel extends ViewModel {
         selectedNote.postValue(note);
     }
 
-    ///////
+    /////////////////
     public void setText(CharSequence input){
-        text.setValue(input);
+       text.setValue(input);
+       getSelectedNote().getValue().getBlocks().add(new TextBlock(""+text));
     }
 
     public LiveData<CharSequence> getText(){

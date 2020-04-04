@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -43,6 +44,8 @@ public class NoteListFragment extends Fragment {
     private NoteListAdapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
 
+    private NoteViewModel noteViewModel;
+
     public NoteListFragment() {
         // Required empty public constructor
     }
@@ -73,6 +76,9 @@ public class NoteListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        // Get view model for notes
+        //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
     }
 
     @Override
@@ -83,7 +89,8 @@ public class NoteListFragment extends Fragment {
         myRecyclerView = myView.findViewById(R.id.myRecycler);
 
         // Get view model for notes
-        NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
 
         // We need to have an Adapter for the RecyclerView
         myAdapter = new NoteListAdapter(noteViewModel, getContext());
@@ -103,31 +110,52 @@ public class NoteListFragment extends Fragment {
                 //  Check orientation
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                     // landscape
-                    System.out.println("Selected note landscape: " + note);
-                     note.getContent();
+                    System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
+                    //noteViewModel.setText(note.getContent());
                 }
                 else{
                     // portrait
-                    System.out.println("Selected note portrait: " + note);
-
+                    System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
+                    //noteViewModel.setText(note.getContent());
                 }
             }
         });
 
         try {
-            //  You can't cast a Fragment to a Context.
-            myLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
-            myRecyclerView.setLayoutManager(myLayoutManager);
-            //RecyclerView.ItemDecoration separator = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
-            //myRecyclerView.addItemDecoration(separator);
+            initRecyclerView();
 
-            //  We need to have an Adapter for the RecyclerView
-            myRecyclerView.setAdapter(myAdapter);
         }catch(Exception e){
             e.printStackTrace();
         }
 
         return myView;
+    }
+
+    private void initRecyclerView(){
+        //  You can't cast a Fragment to a Context.
+        myLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+        myRecyclerView.setLayoutManager(myLayoutManager);
+        //RecyclerView.ItemDecoration separator = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
+        //myRecyclerView.addItemDecoration(separator);
+
+        //  We need to have an Adapter for the RecyclerView
+        myRecyclerView.setAdapter(myAdapter);
+    }
+
+    @Override
+    public void onPause() {
+        System.out.println("Pause");
+        //saved.putParcelableArray("notes", (Parcelable[]) noteViewModel.getNotes().getValue().toArray());
+        super.onPause();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //saved.get("notes");
+        //noteViewModel.loadNotes();
+        System.out.println("Resume");
     }
 
 }
