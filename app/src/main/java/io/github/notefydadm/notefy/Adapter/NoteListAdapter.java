@@ -1,5 +1,6 @@
 package io.github.notefydadm.notefy.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.View.Activities.MainActivity;
 import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
 
 public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder> {
@@ -25,8 +28,8 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
     private PositionClickedListener positionListener;
 
-    public NoteListAdapter(NoteViewModel noteViewModel, Context context) {
-        this.viewModel = noteViewModel;
+    public NoteListAdapter(Activity activity, Context context) {
+        this.viewModel = ViewModelProviders.of((MainActivity)activity).get(NoteViewModel.class);
         this.fragmentContext = context;
         this.positionListener = new PositionClickedListener() {
             @Override

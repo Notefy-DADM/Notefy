@@ -32,12 +32,42 @@ public class NoteViewModel extends ViewModel {
         return notes;
     }
 
+    public LiveData<List<Note>> getAllNotes(){
+        if(notes == null){
+            notes = new MutableLiveData<>();
+            this.notes.setValue(loadAllNotes());
+        }
+        return notes;
+    }
+
+    public void setNotes(ArrayList<Note> notes){
+        this.notes.setValue(notes);
+    }
+    public void setSelectedNote(Note note){
+        this.selectedNote.setValue(note);
+    }
+
     public void loadNotes() {
         ArrayList<Note> loadedNotes = new ArrayList<>();
         // TODO: Do an asynchronous operation to fetch notes from database
         // For now, we will use mock notes
         getMockNotes(loadedNotes);
         notes.postValue(loadedNotes);
+    }
+
+    public ArrayList<Note> loadAllNotes(){
+        ArrayList<Note> loadedNotes = new ArrayList<>();
+
+        loadedNotes.add(new Note("Test", "1"));
+        loadedNotes.add(new Note("Very very very long test", "1"));
+
+        Note note = new Note("Important notes to remember for studying", "3");
+        note.getBlocks().add(new TextBlock("DADM is cool!"));
+        loadedNotes.add(note);
+
+        loadedNotes.add(new Note("Some notes about my games", "3"));
+
+        return loadedNotes;
     }
 
     // Used for testing

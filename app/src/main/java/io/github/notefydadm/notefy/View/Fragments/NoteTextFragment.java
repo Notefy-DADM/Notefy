@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.List;
+
 import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
@@ -59,7 +61,7 @@ public class NoteTextFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
     }
 
     @Override
@@ -69,6 +71,18 @@ public class NoteTextFragment extends Fragment {
         View v =  inflater.inflate(R.layout.fragment_note_text, container, false);
 
         return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        noteViewModel = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
+        noteViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+
+            }
+        });
     }
 
     @Override
@@ -93,6 +107,12 @@ public class NoteTextFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+
     }
 
     public void setEditorText(CharSequence text){

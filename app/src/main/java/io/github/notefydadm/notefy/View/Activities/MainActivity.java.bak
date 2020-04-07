@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -37,11 +36,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NoteListFragment noteListFragment;
     NoteTextFragment noteTextFragment;
 
-    NoteViewModel noteViewModel;
+    Bundle saved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        saved = savedInstanceState;
 
         setContentView(R.layout.activity_main);
 
@@ -57,31 +57,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-        //LiveData<List<Note>> notesData = noteViewModel.getNotes();
-        LiveData<List<Note>> notesData = noteViewModel.getAllNotes();
-        //first note as default selected note
-        noteViewModel.setSelectedNote(notesData.getValue().get(0));
-
         noteListFragment = new NoteListFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
         if (savedInstanceState != null) {
-            //return;
+            return;
         }
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            //  landscape
-        }
-        else{
-            //  portrait
-            //  If the activity was started with special instructions from an
-            //  Intent, pass the Intent's extras to the fragment as arguments
-            noteListFragment.setArguments(getIntent().getExtras());
-            //  Replace the Fragment on the 'fragmentContainer' FrameLayout
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).addToBackStack(null).commit();
-        }
+        //  If the activity was started with special instructions from an
+        //  Intent, pass the Intent's extras to the fragment as arguments
+        noteListFragment.setArguments(getIntent().getExtras());
+        //  Replace the Fragment on the 'fragmentContainer' FrameLayout
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).addToBackStack(null).commit();
 
     }
 
@@ -127,7 +115,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    public NoteViewModel getNoteViewModel() {
-        return this.noteViewModel;
-    }
 }

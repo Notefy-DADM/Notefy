@@ -68,6 +68,7 @@ public class NoteListFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +79,13 @@ public class NoteListFragment extends Fragment {
 
         // Get view model for notes
         //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        System.out.println("Created!");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -91,9 +98,10 @@ public class NoteListFragment extends Fragment {
         // Get view model for notes
         //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
         //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        noteViewModel = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
 
         // We need to have an Adapter for the RecyclerView
-        myAdapter = new NoteListAdapter(noteViewModel, getContext());
+        myAdapter = new NoteListAdapter(this.getActivity(), getContext());
 
         // Update the adapter whenever the ViewModel gets new notes
         noteViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
