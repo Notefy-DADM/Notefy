@@ -4,8 +4,8 @@
     android:layout_height="?attr/actionBarSize"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
-    android:theme="@style/AppTheme"
-    app:popupTheme="@style/AppTheme"
+    android:theme="@style/AppTheme.NoActionBar"
+    app:popupTheme="@style/AppTheme.NoActionBar"
     app:titleTextColor="#FFFFFF"
     android:elevation="4dp" >
 

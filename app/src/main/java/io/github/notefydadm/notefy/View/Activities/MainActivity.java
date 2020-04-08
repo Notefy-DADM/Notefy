@@ -45,25 +45,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
-                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setToolbarDrawer();
 
         noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
         //LiveData<List<Note>> notesData = noteViewModel.getNotes();
         LiveData<List<Note>> notesData = noteViewModel.getAllNotes();
-        //first note as default selected note
-        noteViewModel.setSelectedNote(notesData.getValue().get(0));
 
         noteListFragment = new NoteListFragment();
+        noteTextFragment = new NoteTextFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -73,6 +62,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             //  landscape
+            //  first note as default selected note
+            noteListFragment.setArguments(getIntent().getExtras());
+            noteTextFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteTextFragment).addToBackStack(null).commit();
+
+            noteViewModel.setSelectedNote(notesData.getValue().get(0));
         }
         else{
             //  portrait
@@ -122,9 +118,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.add_toolbar:
                 System.out.println("Add item selected");
+
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setToolbarDrawer(){
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
+                R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //outState.p
     }
 
     public NoteViewModel getNoteViewModel() {

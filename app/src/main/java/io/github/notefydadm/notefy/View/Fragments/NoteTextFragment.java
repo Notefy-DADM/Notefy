@@ -60,16 +60,18 @@ public class NoteTextFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_note_text, container, false);
-
+        View v = null;
+        try {
+            // Inflate the layout for this fragment
+            v = inflater.inflate(R.layout.fragment_note_text, container, false);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return v;
     }
 
@@ -107,12 +109,6 @@ public class NoteTextFragment extends Fragment {
 
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
-
     }
 
     public void setEditorText(CharSequence text){

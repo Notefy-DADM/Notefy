@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -91,45 +92,45 @@ public class NoteListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        myView = inflater.inflate(R.layout.fragment_note_list, container, false);
-        myRecyclerView = myView.findViewById(R.id.myRecycler);
-
-        // Get view model for notes
-        //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-        //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-        noteViewModel = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
-
-        // We need to have an Adapter for the RecyclerView
-        myAdapter = new NoteListAdapter(this.getActivity(), getContext());
-
-        // Update the adapter whenever the ViewModel gets new notes
-        noteViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
-            @Override
-            public void onChanged(List<Note> notes) {
-                myAdapter.addNotes(notes);
-            }
-        });
-
-        // When a note is selected, open it
-        noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
-            @Override
-            public void onChanged(Note note) {
-                //  Check orientation
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                    // landscape
-                    System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
-                    //noteViewModel.setText(note.getContent());
-                }
-                else{
-                    // portrait
-                    System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
-                    //noteViewModel.setText(note.getContent());
-                }
-            }
-        });
-
         try {
+            // Inflate the layout for this fragment
+            myView = inflater.inflate(R.layout.fragment_note_list, container, false);
+            myRecyclerView = myView.findViewById(R.id.myRecycler);
+
+            // Get view model for notes
+            //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+            //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+            noteViewModel = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
+
+            // We need to have an Adapter for the RecyclerView
+            myAdapter = new NoteListAdapter(this.getActivity(), getContext());
+
+            // Update the adapter whenever the ViewModel gets new notes
+            noteViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
+                @Override
+                public void onChanged(List<Note> notes) {
+                    myAdapter.addNotes(notes);
+                }
+            });
+
+            // When a note is selected, open it
+            noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
+                @Override
+                public void onChanged(Note note) {
+                    //  Check orientation
+                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                        // landscape
+                        System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
+                        //noteViewModel.setText(note.getContent());
+                    }
+                    else{
+                        // portrait
+                        System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
+                        //noteViewModel.setText(note.getContent());
+                    }
+                }
+            });
+
             initRecyclerView();
 
         }catch(Exception e){
