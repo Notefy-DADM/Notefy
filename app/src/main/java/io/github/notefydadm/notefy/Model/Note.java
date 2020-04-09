@@ -41,6 +41,18 @@ public class Note {
         creationDate = lastModifiedDate = currentDateTime;
     }
 
+    public Note(String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate) {
+        this.title = title;
+        this.userID = userID;
+
+        this.state = state;
+        this.isFavorite = isFavorite;
+        this.color = color;
+
+        this.creationDate = creationDate;
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
     public ArrayList<Block> getBlocks() {
         return blocks;
     }
