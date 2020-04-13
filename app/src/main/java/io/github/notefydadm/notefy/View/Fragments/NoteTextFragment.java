@@ -7,10 +7,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,6 +23,7 @@ import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.View.Activities.MainActivity;
 import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
+import io.github.notefydadm.notefy.databinding.FragmentNoteTextBinding;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,15 +33,8 @@ import static java.util.Objects.requireNonNull;
  * create an instance of this fragment.
  */
 public class NoteTextFragment extends Fragment {
-    private static CharSequence text;
-
-    // TODO: Rename and change types of parameters
-    private CharSequence mText;
-
+    private FragmentNoteTextBinding binding;
     private NoteViewModel noteViewModel;
-    private MainActivity mainActivity;
-
-    private EditText textEditor;
 
     public NoteTextFragment() {
         // Required empty public constructor
@@ -72,9 +68,8 @@ public class NoteTextFragment extends Fragment {
         try {
             // Inflate the layout for this fragment
             v = inflater.inflate(R.layout.fragment_note_text, container, false);
-            textEditor = v.findViewById(R.id.textEditor);
-
-        }catch (Exception e){
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_text, container, false);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return v;
@@ -84,42 +79,24 @@ public class NoteTextFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         noteViewModel = new ViewModelProvider(requireNonNull(getActivity())).get(NoteViewModel.class);
-        noteViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
-            @Override
-            public void onChanged(List<Note> notes) {
-
-            }
-        });
+        binding.setViewModel(noteViewModel);
+//        noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
+//            @Override
+//            public void onChanged(Note note) {
+//
+//            }
+//        });
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//    }
 
-        textEditor = view.findViewById(R.id.textEditor);
-
-        textEditor.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                noteViewModel.setText(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        mainActivity = (MainActivity) context;
-    }
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//
+//        //mainActivity = (MainActivity) context;
+//    }
 }

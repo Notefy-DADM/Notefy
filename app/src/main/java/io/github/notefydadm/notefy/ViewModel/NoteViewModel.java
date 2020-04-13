@@ -1,28 +1,18 @@
 package io.github.notefydadm.notefy.ViewModel;
 
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.Model.TextBlock;
-import io.github.notefydadm.notefy.View.Fragments.NoteTextFragment;
 
 public class NoteViewModel extends ViewModel {
     private MutableLiveData<List<Note>> notes;
     private MutableLiveData<Note> selectedNote = new MutableLiveData<>();
-    private MutableLiveData<CharSequence> text = new MutableLiveData<>();
-
-    private NoteTextFragment noteTextFragment = new NoteTextFragment();
 
     public LiveData<List<Note>> getNotes() {
         if (notes == null) {
@@ -90,14 +80,10 @@ public class NoteViewModel extends ViewModel {
         selectedNote.postValue(note);
     }
 
-    /////////////////
-    public void setText(CharSequence input){
-       text.setValue(input);
-       getSelectedNote().getValue().getBlocks().add(new TextBlock(""+text));
+    public void setContent(CharSequence input){
+       Note selectedNote = getSelectedNote().getValue();
+       if (selectedNote != null) {
+           selectedNote.getBlocks().add(new TextBlock(input.toString()));
+       }
     }
-
-    public LiveData<CharSequence> getText(){
-        return text;
-    }
-
 }
