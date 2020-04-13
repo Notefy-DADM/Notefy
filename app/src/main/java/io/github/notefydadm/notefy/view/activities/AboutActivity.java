@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.View.Activities;
+package io.github.notefydadm.notefy.view.activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;

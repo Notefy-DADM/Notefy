@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.View.Fragments;
+package io.github.notefydadm.notefy.view.fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import io.github.notefydadm.notefy.Adapter.NoteListAdapter;
-import io.github.notefydadm.notefy.Model.Note;
+import io.github.notefydadm.notefy.adapter.NoteListAdapter;
+import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.R;
-import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
+import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

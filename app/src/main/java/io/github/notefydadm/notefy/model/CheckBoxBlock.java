@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.Model;
+package io.github.notefydadm.notefy.model;
 
 public class CheckBoxBlock extends TextBlock {
     private boolean isChecked;

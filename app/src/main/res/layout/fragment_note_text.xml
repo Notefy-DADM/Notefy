@@ -2,14 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="io.github.notefydadm.notefy.ViewModel.NoteViewModel" />
+        <variable name="viewModel" type="io.github.notefydadm.notefy.viewModel.NoteViewModel" />
     </data>
     <FrameLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
-        tools:context=".View.Fragments.NoteTextFragment">
+        tools:context=".view.fragments.NoteTextFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

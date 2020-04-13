@@ -11,27 +11,27 @@
         android:theme="@style/AppTheme.NoActionBar">
 
         <activity
-            android:name=".View.Activities.TextEditorPortraitActivity"
+            android:name=".view.activities.TextEditorPortraitActivity"
             android:label="Editor"
-            android:parentActivityName=".View.Activities.MainActivity"
+            android:parentActivityName=".view.activities.MainActivity"
             android:screenOrientation="sensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".View.Activities.MainActivity" />
+                android:value=".view.activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".View.Activities.AboutActivity"
+            android:name=".view.activities.AboutActivity"
             android:label="About"
-            android:parentActivityName=".View.Activities.MainActivity"
+            android:parentActivityName=".view.activities.MainActivity"
             android:screenOrientation="sensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".View.Activities.MainActivity" />
+                android:value=".view.activities.MainActivity" />
         </activity>
 
         <activity
-            android:name=".View.Activities.MainActivity"
+            android:name=".view.activities.MainActivity"
             android:screenOrientation="sensor"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
