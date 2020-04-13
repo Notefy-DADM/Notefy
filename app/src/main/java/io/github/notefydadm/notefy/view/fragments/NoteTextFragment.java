@@ -15,8 +15,6 @@ import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 import io.github.notefydadm.notefy.databinding.FragmentNoteTextBinding;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link NoteTextFragment#newInstance} factory method to
@@ -49,6 +47,7 @@ public class NoteTextFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        noteViewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
     }
 
     @Override
@@ -56,9 +55,13 @@ public class NoteTextFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = null;
         try {
-            // Inflate the layout for this fragment
-            v = inflater.inflate(R.layout.fragment_note_text, container, false);
+            // Inflate the layout for this fragment with data binding
             binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_text, container, false);
+            binding.setLifecycleOwner(this);
+            binding.setViewModel(noteViewModel);
+
+            // Get the inflated view
+            v = binding.getRoot();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,8 +71,6 @@ public class NoteTextFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        noteViewModel = new ViewModelProvider(requireNonNull(getActivity())).get(NoteViewModel.class);
-        binding.setViewModel(noteViewModel);
 //        noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
 //            @Override
 //            public void onChanged(Note note) {

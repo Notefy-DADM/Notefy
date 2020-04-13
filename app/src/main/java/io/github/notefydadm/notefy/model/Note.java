@@ -121,6 +121,11 @@ public class Note implements Parcelable {
     }
 
     public void setContent(String text) {
+        blocks.clear();
+        addContent(text);
+    }
+
+    public void addContent(String text) {
         try (Scanner sc = new Scanner(text)) {
             StringBuilder builder = new StringBuilder();
             while (sc.hasNext()) {

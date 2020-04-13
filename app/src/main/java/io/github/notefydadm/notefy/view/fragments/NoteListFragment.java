@@ -11,15 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.model.Note;
-import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 /**
@@ -85,11 +85,6 @@ public class NoteListFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         try {
@@ -98,7 +93,7 @@ public class NoteListFragment extends Fragment {
             myRecyclerView = myView.findViewById(R.id.myRecycler);
 
             // Get view model for notes
-            noteViewModel = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
+            noteViewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
 
             // We need to have an Adapter for the RecyclerView
             myAdapter = new NoteListAdapter(this.getActivity(), getContext());
@@ -141,6 +136,11 @@ public class NoteListFragment extends Fragment {
         }
 
         return myView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     public interface ChangeToTextEditor{
