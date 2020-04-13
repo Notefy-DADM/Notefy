@@ -110,21 +110,23 @@ public class NoteListFragment extends Fragment {
             noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
                 @Override
                 public void onChanged(Note note) {
-                    //  Check orientation
-                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                        // landscape
-                        System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
-                        //noteViewModel.setText(note.getContent());
-                    }
-                    else{
-                        // portrait
-                        System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
-                        //noteViewModel.setText(note.getContent());
+                    if (note != null) {
+                        //  Check orientation
+                        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                            // landscape
+                            System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
+                            //noteViewModel.setText(note.getContent());
+                        }
+                        else{
+                            // portrait
+                            System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
+                            //noteViewModel.setText(note.getContent());
                         /*Intent intent = new Intent(getActivity(), TextEditorPortraitActivity.class);
                         intent.putExtra("selectedNote", note);
                         intent.putExtra("selectedNoteContent",note.getContent());
                         startActivity(intent);*/
-                        listener.changeToTextEditor();
+                            listener.changeToTextEditor();
+                        }
                     }
                 }
             });

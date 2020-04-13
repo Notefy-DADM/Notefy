@@ -79,6 +79,12 @@ public class NoteTextFragment extends Fragment {
 //        });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        noteViewModel.setSelectedNote(null);
+    }
+
 //    @Override
 //    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 //        super.onViewCreated(view, savedInstanceState);
