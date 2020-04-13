@@ -46,7 +46,7 @@ public class Note implements Parcelable {
         creationDate = lastModifiedDate = currentDateTime;
     }
 
-    public Note(String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate) {
+    public Note(String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate, ArrayList<Block> blocks) {
         this.title = title;
         this.userID = userID;
 
@@ -56,6 +56,8 @@ public class Note implements Parcelable {
 
         this.creationDate = creationDate;
         this.lastModifiedDate = lastModifiedDate;
+
+        this.blocks = blocks;
     }
 
     public ArrayList<Block> getBlocks() {
