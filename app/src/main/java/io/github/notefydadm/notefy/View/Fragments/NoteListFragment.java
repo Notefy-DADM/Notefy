@@ -26,7 +26,6 @@ import io.github.notefydadm.notefy.Adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.View.Activities.MainActivity;
-import io.github.notefydadm.notefy.View.Activities.TextEditorPortraitActivity;
 import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
 
 /**
