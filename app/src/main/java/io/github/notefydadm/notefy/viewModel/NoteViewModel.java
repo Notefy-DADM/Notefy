@@ -83,7 +83,7 @@ public class NoteViewModel extends ViewModel {
     public void setContent(CharSequence input){
        Note selectedNote = getSelectedNote().getValue();
        if (selectedNote != null) {
-           selectedNote.getBlocks().add(new TextBlock(input.toString()));
+           selectedNote.setContent(input.toString());
        }
     }
 }

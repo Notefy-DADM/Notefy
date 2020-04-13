@@ -24,6 +24,7 @@
                 android:background="@android:color/background_light"
                 android:gravity="top"
                 android:hint="@string/hint_noteText"
+                android:text="@{viewModel.selectedNote.content}"
                 android:inputType="textAutoCorrect|textMultiLine"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

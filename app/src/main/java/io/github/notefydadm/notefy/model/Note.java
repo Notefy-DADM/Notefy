@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Matcher;
 
 public class Note implements Parcelable {
     private String title;
@@ -116,6 +118,33 @@ public class Note implements Parcelable {
             content.append(block.getContent());
         }
         return content.toString();
+    }
+
+    public void setContent(String text) {
+        blocks.clear();
+        addContent(text);
+    }
+
+    public void addContent(String text) {
+        try (Scanner sc = new Scanner(text)) {
+            StringBuilder builder = new StringBuilder();
+            while (sc.hasNext()) {
+                String line = sc.nextLine();
+
+                if (CheckBoxBlock.matches(line)) {
+                    if (builder.length() > 0) {
+                        blocks.add(new TextBlock(builder.toString()));
+                        builder = new StringBuilder();
+                    }
+                    blocks.add(CheckBoxBlock.fromLine(line));
+                } else {
+                    builder.append(line);
+                }
+            }
+            if (builder.length() > 0) {
+                blocks.add(new TextBlock(builder.toString()));
+            }
+        }
     }
 
     @NonNull

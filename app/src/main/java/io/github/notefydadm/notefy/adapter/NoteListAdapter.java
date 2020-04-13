@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
@@ -29,7 +29,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     private PositionClickedListener positionListener;
 
     public NoteListAdapter(Activity activity, Context context) {
-        this.viewModel = ViewModelProviders.of((MainActivity)activity).get(NoteViewModel.class);
+        this.viewModel = new ViewModelProvider((MainActivity)activity).get(NoteViewModel.class);
         this.fragmentContext = context;
         this.positionListener = new PositionClickedListener() {
             @Override
