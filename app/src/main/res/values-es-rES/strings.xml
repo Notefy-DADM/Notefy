@@ -5,4 +5,5 @@
     <string name="notSelected_noteText">¡Por favor, selecciona una nota!</string>
     <string name="label_textEditor">Editor</string>
     <string name="nav_about">Ajustes</string>
+    <string name="text_about">La app móvil de Notefy ha sido hecha por</string>
 </resources>
