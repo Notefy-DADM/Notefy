@@ -7,7 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setToolbarDrawer();
 
-        noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         //LiveData<List<Note>> notesData = noteViewModel.getNotes();
         LiveData<List<Note>> notesData = noteViewModel.getAllNotes();
 
