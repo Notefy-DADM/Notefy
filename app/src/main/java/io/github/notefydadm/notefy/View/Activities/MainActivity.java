@@ -1,6 +1,7 @@
 package io.github.notefydadm.notefy.View.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -30,7 +32,7 @@ import io.github.notefydadm.notefy.View.Fragments.NoteListFragment;
 import io.github.notefydadm.notefy.View.Fragments.NoteTextFragment;
 import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
 
     private DrawerLayout drawer;
 
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NoteTextFragment noteTextFragment;
 
     NoteViewModel noteViewModel;
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +129,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setToolbarDrawer(){
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
+        //currentToolbarLayout = R.id.toolbar;
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -145,7 +150,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //outState.p
     }
 
-    public NoteViewModel getNoteViewModel() {
-        return this.noteViewModel;
+    @Override
+    public void changeToTextEditor() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteTextFragment).addToBackStack(null).commit();
+
     }
+
+    /*private void switchToolbar(String currentFragment){
+        if(currentFragment == ){
+            return;
+        }
+        currentToolbarLayout = layout;
+        View v = getLayoutInflater().inflate(layout,null);
+        toolbar.removeAllViews();
+        toolbar.addView(v);
+    }*/
+
 }

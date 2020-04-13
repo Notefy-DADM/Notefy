@@ -1,7 +1,10 @@
 package io.github.notefydadm.notefy.View.Fragments;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,8 @@ import java.util.List;
 import io.github.notefydadm.notefy.Adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.View.Activities.MainActivity;
+import io.github.notefydadm.notefy.View.Activities.TextEditorPortraitActivity;
 import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
 
 /**
@@ -46,6 +51,8 @@ public class NoteListFragment extends Fragment {
     private RecyclerView.LayoutManager myLayoutManager;
 
     private NoteViewModel noteViewModel;
+
+    private ChangeToTextEditor listener;
 
     public NoteListFragment() {
         // Required empty public constructor
@@ -98,8 +105,6 @@ public class NoteListFragment extends Fragment {
             myRecyclerView = myView.findViewById(R.id.myRecycler);
 
             // Get view model for notes
-            //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-            //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
             noteViewModel = ViewModelProviders.of(getActivity()).get(NoteViewModel.class);
 
             // We need to have an Adapter for the RecyclerView
@@ -127,6 +132,11 @@ public class NoteListFragment extends Fragment {
                         // portrait
                         System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
                         //noteViewModel.setText(note.getContent());
+                        /*Intent intent = new Intent(getActivity(), TextEditorPortraitActivity.class);
+                        intent.putExtra("selectedNote", note);
+                        intent.putExtra("selectedNoteContent",note.getContent());
+                        startActivity(intent);*/
+                        listener.changeToTextEditor();
                     }
                 }
             });
@@ -138,6 +148,20 @@ public class NoteListFragment extends Fragment {
         }
 
         return myView;
+    }
+
+    public interface ChangeToTextEditor{
+        public void changeToTextEditor();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (ChangeToTextEditor) context;
+        } catch (ClassCastException e){
+            e.printStackTrace();
+        }
     }
 
     private void initRecyclerView(){

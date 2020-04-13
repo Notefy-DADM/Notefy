@@ -1,10 +1,13 @@
 package io.github.notefydadm.notefy.View.Fragments;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -20,6 +23,7 @@ import java.util.List;
 
 import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.View.Activities.MainActivity;
 import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
 
 /**
@@ -34,6 +38,8 @@ public class NoteTextFragment extends Fragment {
     private CharSequence mText;
 
     private NoteViewModel noteViewModel;
+    private MainActivity mainActivity;
+
     private EditText textEditor;
 
     public NoteTextFragment() {
@@ -69,6 +75,8 @@ public class NoteTextFragment extends Fragment {
         try {
             // Inflate the layout for this fragment
             v = inflater.inflate(R.layout.fragment_note_text, container, false);
+            textEditor = v.findViewById(R.id.textEditor);
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -111,12 +119,10 @@ public class NoteTextFragment extends Fragment {
         });
     }
 
-    public void setEditorText(CharSequence text){
-        textEditor.setText(text);
-    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
 
-    public CharSequence getEditorText(){
-        return textEditor.getText();
+        mainActivity = (MainActivity) context;
     }
-
 }
