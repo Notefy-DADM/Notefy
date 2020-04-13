@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.Model;
+package io.github.notefydadm.notefy.model;
 
 import androidx.annotation.Nullable;
 

@@ -1,28 +1,18 @@
-package io.github.notefydadm.notefy.View.Fragments;
+package io.github.notefydadm.notefy.view.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.List;
-
-import io.github.notefydadm.notefy.Model.Note;
 import io.github.notefydadm.notefy.R;
-import io.github.notefydadm.notefy.View.Activities.MainActivity;
-import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
+import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 import io.github.notefydadm.notefy.databinding.FragmentNoteTextBinding;
 
 import static java.util.Objects.requireNonNull;

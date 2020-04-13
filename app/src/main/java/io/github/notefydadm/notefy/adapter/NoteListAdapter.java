@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.Adapter;
+package io.github.notefydadm.notefy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.notefydadm.notefy.Model.Note;
+import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.R;
-import io.github.notefydadm.notefy.View.Activities.MainActivity;
-import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
+import io.github.notefydadm.notefy.view.activities.MainActivity;
+import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder> {
 

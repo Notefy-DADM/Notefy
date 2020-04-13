@@ -1,36 +1,30 @@
-package io.github.notefydadm.notefy.View.Activities;
+package io.github.notefydadm.notefy.view.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-import io.github.notefydadm.notefy.Adapter.NoteListAdapter;
-import io.github.notefydadm.notefy.Model.Note;
+import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.R;
-import io.github.notefydadm.notefy.View.Fragments.NoteListFragment;
-import io.github.notefydadm.notefy.View.Fragments.NoteTextFragment;
-import io.github.notefydadm.notefy.ViewModel.NoteViewModel;
+import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
+import io.github.notefydadm.notefy.view.fragments.NoteTextFragment;
+import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
 

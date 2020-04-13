@@ -2,14 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="io.github.notefydadm.notefy.ViewModel.NoteViewModel" />
+        <variable name="viewModel" type="io.github.notefydadm.notefy.viewModel.NoteViewModel" />
     </data>
     <FrameLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
-        tools:context=".View.Fragments.NoteTextFragment">
+        tools:context=".view.fragments.NoteTextFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="32dp"
                 android:clickable="true"
-                android:onClick="@{() -> viewModel.setContent(textEditor.text.toString())}"
+                android:onClick="@{() -> viewModel.setContent(textEditor.getText().toString())}"
                 android:src="@android:drawable/ic_menu_save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.ViewModel;
+package io.github.notefydadm.notefy.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.notefydadm.notefy.Model.Note;
-import io.github.notefydadm.notefy.Model.TextBlock;
+import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.model.TextBlock;
 
 public class NoteViewModel extends ViewModel {
     private MutableLiveData<List<Note>> notes;
