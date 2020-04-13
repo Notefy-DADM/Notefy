@@ -37,7 +37,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="32dp"
                 android:clickable="true"
-                android:onClick="@{() -> viewModel.setContent(textEditor.text.toString())}"
+                android:onClick="@{() -> viewModel.setContent(textEditor.getText().toString())}"
                 android:src="@android:drawable/ic_menu_save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
