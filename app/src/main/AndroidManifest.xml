@@ -8,14 +8,39 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".View.MainActivity">
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <activity
+            android:name=".View.Activities.TextEditorPortraitActivity"
+            android:label="Editor"
+            android:parentActivityName=".View.Activities.MainActivity"
+            android:screenOrientation="sensor">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.Activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".View.Activities.AboutActivity"
+            android:label="About"
+            android:parentActivityName=".View.Activities.MainActivity"
+            android:screenOrientation="sensor">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.Activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".View.Activities.MainActivity"
+            android:screenOrientation="sensor"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

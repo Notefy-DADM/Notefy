@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    tools:context=".View.Fragments.NoteTextFragment">
+
+    <!--<data>
+        <variable android:name="note" android:type="io.github.notefydadm.notefy.Model.Note" />
+    </data>-->
+
+    <EditText
+        android:id="@+id/textEditor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_light"
+        android:gravity="top"
+        android:layout_margin="7dp"
+        android:inputType="textAutoCorrect|textMultiLine"
+        android:hint="@string/hint_noteText"
+        android:autofillHints="" />
+
+</FrameLayout>

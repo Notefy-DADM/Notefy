@@ -2,13 +2,16 @@ package io.github.notefydadm.notefy.Model;
 
 import android.graphics.Color;
 import android.location.Location;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Note {
+public class Note implements Parcelable {
     private String title;
 
     private LocalDateTime creationDate;
@@ -35,6 +38,8 @@ public class Note {
         state = NoteState.DRAFT;
         isFavorite = false;
         color = Color.WHITE;
+
+        blocks = new ArrayList<>();
 
         // This requires minimum API 26
         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -102,4 +107,54 @@ public class Note {
     }
 
     public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
+
+    public String getContent() {
+        StringBuilder content = new StringBuilder();
+        for (Block block : this.blocks) {
+            content.append(block.getContent());
+        }
+        return content.toString();
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.title;
+    }
+
+    // Parcelable
+    protected Note(Parcel in) {
+        title = in.readString();
+        userID = in.readString();
+        isFavorite = in.readByte() != 0;
+        color = in.readInt();
+        createdLocation = in.readParcelable(Location.class.getClassLoader());
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(userID);
+        dest.writeByte((byte) (isFavorite ? 1 : 0));
+        dest.writeInt(color);
+        dest.writeParcelable(createdLocation, flags);
+    }
+
 }
