@@ -46,8 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setToolbarDrawer();
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        //LiveData<List<Note>> notesData = noteViewModel.getNotes();
-        LiveData<List<Note>> notesData = noteViewModel.getAllNotes();
+        LiveData<List<Note>> notesData = noteViewModel.getNotes();
 
         noteListFragment = new NoteListFragment();
         noteTextFragment = new NoteTextFragment();
