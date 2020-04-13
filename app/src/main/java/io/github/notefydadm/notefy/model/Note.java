@@ -115,7 +115,7 @@ public class Note implements Parcelable {
     public String getContent() {
         StringBuilder content = new StringBuilder();
         for (Block block : this.blocks) {
-            content.append(block.getContent());
+            content.append(block.getContent()).append('\n');
         }
         return content.toString();
     }
@@ -130,6 +130,10 @@ public class Note implements Parcelable {
             StringBuilder builder = new StringBuilder();
             while (sc.hasNext()) {
                 String line = sc.nextLine();
+
+                if (builder.length() > 0) {
+                    builder.append('\n');
+                }
 
                 if (CheckBoxBlock.matches(line)) {
                     if (builder.length() > 0) {

@@ -45,4 +45,9 @@ public class CheckBoxBlock extends TextBlock {
     public void setChecked(boolean checked) {
         isChecked = checked;
     }
+
+    @Override
+    public String getContent() {
+        return "- [" + (isChecked ? "x" : " ") + "] " + super.getContent();
+    }
 }
