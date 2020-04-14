@@ -14,6 +14,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class Note implements Parcelable {
+
+    private String noteId;
     private String title;
 
     private LocalDateTime creationDate;
@@ -48,7 +50,8 @@ public class Note implements Parcelable {
         creationDate = lastModifiedDate = currentDateTime;
     }
 
-    public Note(String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate, ArrayList<Block> blocks) {
+    public Note(String noteId, String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate, ArrayList<Block> blocks) {
+        this.noteId = noteId;
         this.title = title;
         this.userID = userID;
 
@@ -59,7 +62,15 @@ public class Note implements Parcelable {
         this.creationDate = creationDate;
         this.lastModifiedDate = lastModifiedDate;
 
-        this.blocks = blocks;
+        if (blocks == null) {
+            this.blocks = new ArrayList<>();
+        } else {
+            this.blocks = blocks;
+        }
+    }
+
+    public String getNoteId() {
+        return noteId;
     }
 
     public ArrayList<Block> getBlocks() {
