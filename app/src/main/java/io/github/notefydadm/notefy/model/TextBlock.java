@@ -6,7 +6,7 @@ public class TextBlock implements Block {
     private String fontSize;
 
     public TextBlock(String text) {
-        this(text, "Arial", "12");
+        this(text, "Arial", "18");
     }
 
     public TextBlock(String text, String fontFamily, String fontSize) {
