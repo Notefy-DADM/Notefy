@@ -138,41 +138,11 @@ public class DatabaseHandler {
     }
 
     private static NoteState getStateFromString(String stateInString){
-        switch (stateInString){
-            case("DRAFT"):
-                return DRAFT;
-            case("PUBLISHED"):
-                return PUBLISHED;
-            case("HIDDEN"):
-                return HIDDEN;
-            case("ARCHIVED"):
-                return ARCHIVED;
-            case("DELETED"):
-                return DELETED;
-            default:
-                return null;
-
-        }
-
+        return NoteState.valueOf(stateInString);
     }
 
     private static String getStringFromState(NoteState state){
-        switch (state){
-            case DRAFT:
-                return "DRAFT";
-            case PUBLISHED:
-                return "PUBLISHED";
-            case HIDDEN:
-                return "HIDDEN";
-            case ARCHIVED:
-                return "ARCHIVED";
-            case DELETED:
-                return "DELETED";
-            default:
-                return "";
-
-        }
-
+        return state.toString();
     }
 
 }
