@@ -1,9 +1,13 @@
-package io.github.notefydadm.notefy.Model;
+package io.github.notefydadm.notefy.model;
 
 public class TextBlock implements Block {
     private String text;
     private String fontFamily;
     private String fontSize;
+
+    public TextBlock(String text) {
+        this(text, "Arial", "18");
+    }
 
     public TextBlock(String text, String fontFamily, String fontSize) {
         this.text = text;
@@ -33,5 +37,10 @@ public class TextBlock implements Block {
 
     public void setFontSize(String fontSize) {
         this.fontSize = fontSize;
+    }
+
+    @Override
+    public String getContent() {
+        return this.getText();
     }
 }

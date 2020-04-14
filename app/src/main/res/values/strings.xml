@@ -1,3 +1,28 @@
 <resources>
+    <!--Manifest-->
     <string name="app_name">Notefy</string>
+    <string name="label_textEditor">Editor</string>
+
+    <!--fragment_note_text_edit-->
+    <string name="notSelected_noteText">Please, select a note!</string>
+    <string name="hint_noteTextView">This note is empty. Press the edit button to start typing!</string>
+    <string name="hint_noteTextEdit">This note is empty. Start typing!</string>
+
+    <!--drawer_menu.xml (NavigationDrawer)-->
+    <string name="nav_about">About</string>
+    <!--nav_header.xml (NavegationDrawer Header)-->
+    <!--TEMPORAL-->
+    <string name="username" translatable="false">Pepe García Martinez</string>
+    <string name="email" translatable="false">pepegm@gmail.com</string>
+
+    <!--MainActivity-->
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
+    <!--AboutActivity-->
+    <string name="text_about">Notefy Mobile App made by</string>
+    <string name="alejandro_about" translatable="false">Gómez Noé, Alejandro \n\nalgono@inf.upv.es</string>
+    <string name="andres_about" translatable="false">Sen Moya, Andrés \n\nansemo@inf.upv.es</string>
+    <string name="marcos_about" translatable="false">Haba Claramunt, Marcos \n\nmarhacla@inf.upv.es</string>
+    <string name="DADM_about" translatable="false">DADM \n\n2019-2020</string>
 </resources>

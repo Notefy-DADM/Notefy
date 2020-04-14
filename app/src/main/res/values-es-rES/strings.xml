@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Notefy</string>
+    <string name="hint_noteTextView">La nota está vacía. ¡Pulsa el botón editar para empezar a escribir!</string>
+    <string name="hint_noteTextEdit">La nota está vacía. ¡Empieza a escribir!</string>
+    <string name="notSelected_noteText">¡Por favor, selecciona una nota!</string>
+    <string name="label_textEditor">Editor</string>
+    <string name="nav_about">Ajustes</string>
+    <string name="text_about">La app móvil de Notefy ha sido hecha por</string>
+</resources>
