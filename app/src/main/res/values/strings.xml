@@ -3,7 +3,7 @@
     <string name="app_name">Notefy</string>
     <string name="label_textEditor">Editor</string>
 
-    <!--fragment_note_text-->
+    <!--fragment_note_text_edit-->
     <string name="notSelected_noteText">Please, select a note!</string>
     <string name="hint_noteText">This note is empty. Start typing!</string>
 

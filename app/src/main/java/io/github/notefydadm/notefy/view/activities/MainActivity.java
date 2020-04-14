@@ -1,5 +1,12 @@
 package io.github.notefydadm.notefy.view.activities;
 
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,21 +16,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
-import io.github.notefydadm.notefy.view.fragments.NoteTextFragment;
+import io.github.notefydadm.notefy.view.fragments.NoteTextViewFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
 
     NoteListFragment noteListFragment;
-    NoteTextFragment noteTextFragment;
+    NoteTextViewFragment noteTextViewFragment;
 
     NoteViewModel noteViewModel;
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LiveData<List<Note>> notesData = noteViewModel.getNotes();
 
         noteListFragment = new NoteListFragment();
-        noteTextFragment = new NoteTextFragment();
+        noteTextViewFragment = new NoteTextViewFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //  landscape
             //  first note as default selected note
             noteListFragment.setArguments(getIntent().getExtras());
-            noteTextFragment.setArguments(getIntent().getExtras());
+            noteTextViewFragment.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).addToBackStack(null).commit();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteTextFragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteTextViewFragment).addToBackStack(null).commit();
 
             noteViewModel.setSelectedNote(notesData.getValue().get(0));
         }
@@ -145,8 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void changeToTextEditor() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteTextFragment).addToBackStack(null).commit();
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteTextViewFragment).addToBackStack(null).commit();
     }
 
     /*private void switchToolbar(String currentFragment){

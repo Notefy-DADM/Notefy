@@ -87,6 +87,9 @@ public class NoteListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Deselect any previously selected note
+        if (noteViewModel != null) noteViewModel.setSelectedNote(null);
+
         try {
             // Inflate the layout for this fragment
             myView = inflater.inflate(R.layout.fragment_note_list, container, false);

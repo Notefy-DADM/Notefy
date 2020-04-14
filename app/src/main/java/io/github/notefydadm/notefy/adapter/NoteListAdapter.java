@@ -35,7 +35,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
             @Override
             public void itemClicked(int position) {
                 Note note = notes.get(position);
-                viewModel.noteSelected(note);
+                viewModel.postSelectedNote(note);
             }
         };
     }

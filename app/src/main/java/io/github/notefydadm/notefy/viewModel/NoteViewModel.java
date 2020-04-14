@@ -28,6 +28,7 @@ public class NoteViewModel extends ViewModel {
     public void setSelectedNote(Note note){
         this.selectedNote.setValue(note);
     }
+    public void postSelectedNote(Note note) { this.selectedNote.postValue(note); }
 
     public void loadNotes() {
         ArrayList<Note> loadedNotes = new ArrayList<>();
@@ -54,10 +55,6 @@ public class NoteViewModel extends ViewModel {
             selectedNote = new MutableLiveData<>();
         }
         return selectedNote;
-    }
-
-    public void noteSelected(Note note) {
-        selectedNote.postValue(note);
     }
 
     public void setContent(CharSequence input){
