@@ -8,8 +8,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-import io.github.notefydadm.notefy.Model.Note;
-import io.github.notefydadm.notefy.Model.User;
+import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.model.User;
 
 public class SingletonDatabase {
 

@@ -1,19 +1,13 @@
 package io.github.notefydadm.notefy.Database;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -23,12 +17,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.FutureTask;
 
-import io.github.notefydadm.notefy.Model.Note;
+import io.github.notefydadm.notefy.model.Note;
 
-import static io.github.notefydadm.notefy.Model.Note.*;
-import static io.github.notefydadm.notefy.Model.Note.NoteState.*;
+import static io.github.notefydadm.notefy.model.Note.*;
+import static io.github.notefydadm.notefy.model.Note.NoteState.*;
 
 public class DatabaseHandler {
 
@@ -140,7 +133,7 @@ public class DatabaseHandler {
         LocalDateTime lastModifiedDate = LocalDateTime.ofEpochSecond(snapshot.getTimestamp("last_modified_date").getSeconds(),0, ZoneOffset.UTC);
 
 
-        Note item = new Note(id,tittle,userId,state,isFavourite,colour,creationDate,lastModifiedDate);
+        Note item = new Note(id,tittle,userId,state,isFavourite,colour,creationDate,lastModifiedDate,null);
         return item;
     }
 
