@@ -13,4 +13,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
     }
+
+    private void initAll(){
+        SingletonDatabase.getInstance().init();
+    }
 }
