@@ -38,7 +38,7 @@ public class DatabaseHandler {
         Timestamp timestampLastModifiedDate = new Timestamp(note.getLastModifiedDate().getSecond(),note.getLastModifiedDate().getNano());
 
         Map<String, Object> noteMap = new HashMap<>();
-        noteMap.put("tittle", note.getTitle());
+        noteMap.put("title", note.getTitle());
         noteMap.put("userId", userId);
         noteMap.put("state", getStringFromState(note.getState()));
         noteMap.put("is_favourite", note.isFavorite());
@@ -124,7 +124,7 @@ public class DatabaseHandler {
 
     private static Note getNoteFromQueryDocumentSnapshot (QueryDocumentSnapshot snapshot){
         String id = snapshot.getId();
-        String tittle = snapshot.getString("tittle");
+        String title = snapshot.getString("title");
         String userId = snapshot.getString("user_id");
         NoteState state = getStateFromString(snapshot.getString("state"));
         boolean isFavourite = snapshot.getBoolean("is_favourite");
@@ -133,7 +133,7 @@ public class DatabaseHandler {
         LocalDateTime lastModifiedDate = LocalDateTime.ofEpochSecond(snapshot.getTimestamp("last_modified_date").getSeconds(),0, ZoneOffset.UTC);
 
 
-        Note item = new Note(id,tittle,userId,state,isFavourite,colour,creationDate,lastModifiedDate,null);
+        Note item = new Note(id,title,userId,state,isFavourite,colour,creationDate,lastModifiedDate,null);
         return item;
     }
 
