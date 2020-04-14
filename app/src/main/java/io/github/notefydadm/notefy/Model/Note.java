@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Note {
+    private String noteId;
+
     private String title;
 
     private LocalDateTime creationDate;
@@ -41,7 +43,8 @@ public class Note {
         creationDate = lastModifiedDate = currentDateTime;
     }
 
-    public Note(String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate) {
+    public Note(String id,String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate) {
+        this.noteId = id;
         this.title = title;
         this.userID = userID;
 
@@ -51,6 +54,14 @@ public class Note {
 
         this.creationDate = creationDate;
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(String noteId) {
+        this.noteId = noteId;
     }
 
     public ArrayList<Block> getBlocks() {
@@ -100,6 +111,8 @@ public class Note {
     public Location getCreatedLocation() {
         return createdLocation;
     }
+
+
 
     public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
 }
