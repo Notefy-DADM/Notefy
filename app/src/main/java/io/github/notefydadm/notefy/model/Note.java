@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -112,12 +113,22 @@ public class Note implements Parcelable {
 
     public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}
 
+    public TextBlock getTitleBlock() {
+        return new TextBlock(getTitle(), "sans-serif", 20, "bold");
+    }
+
     public String getContent() {
         StringBuilder content = new StringBuilder();
-        for (Block block : this.blocks) {
-            content.append(block.getContent()).append('\n');
+        final Iterator<Block> blockIterator = this.blocks.iterator();
+        while (blockIterator.hasNext()) {
+            content.append(blockIterator.next().getContent());
+            if (blockIterator.hasNext()) content.append('\n');
         }
         return content.toString();
+    }
+
+    public String getTitleAndContent() {
+        return getTitle() + '\n' + getContent();
     }
 
     public void setContent(String text) {
@@ -128,12 +139,12 @@ public class Note implements Parcelable {
     public void addContent(String text) {
         try (Scanner sc = new Scanner(text)) {
             StringBuilder builder = new StringBuilder();
+
+            String firstLine = sc.nextLine();
+            setTitle(firstLine);
+
             while (sc.hasNext()) {
                 String line = sc.nextLine();
-
-                if (builder.length() > 0) {
-                    builder.append('\n');
-                }
 
                 if (CheckBoxBlock.matches(line)) {
                     if (builder.length() > 0) {
@@ -142,6 +153,9 @@ public class Note implements Parcelable {
                     }
                     blocks.add(CheckBoxBlock.fromLine(line));
                 } else {
+                    if (sc.hasNextLine() && builder.length() > 0) {
+                        builder.append('\n');
+                    }
                     builder.append(line);
                 }
             }

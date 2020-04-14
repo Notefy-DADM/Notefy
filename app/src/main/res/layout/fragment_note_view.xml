@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="android.text.InputType" />
         <variable name="viewModel" type="io.github.notefydadm.notefy.viewModel.NoteViewModel" />
         <variable name="editView" type="java.util.function.Consumer" />
     </data>
@@ -11,30 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
-        tools:context=".view.fragments.NoteTextEditFragment">
+        tools:context=".view.fragments.NoteEditFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/textEditor"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="7dp"
-                android:autofillHints=""
-                android:background="@android:color/background_light"
-                android:gravity="top"
-                android:hint="@string/hint_noteView"
-                android:textIsSelectable="true"
-                android:focusable="true"
-                android:longClickable="true"
-                android:textSize="18sp"
-                android:text="@{viewModel.selectedNote.content}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@android:color/background_light"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:inflateNoteContent="@{viewModel.selectedNote}" />
+            </ScrollView>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/editButton"
