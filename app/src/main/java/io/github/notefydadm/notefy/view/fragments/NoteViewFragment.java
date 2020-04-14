@@ -1,10 +1,12 @@
 package io.github.notefydadm.notefy.view.fragments;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
@@ -82,6 +84,16 @@ public class NoteViewFragment extends Fragment {
                 NoteTextViewBinding textView = DataBindingUtil.inflate(inflater, R.layout.note_text_view, layout, true);
                 textView.setTextBlock((TextBlock) block);
             }
+        }
+    }
+
+    @BindingAdapter("textStyle")
+    public static void setTextStyle(TextView view, String format) {
+        try {
+            final int textStyle = Typeface.class.getDeclaredField(format.toUpperCase()).getInt(null);
+            view.setTypeface(null, textStyle);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
         }
     }
 }
