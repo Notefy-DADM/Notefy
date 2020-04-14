@@ -62,7 +62,11 @@ public class Note implements Parcelable {
         this.creationDate = creationDate;
         this.lastModifiedDate = lastModifiedDate;
 
-        this.blocks = blocks;
+        if (blocks == null) {
+            this.blocks = new ArrayList<>();
+        } else {
+            this.blocks = blocks;
+        }
     }
 
     public String getNoteId() {
