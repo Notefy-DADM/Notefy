@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.Database;
+package io.github.notefydadm.notefy.database;
 
 import androidx.annotation.Nullable;
 
