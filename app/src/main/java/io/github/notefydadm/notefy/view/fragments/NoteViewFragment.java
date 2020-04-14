@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,18 +13,18 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.function.Consumer;
 
 import io.github.notefydadm.notefy.R;
-import io.github.notefydadm.notefy.databinding.FragmentNoteTextViewBinding;
+import io.github.notefydadm.notefy.databinding.FragmentNoteViewBinding;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NoteTextViewFragment extends Fragment {
-    private FragmentNoteTextViewBinding binding;
+public class NoteViewFragment extends Fragment {
+    private FragmentNoteViewBinding binding;
     private NoteViewModel noteViewModel;
-    private NoteTextEditFragment noteTextEditFragment;
+    private NoteEditFragment noteEditFragment;
 
-    public NoteTextViewFragment() {
+    public NoteViewFragment() {
         // Required empty public constructor
     }
 
@@ -35,16 +34,16 @@ public class NoteTextViewFragment extends Fragment {
         View v = null;
         try {
             noteViewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
-            noteTextEditFragment = new NoteTextEditFragment();
+            noteEditFragment = new NoteEditFragment();
 
             // Inflate the layout for this fragment with data binding
-            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_text_view, container, false);
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_view, container, false);
             binding.setLifecycleOwner(this);
             binding.setViewModel(noteViewModel);
             binding.setEditView(new Consumer() {
                 @Override
                 public void accept(Object t) {
-                    NoteTextViewFragment.this.editView();
+                    NoteViewFragment.this.editView();
                 }
             });
 
@@ -57,6 +56,6 @@ public class NoteTextViewFragment extends Fragment {
     }
 
     private void editView() {
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteTextEditFragment).addToBackStack(null).commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteEditFragment).addToBackStack(null).commit();
     }
 }

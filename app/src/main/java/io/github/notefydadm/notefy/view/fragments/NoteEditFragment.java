@@ -6,25 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.databinding.FragmentNoteEditBinding;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
-import io.github.notefydadm.notefy.databinding.FragmentNoteTextEditBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NoteTextEditFragment#newInstance} factory method to
+ * Use the {@link NoteEditFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoteTextEditFragment extends Fragment {
-    private FragmentNoteTextEditBinding binding;
+public class NoteEditFragment extends Fragment {
+    private FragmentNoteEditBinding binding;
     private NoteViewModel noteViewModel;
 
-    public NoteTextEditFragment() {
+    public NoteEditFragment() {
         // Required empty public constructor
     }
 
@@ -36,8 +35,8 @@ public class NoteTextEditFragment extends Fragment {
      * @return A new instance of fragment NoteTextFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NoteTextEditFragment newInstance(CharSequence text) {
-        NoteTextEditFragment fragment = new NoteTextEditFragment();
+    public static NoteEditFragment newInstance(CharSequence text) {
+        NoteEditFragment fragment = new NoteEditFragment();
         Bundle args = new Bundle();
         args.putCharSequence("text", text);
         fragment.setArguments(args);
@@ -56,7 +55,7 @@ public class NoteTextEditFragment extends Fragment {
         View v = null;
         try {
             // Inflate the layout for this fragment with data binding
-            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_text_edit, container, false);
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_edit, container, false);
             binding.setLifecycleOwner(this);
             binding.setViewModel(noteViewModel);
 
