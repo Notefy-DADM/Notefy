@@ -3,9 +3,10 @@
     <string name="app_name">Notefy</string>
     <string name="label_textEditor">Editor</string>
 
-    <!--fragment_note_text-->
+    <!--fragment_note_text_edit-->
     <string name="notSelected_noteText">Please, select a note!</string>
-    <string name="hint_noteText">This note is empty. Start typing!</string>
+    <string name="hint_noteTextView">This note is empty. Press the edit button to start typing!</string>
+    <string name="hint_noteTextEdit">This note is empty. Start typing!</string>
 
     <!--drawer_menu.xml (NavigationDrawer)-->
     <string name="nav_about">About</string>

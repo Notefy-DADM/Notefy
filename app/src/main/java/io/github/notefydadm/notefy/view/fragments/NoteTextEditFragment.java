@@ -13,18 +13,18 @@ import androidx.lifecycle.ViewModelProvider;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
-import io.github.notefydadm.notefy.databinding.FragmentNoteTextBinding;
+import io.github.notefydadm.notefy.databinding.FragmentNoteTextEditBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NoteTextFragment#newInstance} factory method to
+ * Use the {@link NoteTextEditFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoteTextFragment extends Fragment {
-    private FragmentNoteTextBinding binding;
+public class NoteTextEditFragment extends Fragment {
+    private FragmentNoteTextEditBinding binding;
     private NoteViewModel noteViewModel;
 
-    public NoteTextFragment() {
+    public NoteTextEditFragment() {
         // Required empty public constructor
     }
 
@@ -36,8 +36,8 @@ public class NoteTextFragment extends Fragment {
      * @return A new instance of fragment NoteTextFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NoteTextFragment newInstance(CharSequence text) {
-        NoteTextFragment fragment = new NoteTextFragment();
+    public static NoteTextEditFragment newInstance(CharSequence text) {
+        NoteTextEditFragment fragment = new NoteTextEditFragment();
         Bundle args = new Bundle();
         args.putCharSequence("text", text);
         fragment.setArguments(args);
@@ -56,7 +56,7 @@ public class NoteTextFragment extends Fragment {
         View v = null;
         try {
             // Inflate the layout for this fragment with data binding
-            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_text, container, false);
+            binding = DataBindingUtil.inflate(inflater, R.layout.fragment_note_text_edit, container, false);
             binding.setLifecycleOwner(this);
             binding.setViewModel(noteViewModel);
 
@@ -67,33 +67,4 @@ public class NoteTextFragment extends Fragment {
         }
         return v;
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-//        noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
-//            @Override
-//            public void onChanged(Note note) {
-//
-//            }
-//        });
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        noteViewModel.setSelectedNote(null);
-    }
-
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//    }
-
-//    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//
-//        //mainActivity = (MainActivity) context;
-//    }
 }
