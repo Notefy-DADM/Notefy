@@ -14,8 +14,8 @@ import io.github.notefydadm.notefy.model.User;
 public class SingletonDatabase {
 
     private static SingletonDatabase instance;
-    private MutableLiveData<List<Note>> mutableNoteList;
-    private User user;
+    private static MutableLiveData<List<Note>> mutableNoteList;
+    private static User user;
 
     private SingletonDatabase(){
         mutableNoteList = new MutableLiveData<>();
@@ -30,7 +30,7 @@ public class SingletonDatabase {
         return instance;
     }
 
-    public void init(){
+    public static void init(){
 
         DatabaseHandler.userGetNoteListListenerCallback callback = new DatabaseHandler.userGetNoteListListenerCallback() {
             @Override
@@ -56,13 +56,13 @@ public class SingletonDatabase {
         DatabaseHandler.userGetNoteListListener(callback, FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
-    private User getUserFromFirebase(){
+    static private User getUserFromFirebase(){
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //User user = new user()
         return null;//TODO implementar
     }
 
-    private void addNoteToMutableList(Note noteToAdd){
+    static private void addNoteToMutableList(Note noteToAdd){
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             list.add(noteToAdd);
@@ -70,7 +70,7 @@ public class SingletonDatabase {
         mutableNoteList.setValue(list);
     }
 
-    private void changeNote(Note noteToChange){
+    static private void changeNote(Note noteToChange){
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             for (int i = 0; i<list.size();i++) {
@@ -83,7 +83,7 @@ public class SingletonDatabase {
         }
     }
 
-    private void removeNote(Note noteToRemove){
+    static private void removeNote(Note noteToRemove){
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             for (int i = 0; i<list.size();i++) {

@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
+        <activity android:name=".database.SplashScreenActivity"></activity>
         <activity
             android:name=".view.activities.AboutActivity"
             android:label="About"
@@ -19,7 +19,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.activities.MainActivity" />
         </activity>
-
         <activity
             android:name=".view.activities.MainActivity"
             android:screenOrientation="sensor"
@@ -30,7 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
