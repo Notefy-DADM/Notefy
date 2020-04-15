@@ -3,21 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="android.text.InputType" />
         <variable name="viewModel" type="io.github.notefydadm.notefy.viewModel.NoteViewModel" />
-        <variable name="editView" type="java.util.function.Consumer" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
-        tools:context=".view.fragments.NoteTextEditFragment">
+        tools:context=".view.fragments.NoteEditFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <EditText
                 android:id="@+id/textEditor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -25,12 +23,11 @@
                 android:autofillHints=""
                 android:background="@android:color/background_light"
                 android:gravity="top"
-                android:hint="@string/hint_noteTextView"
-                android:textIsSelectable="true"
-                android:focusable="true"
-                android:longClickable="true"
+                android:hint="@string/hint_noteEdit"
+                android:inputType="textAutoCorrect|textMultiLine"
+                android:singleLine="false"
                 android:textSize="18sp"
-                android:text="@{viewModel.selectedNote.content}"
+                android:text="@{viewModel.selectedNote.titleAndContent}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -43,8 +40,8 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="32dp"
                 android:clickable="true"
-                android:onClick="@{() -> editView.accept(null)}"
-                android:src="@android:drawable/ic_menu_edit"
+                android:onClick="@{() -> viewModel.setContent(textEditor.getText().toString())}"
+                android:src="@android:drawable/ic_menu_save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
