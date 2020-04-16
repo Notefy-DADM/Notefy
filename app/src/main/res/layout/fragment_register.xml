@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="registerCallback" type="io.github.notefydadm.notefy.view.autentication.RegisterCallback" />
+        <variable name="registerCallback" type="io.github.notefydadm.notefy.view.authentication.RegisterCallback" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="fill_parent"

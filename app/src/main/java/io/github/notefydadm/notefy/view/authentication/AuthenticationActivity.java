@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.view.autentication;
+package io.github.notefydadm.notefy.view.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

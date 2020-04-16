@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
-import io.github.notefydadm.notefy.view.autentication.AuthenticationActivity;
+import io.github.notefydadm.notefy.view.authentication.AuthenticationActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="loginCallback" type="io.github.notefydadm.notefy.view.autentication.LoginCallback" />
+        <variable name="loginCallback" type="io.github.notefydadm.notefy.view.authentication.LoginCallback" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

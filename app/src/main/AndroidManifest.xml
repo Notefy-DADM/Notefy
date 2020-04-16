@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".view.autentication.AuthenticationActivity"
+        <activity android:name=".view.authentication.AuthenticationActivity"
             android:windowSoftInputMode="adjustResize"
             >
         </activity>
