@@ -26,4 +26,5 @@
     <string name="marcos_about" translatable="false">Haba Claramunt, Marcos \n\nmarhacla@inf.upv.es</string>
     <string name="DADM_about" translatable="false">DADM \n\n2019-2020</string>
     <string name="password">Password</string>
+    <string name="register">Register</string>
 </resources>

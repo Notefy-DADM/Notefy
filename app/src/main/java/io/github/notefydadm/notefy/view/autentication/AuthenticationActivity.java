@@ -23,21 +23,36 @@ public class AuthenticationActivity extends AppCompatActivity {
 
             @Override
             public void registerClick() {
-
+                openRegister();
             }
         };
 
         // Create new fragment and transaction
-        Fragment newFragment = new LoginFragment(callback);
+        LoginFragment loginFragment = new LoginFragment(callback);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack
-        transaction.replace(R.id.fragment_auth, newFragment);
+        transaction.replace(R.id.fragment_auth, loginFragment);
         transaction.addToBackStack(null);
 
 // Commit the transaction
         transaction.commit();
 
+    }
+
+    void openRegister(){
+        RegisterCallback callback = new RegisterCallback() {
+            @Override
+            public void register(String userName, String mail, String password) {
+
+            }
+        };
+
+        RegisterFragment registerFragment = new RegisterFragment(callback);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_auth, registerFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

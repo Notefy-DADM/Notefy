@@ -14,18 +14,17 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import io.github.notefydadm.notefy.R;
 
+public class RegisterFragment  extends Fragment{
 
-public class LoginFragment extends Fragment {
+        RegisterCallback callback;
 
-    LoginCallback callback;
-
-    LoginFragment(LoginCallback callback){
+        RegisterFragment(RegisterCallback callback){
         this.callback = callback;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
@@ -33,31 +32,26 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        final TextInputLayout textInputLayoutUserName = view.findViewById(R.id.textFieldUserName);
         final TextInputLayout textInputLayoutMail = view.findViewById(R.id.textFieldMail);
         final TextInputLayout textInputLayoutPassword = view.findViewById(R.id.textFieldPassword);
 
         Button buttonRegister = view.findViewById(R.id.buttonRegister);
-        Button buttonLogin = view.findViewById(R.id.buttonLogin);
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.registerClick();
-            }
-        });
-
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                String userName = textInputLayoutUserName.getEditText().getText().toString();
                 String mail = textInputLayoutMail.getEditText().getText().toString();
                 String password = textInputLayoutPassword.getEditText().getText().toString();
-                callback.login(mail,password);
+                callback.register(userName,mail,password);
             }
         });
+
+    }
+}
+
+    interface RegisterCallback{
+        void register(String userName, String mail,String password);
     }
 
-}
-interface LoginCallback{
-void login(String mail,String password);
-void registerClick();
-}
