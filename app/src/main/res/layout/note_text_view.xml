@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="textBlock" type="io.github.notefydadm.notefy.model.TextBlock" />
+    </data>
+    <TextView
+        android:id="@+id/textEditor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light"
+        android:textIsSelectable="true"
+        android:focusable="true"
+        android:longClickable="true"
+        android:textSize="@{textBlock.fontSize + 30}"
+        app:textStyle="@{textBlock.textStyle}"
+        android:textColor="@android:color/black"
+        android:text="@{textBlock.content}" />
+</layout>

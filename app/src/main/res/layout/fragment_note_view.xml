@@ -4,34 +4,39 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable name="viewModel" type="io.github.notefydadm.notefy.viewModel.NoteViewModel" />
+        <variable name="editView" type="java.util.function.Consumer" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
-        tools:context=".view.fragments.NoteTextEditFragment">
+        tools:context=".view.fragments.NoteEditFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/textEditor"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="7dp"
-                android:autofillHints=""
-                android:background="@android:color/background_light"
-                android:gravity="top"
-                android:hint="@string/hint_noteTextEdit"
-                android:inputType="textAutoCorrect|textMultiLine"
-                android:singleLine="false"
-                android:textSize="18sp"
-                android:text="@{viewModel.selectedNote.content}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="7dp"
+                    android:background="@android:color/background_light"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:inflateNoteContent="@{viewModel.selectedNote}" />
+            </ScrollView>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/editButton"
@@ -40,8 +45,8 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="32dp"
                 android:clickable="true"
-                android:onClick="@{() -> viewModel.setContent(textEditor.getText().toString())}"
-                android:src="@android:drawable/ic_menu_save"
+                android:onClick="@{() -> editView.accept(null)}"
+                android:src="@android:drawable/ic_menu_edit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
