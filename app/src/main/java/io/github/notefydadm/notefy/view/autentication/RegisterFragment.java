@@ -26,7 +26,7 @@ public class RegisterFragment  extends Fragment{
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class RegisterFragment  extends Fragment{
                 String userName = textInputLayoutUserName.getEditText().getText().toString();
                 String mail = textInputLayoutMail.getEditText().getText().toString();
                 String password = textInputLayoutPassword.getEditText().getText().toString();
-                callback.register(userName,mail,password);
+                callback.registerCallback(userName,mail,password);
             }
         });
 
@@ -52,6 +52,6 @@ public class RegisterFragment  extends Fragment{
 }
 
     interface RegisterCallback{
-        void register(String userName, String mail,String password);
+        void registerCallback(String userName, String mail, String password);
     }
 

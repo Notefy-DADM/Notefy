@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".view.autentication.AuthenticationActivity"></activity>
+        <activity android:name=".view.autentication.AuthenticationActivity"
+            android:windowSoftInputMode="adjustResize"
+            >
+        </activity>
         <activity android:name=".database.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

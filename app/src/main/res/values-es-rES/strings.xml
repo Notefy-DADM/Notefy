@@ -10,4 +10,7 @@
     <string name="password">Contraseña</string>
     <string name="username">Nombre de usuario</string>
     <string name="email">Email</string>
+    <string name="register">Registrarse</string>
+    <string name="loading">Cargando...</string>
+    <string name="authentication_failed">Error en autenticación</string>
 </resources>

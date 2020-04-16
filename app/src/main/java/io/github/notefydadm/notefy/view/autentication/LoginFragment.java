@@ -51,13 +51,13 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 String mail = textInputLayoutMail.getEditText().getText().toString();
                 String password = textInputLayoutPassword.getEditText().getText().toString();
-                callback.login(mail,password);
+                callback.loginCallback(mail,password);
             }
         });
     }
 
 }
 interface LoginCallback{
-void login(String mail,String password);
+void loginCallback(String mail, String password);
 void registerClick();
 }
