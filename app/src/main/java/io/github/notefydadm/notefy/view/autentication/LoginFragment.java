@@ -4,60 +4,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.textfield.TextInputLayout;
-
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.databinding.FragmentLoginBinding;
 
 
 public class LoginFragment extends Fragment {
 
-    LoginCallback callback;
+    private FragmentLoginBinding binding;
+    private LoginCallback callback;
 
     LoginFragment(LoginCallback callback){
         this.callback = callback;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
+        binding.setLoginCallback(callback);
+        return binding.getRoot();
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        final TextInputLayout textInputLayoutMail = view.findViewById(R.id.textFieldMail);
-        final TextInputLayout textInputLayoutPassword = view.findViewById(R.id.textFieldPassword);
-
-        Button buttonRegister = view.findViewById(R.id.buttonRegister);
-        Button buttonLogin = view.findViewById(R.id.buttonLogin);
-
-        buttonRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.registerClick();
-            }
-        });
-
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mail = textInputLayoutMail.getEditText().getText().toString();
-                String password = textInputLayoutPassword.getEditText().getText().toString();
-                callback.loginCallback(mail,password);
-            }
-        });
-    }
-
-}
-interface LoginCallback{
-void loginCallback(String mail, String password);
-void registerClick();
 }
