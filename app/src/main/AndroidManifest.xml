@@ -10,7 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".view.autentication.AuthenticationActivity"></activity>
-        <activity android:name=".database.SplashScreenActivity" />
+        <activity android:name=".database.SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.activities.AboutActivity"
             android:label="About"
@@ -24,11 +30,7 @@
             android:name=".view.activities.MainActivity"
             android:screenOrientation="sensor"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
