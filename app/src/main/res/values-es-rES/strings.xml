@@ -7,4 +7,7 @@
     <string name="label_textEditor">Editor</string>
     <string name="nav_about">Ajustes</string>
     <string name="text_about">La app móvil de Notefy ha sido hecha por</string>
+    <string name="password">Contraseña</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="email">Email</string>
 </resources>
