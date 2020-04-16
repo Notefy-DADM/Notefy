@@ -13,7 +13,9 @@
             android:windowSoftInputMode="adjustResize"
             >
         </activity>
-        <activity android:name=".database.SplashScreenActivity">
+        <activity android:name=".database.SplashScreenActivity"
+            android:noHistory="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
