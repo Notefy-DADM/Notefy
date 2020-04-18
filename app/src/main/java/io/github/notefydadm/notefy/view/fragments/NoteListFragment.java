@@ -78,9 +78,6 @@ public class NoteListFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // Get view model for notes
-        //final NoteViewModel noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-        //noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
         System.out.println("Created!");
     }
 
@@ -149,7 +146,8 @@ public class NoteListFragment extends Fragment {
     }
 
     public interface ChangeToTextEditor{
-        public void changeToTextEditor();
+        void changeToTextEditor();
+        void changeToTextEditor(boolean isEditing);
     }
 
     @Override

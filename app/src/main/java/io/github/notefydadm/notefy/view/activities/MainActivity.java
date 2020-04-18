@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -22,6 +24,7 @@ import java.util.List;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.fragments.NoteEditFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteViewFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     NoteListFragment noteListFragment;
     NoteViewFragment noteViewFragment;
+    NoteEditFragment noteEditFragment;
 
     NoteViewModel noteViewModel;
 
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         noteListFragment = new NoteListFragment();
         noteViewFragment = new NoteViewFragment();
+        noteEditFragment = new NoteEditFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -115,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.add_toolbar:
                 System.out.println("Add item selected");
-
+                noteViewModel.setSelectedNoteNew(true);
+                MainActivity.this.changeToTextEditor(true);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -145,7 +151,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void changeToTextEditor() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteViewFragment).addToBackStack(null).commit();
+        changeToTextEditor(false);
+    }
+
+    @Override
+    public void changeToTextEditor(boolean isEditing) {
+        if (isEditing) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteEditFragment).addToBackStack(null).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteViewFragment).addToBackStack(null).commit();
+        }
     }
 
     /*private void switchToolbar(String currentFragment){

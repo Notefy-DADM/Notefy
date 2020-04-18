@@ -36,10 +36,7 @@ public class Note implements Parcelable {
     // TODO: Add location system for notes
     private Location createdLocation;
 
-    public Note(String title, String userID) {
-        this.title = title;
-        this.userID = userID;
-
+    public Note() {
         state = NoteState.DRAFT;
         isFavorite = false;
         color = Color.WHITE;
@@ -49,6 +46,12 @@ public class Note implements Parcelable {
         // This requires minimum API 26
         LocalDateTime currentDateTime = LocalDateTime.now();
         creationDate = lastModifiedDate = currentDateTime;
+    }
+
+    public Note(String title, String userID) {
+        this();
+        this.title = title;
+        this.userID = userID;
     }
 
     public Note(String noteId, String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate, ArrayList<Block> blocks) {
@@ -139,7 +142,7 @@ public class Note implements Parcelable {
     }
 
     public String getTitleAndContent() {
-        return getTitle() + '\n' + getContent();
+        return title == null ? getContent() : title + '\n' + getContent();
     }
 
     public void setContent(String text) {
