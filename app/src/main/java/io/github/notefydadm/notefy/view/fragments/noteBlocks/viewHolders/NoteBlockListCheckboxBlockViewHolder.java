@@ -19,6 +19,10 @@ public class NoteBlockListCheckboxBlockViewHolder extends RecyclerView.ViewHolde
     @Override
     public void bind(CheckBoxBlock block, NoteBlocksListAdapterCallbacks callbacks) {
         binding.setCheckBoxBlock(block);
+
+        // This prevents the "onItemModifiedCallback" to be triggered because of the binding
+        binding.executePendingBindings();
+
         binding.setCallbacks(callbacks);
     }
 }

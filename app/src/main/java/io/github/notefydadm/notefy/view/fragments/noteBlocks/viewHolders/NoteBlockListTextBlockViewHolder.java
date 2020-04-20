@@ -19,6 +19,10 @@ public class NoteBlockListTextBlockViewHolder extends RecyclerView.ViewHolder im
     @Override
     public void bind(TextBlock block, NoteBlocksListAdapterCallbacks callbacks) {
         binding.setTextBlock(block);
+
+        // This prevents the "onItemModifiedCallback" to be triggered because of the binding
+        binding.executePendingBindings();
+
         binding.setCallbacks(callbacks);
     }
 }

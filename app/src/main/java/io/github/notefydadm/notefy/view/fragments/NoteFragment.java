@@ -88,12 +88,12 @@ public class NoteFragment extends Fragment {
     }
 
     private void addNewTextBlock() {
-        TextBlock block = new TextBlock(getString(R.string.hint_text));
+        TextBlock block = new TextBlock();
         adapter.addBlock(block);
     }
 
     private void addNewCheckboxBlock(){
-        CheckBoxBlock block = new CheckBoxBlock(getString(R.string.hint_text),false);
+        CheckBoxBlock block = new CheckBoxBlock(false);
         adapter.addBlock(block);
     }
 

@@ -10,6 +10,8 @@ public class TextBlock implements Block {
     @Dimension(unit = Dimension.SP)
     private float fontSize;
 
+    public TextBlock() {}
+
     public TextBlock(String text) {
         this(text, "sans-serif", 18, "normal");
     }
