@@ -26,16 +26,22 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     private Context fragmentContext;
     private NoteViewModel viewModel;
 
-    private PositionClickedListener positionListener;
+    private static PositionClickedListener positionListener;
 
     public NoteListAdapter(Activity activity, Context context) {
         this.viewModel = new ViewModelProvider((MainActivity)activity).get(NoteViewModel.class);
         this.fragmentContext = context;
-        this.positionListener = new PositionClickedListener() {
+        positionListener = new PositionClickedListener() {
             @Override
             public void itemClicked(int position) {
                 Note note = notes.get(position);
                 viewModel.postSelectedNote(note);
+            }
+
+            @Override
+            public void itemLongClicked(int position) {
+                Note note = notes.get(position);
+                viewModel.postLongSelectedNote(note);
             }
         };
     }
@@ -65,11 +71,17 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
         notifyDataSetChanged();
     }
 
-    interface PositionClickedListener {
-        void itemClicked(int position);
+    public void setOnItemClickListener(PositionClickedListener positionListener){
+        NoteListAdapter.positionListener = positionListener;
     }
 
-    class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    interface PositionClickedListener {
+        void itemClicked(int position);
+
+        void itemLongClicked(int position);
+    }
+
+    class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private TextView title, content;
         private PositionClickedListener listener;
@@ -81,6 +93,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
             this.content = itemView.findViewById(R.id.card_content);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
             this.listener = listener;
         }
@@ -93,6 +106,12 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
         @Override
         public void onClick(View view) {
             listener.itemClicked(getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            listener.itemLongClicked(getAdapterPosition());
+            return true;
         }
     }
 }

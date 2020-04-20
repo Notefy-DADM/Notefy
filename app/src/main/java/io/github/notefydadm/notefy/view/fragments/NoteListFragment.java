@@ -3,6 +3,7 @@ package io.github.notefydadm.notefy.view.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.List;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.activities.MainActivity;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 /**
@@ -46,6 +48,7 @@ public class NoteListFragment extends Fragment {
     private NoteViewModel noteViewModel;
 
     private ChangeToTextEditor listener;
+    private ChangeToolbar longListener;
 
     public NoteListFragment() {
         // Required empty public constructor
@@ -106,6 +109,14 @@ public class NoteListFragment extends Fragment {
                 }
             });
 
+            // When a note is long clicked
+            noteViewModel.getLongSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
+                @Override
+                public void onChanged(Note note) {
+                    longListener.changeToolbar();
+                }
+            });
+
             // When a note is selected, open it
             noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
                 @Override
@@ -150,11 +161,16 @@ public class NoteListFragment extends Fragment {
         void changeToTextEditor(boolean isEditing);
     }
 
+    public interface ChangeToolbar{
+        public void changeToolbar();
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
             listener = (ChangeToTextEditor) context;
+            longListener = (ChangeToolbar) context;
         } catch (ClassCastException e){
             e.printStackTrace();
         }

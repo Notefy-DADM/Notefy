@@ -29,7 +29,7 @@ import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteViewFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor, NoteListFragment.ChangeToolbar {
 
     private DrawerLayout drawer;
 
@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NoteViewModel noteViewModel;
 
     private Toolbar toolbar;
+
+    private boolean longClickToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,17 +113,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu,menu);
+        if(!longClickToolbar){
+            inflater.inflate(R.menu.toolbar_menu,menu);
+        }
+        else{
+            inflater.inflate(R.menu.toolbar_longclick,menu);
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case R.id.add_toolbar:
-                System.out.println("Add item selected");
-                noteViewModel.setSelectedNoteNew(true);
-                MainActivity.this.changeToTextEditor(true);
+            case R.id.delete_toolbar:
+                System.out.println("Delete item selected");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -129,14 +135,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setToolbarDrawer(){
         toolbar = findViewById(R.id.toolbar);
-        //currentToolbarLayout = R.id.toolbar;
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, toolbar,
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -154,6 +159,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         changeToTextEditor(false);
     }
 
+    @Override
+    public void changeToolbar(){
+        longClickToolbar = !longClickToolbar;
+        invalidateOptionsMenu();
+    }
     @Override
     public void changeToTextEditor(boolean isEditing) {
         if (isEditing) {

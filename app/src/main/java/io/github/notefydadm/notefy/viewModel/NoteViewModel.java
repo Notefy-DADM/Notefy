@@ -14,6 +14,7 @@ import io.github.notefydadm.notefy.model.TextBlock;
 public class NoteViewModel extends ViewModel {
     private MutableLiveData<List<Note>> notes;
     private MutableLiveData<Note> selectedNote;
+    private MutableLiveData<Note> longSelectedNote;
 
     private boolean isSelectedNoteNew;
 
@@ -31,7 +32,11 @@ public class NoteViewModel extends ViewModel {
     public void setSelectedNote(Note note){
         this.selectedNote.setValue(note);
     }
+    public void setLongSelectedNote(Note note){
+        this.longSelectedNote.setValue(note);
+    }
     public void postSelectedNote(Note note) { this.selectedNote.postValue(note); }
+    public void postLongSelectedNote(Note note) { this.longSelectedNote.postValue(note); }
 
     public boolean isSelectedNoteNew() {
         return isSelectedNoteNew;
@@ -86,4 +91,12 @@ public class NoteViewModel extends ViewModel {
            }
        }
     }
+
+    public LiveData<Note> getLongSelectedNote() {
+        if(longSelectedNote == null){
+            longSelectedNote = new MutableLiveData<>();
+        }
+        return longSelectedNote;
+    }
+
 }
