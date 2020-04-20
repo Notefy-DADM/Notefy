@@ -27,7 +27,6 @@ import java.util.List;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.view.fragments.NoteFragment;
-import io.github.notefydadm.notefy.view.fragments.NoteEditFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
@@ -156,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void changeToTextEditor() {
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
+    }
+
+    @Override
+    public void changeToTextEditor(boolean isEditing) {
+
     }
 
     private void saveNote(Note note){
