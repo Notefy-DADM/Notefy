@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.model.TextBlock;
@@ -13,6 +14,8 @@ import io.github.notefydadm.notefy.model.TextBlock;
 public class NoteViewModel extends ViewModel {
     private MutableLiveData<List<Note>> notes;
     private MutableLiveData<Note> selectedNote;
+
+    private boolean isSelectedNoteNew;
 
     public LiveData<List<Note>> getNotes() {
         if (notes == null) {
@@ -29,6 +32,17 @@ public class NoteViewModel extends ViewModel {
         this.selectedNote.setValue(note);
     }
     public void postSelectedNote(Note note) { this.selectedNote.postValue(note); }
+
+    public boolean isSelectedNoteNew() {
+        return isSelectedNoteNew;
+    }
+
+    public void setSelectedNoteNew(boolean selectedNoteNew) {
+        isSelectedNoteNew = selectedNoteNew;
+        if (selectedNoteNew) {
+            selectedNote.setValue(new Note());
+        }
+    }
 
     public void loadNotes() {
         ArrayList<Note> loadedNotes = new ArrayList<>();
@@ -57,10 +71,19 @@ public class NoteViewModel extends ViewModel {
         return selectedNote;
     }
 
-    public void setContent(CharSequence input){
+    public void saveChanges(CharSequence input){
        Note selectedNote = getSelectedNote().getValue();
        if (selectedNote != null) {
            selectedNote.setContent(input.toString());
+           if (isSelectedNoteNew) {
+               final List<Note> noteList = Objects.requireNonNull(this.notes.getValue());
+               noteList.add(selectedNote);
+               isSelectedNoteNew = false;
+
+               // In order to notify observers that the values in the list have changed,
+               // you have to set the value of the LiveData to itself (it's the only way)
+               this.notes.setValue(noteList);
+           }
        }
     }
 }

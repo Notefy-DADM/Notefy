@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -25,6 +27,7 @@ import java.util.List;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.view.fragments.NoteFragment;
+import io.github.notefydadm.notefy.view.fragments.NoteEditFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
@@ -44,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         setContentView(R.layout.activity_main);
 
@@ -120,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.add_toolbar:
                 System.out.println("Add item selected");
-
+                noteViewModel.setSelectedNoteNew(true);
+                MainActivity.this.changeToTextEditor(true);
                 break;
             case R.id.save_toolbar:
                 Note note = noteFragment.getNoteToSave();
