@@ -2,12 +2,15 @@ package io.github.notefydadm.notefy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
@@ -37,12 +40,6 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
                 Note note = notes.get(position);
                 viewModel.postSelectedNote(note);
             }
-
-            @Override
-            public void itemLongClicked(int position) {
-                Note note = notes.get(position);
-                viewModel.postLongSelectedNote(note);
-            }
         };
     }
 
@@ -56,7 +53,6 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull NoteListViewHolder holder, int position) {
-
         Note note = notes.get(position);
         holder.bind(note, fragmentContext);
     }
@@ -71,19 +67,19 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
         notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener(PositionClickedListener positionListener){
-        NoteListAdapter.positionListener = positionListener;
+    public void removeNote(int position){
+        notes.remove(position);
+        notifyDataSetChanged();
     }
 
     interface PositionClickedListener {
         void itemClicked(int position);
-
-        void itemLongClicked(int position);
     }
 
-    class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 
         private TextView title, content;
+        private CardView cardView;
         private PositionClickedListener listener;
 
         public NoteListViewHolder(@NonNull View itemView, PositionClickedListener listener) {
@@ -91,9 +87,10 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
             this.title = itemView.findViewById(R.id.card_title);
             this.content = itemView.findViewById(R.id.card_content);
+            this.cardView = itemView.findViewById(R.id.note);
 
             itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+            cardView.setOnCreateContextMenuListener(this);
 
             this.listener = listener;
         }
@@ -109,9 +106,9 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
         }
 
         @Override
-        public boolean onLongClick(View view) {
-            listener.itemLongClicked(getAdapterPosition());
-            return true;
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(this.getAdapterPosition(), 121,0,R.string.remove_adapter_context);
+            menu.add(this.getAdapterPosition(),122,1,R.string.share_adapter_context);
         }
     }
 }

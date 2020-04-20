@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -29,7 +27,7 @@ import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteViewFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor, NoteListFragment.ChangeToolbar {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
 
     private DrawerLayout drawer;
 
@@ -40,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NoteViewModel noteViewModel;
 
     private Toolbar toolbar;
-
-    private boolean longClickToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,24 +109,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if(!longClickToolbar){
-            inflater.inflate(R.menu.toolbar_menu,menu);
-        }
-        else{
-            inflater.inflate(R.menu.toolbar_longclick,menu);
-        }
-
+        inflater.inflate(R.menu.toolbar_menu,menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.delete_toolbar:
-                System.out.println("Delete item selected");
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void setToolbarDrawer(){
@@ -150,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        //outState.p
     }
 
     @Override
@@ -160,11 +138,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void changeToolbar(){
-        longClickToolbar = !longClickToolbar;
-        invalidateOptionsMenu();
-    }
-    @Override
     public void changeToTextEditor(boolean isEditing) {
         if (isEditing) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteEditFragment).addToBackStack(null).commit();
@@ -172,15 +145,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteViewFragment).addToBackStack(null).commit();
         }
     }
-
-    /*private void switchToolbar(String currentFragment){
-        if(currentFragment == ){
-            return;
-        }
-        currentToolbarLayout = layout;
-        View v = getLayoutInflater().inflate(layout,null);
-        toolbar.removeAllViews();
-        toolbar.addView(v);
-    }*/
 
 }
