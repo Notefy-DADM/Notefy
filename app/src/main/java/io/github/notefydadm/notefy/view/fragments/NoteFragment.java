@@ -2,21 +2,21 @@ package io.github.notefydadm.notefy.view.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.databinding.FragmentNoteBinding;
 import io.github.notefydadm.notefy.model.Block;
 import io.github.notefydadm.notefy.model.CheckBoxBlock;
 import io.github.notefydadm.notefy.model.Note;
@@ -24,103 +24,91 @@ import io.github.notefydadm.notefy.model.TextBlock;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
 import io.github.notefydadm.notefy.view.fragments.noteBlocks.NoteBlocksListAdapter;
 import io.github.notefydadm.notefy.view.fragments.noteBlocks.OnItemModifiedCallback;
+import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NoteFragment extends Fragment {
-    NoteBlocksListAdapter adapter;
-    Note noteToShow;
+    private NoteBlocksListAdapter adapter;
+    private NoteViewModel noteViewModel;
 
-    public NoteFragment(Note note) {
-        ArrayList<Block> blocks = new ArrayList<>();
-        blocks.add(new TextBlock("Texto1"));
-        blocks.add(new TextBlock("Texto2"));
-        blocks.add(new CheckBoxBlock("CheckboxTrue",true));
-        blocks.add(new CheckBoxBlock("CheckboxTrue",false));
-        blocks.add(new TextBlock("Texto3"));
-        Note exampleNote = new Note("Id","Titulo note","idUser", Note.NoteState.PUBLISHED,false,2, LocalDateTime.MAX,LocalDateTime.MIN,blocks);
-
-        this.noteToShow = note;
-    }
-
-    public Note getNoteToSave(){
-        noteToShow.setBlocks(adapter.getBlocks());
-        return noteToShow;
+    public void saveNote() {
+        final Note note = noteViewModel.getSelectedNote().getValue();
+        if (note != null) note.setBlocks(adapter.getBlocks());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         hideButtonSave();
+        noteViewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
 
-        View view =inflater.inflate(R.layout.fragment_note,container,false);
+        final Note note = noteViewModel.getSelectedNote().getValue();
+        if (note == null) throw new IllegalStateException("A note needs to be selected");
 
+        FragmentNoteBinding binding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_note, container,false);
 
+        RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerViewBlocks);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewBlocks);
-        OnItemModifiedCallback onItemModifiedCallback = new OnItemModifiedCallback() {
+        ArrayList<Block> blocks = new ArrayList<>(note.getBlocks());
+        adapter = new NoteBlocksListAdapter(blocks, new OnItemModifiedCallback() {
             @Override
             public void onItemModified() {
                 showButtonSave();
             }
-        };
-        ArrayList<Block> blocks = new ArrayList<>();
-        blocks.addAll(noteToShow.getBlocks());
-        adapter = new NoteBlocksListAdapter(blocks,onItemModifiedCallback);
+        });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-
         recyclerView.setAdapter(adapter);
-        initFab(view);
 
+        initFab(binding);
 
-        return view;
+        return binding.getRoot();
     }
 
-    private void initFab(View view){
-        FloatingActionsMenu menuMultipleActions = view.findViewById(R.id.multiple_actions);
-
-        final FloatingActionButton buttonAddText = view.findViewById(R.id.buttonAddText);
-        buttonAddText.setOnClickListener(new View.OnClickListener() {
+    private void initFab(FragmentNoteBinding binding) {
+        binding.setAddNewTextBlock(new Runnable() {
             @Override
-            public void onClick(View v) {
+            public void run() {
                 showButtonSave();
                 addNewTextBlock();
             }
         });
-        final FloatingActionButton buttonAddCheckbox = view.findViewById(R.id.buttonAddCheckbox);
-        buttonAddCheckbox.setOnClickListener(new View.OnClickListener() {
+        binding.setAddNewCheckBoxBlock(new Runnable() {
             @Override
-            public void onClick(View v) {
+            public void run() {
                 showButtonSave();
                 addNewCheckboxBlock();
             }
         });
     }
 
-    private void addNewTextBlock(){
-        TextBlock block = new TextBlock("Text");
+    private void addNewTextBlock() {
+        TextBlock block = new TextBlock(getString(R.string.hint_text));
         adapter.addBlock(block);
     }
 
     private void addNewCheckboxBlock(){
-        CheckBoxBlock block = new CheckBoxBlock("Text",false);
+        CheckBoxBlock block = new CheckBoxBlock(getString(R.string.hint_text),false);
         adapter.addBlock(block);
     }
 
     private void showButtonSave(){
-        MainActivity activity = (MainActivity) getActivity();
-        activity.toolbarMenu.findItem(R.id.save_toolbar).setVisible(true);
-        activity.toolbarMenu.findItem(R.id.save_toolbar).setEnabled(true);
+        MainActivity activity = (MainActivity) requireActivity();
+        final MenuItem saveItem = activity.toolbarMenu.findItem(R.id.save_toolbar);
+        saveItem.setVisible(true);
+        saveItem.setEnabled(true);
     }
 
     private void hideButtonSave(){
-        MainActivity activity = (MainActivity) getActivity();
-        activity.toolbarMenu.findItem(R.id.save_toolbar).setVisible(false);
-        activity.toolbarMenu.findItem(R.id.save_toolbar).setEnabled(false);
+        MainActivity activity = (MainActivity) requireActivity();
+        final MenuItem saveItem = activity.toolbarMenu.findItem(R.id.save_toolbar);
+        saveItem.setVisible(false);
+        saveItem.setEnabled(false);
     }
-
 
 }

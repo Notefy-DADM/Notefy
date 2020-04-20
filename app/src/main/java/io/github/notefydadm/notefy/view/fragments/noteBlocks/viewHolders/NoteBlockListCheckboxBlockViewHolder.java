@@ -1,26 +1,24 @@
 package io.github.notefydadm.notefy.view.fragments.noteBlocks.viewHolders;
 
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.databinding.NoteCheckboxBlockBinding;
+import io.github.notefydadm.notefy.model.CheckBoxBlock;
+import io.github.notefydadm.notefy.view.fragments.noteBlocks.NoteBlocksListAdapterCallbacks;
 
-public class NoteBlockListCheckboxBlockViewHolder extends RecyclerView.ViewHolder {
+public class NoteBlockListCheckboxBlockViewHolder extends RecyclerView.ViewHolder implements NoteBlockListViewHolder<CheckBoxBlock> {
 
-    public final CheckBox checkBox;
-    public final EditText editText;
-    public final ImageButton button;
+    private final NoteCheckboxBlockBinding binding;
 
+    public NoteBlockListCheckboxBlockViewHolder(@NonNull NoteCheckboxBlockBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
+    }
 
-    public NoteBlockListCheckboxBlockViewHolder(@NonNull View itemView) {
-        super(itemView);
-        checkBox = itemView.findViewById(R.id.checkBox_block);
-        editText = itemView.findViewById(R.id.editText_checkboxBlock);
-        button = itemView.findViewById(R.id.deleteCheckboxButton);
+    @Override
+    public void bind(CheckBoxBlock block, NoteBlocksListAdapterCallbacks callbacks) {
+        binding.setCheckBoxBlock(block);
+        binding.setCallbacks(callbacks);
     }
 }
