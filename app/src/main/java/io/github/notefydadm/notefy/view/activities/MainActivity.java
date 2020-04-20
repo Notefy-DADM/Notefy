@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
@@ -22,16 +24,18 @@ import java.util.List;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.fragments.NoteFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
-import io.github.notefydadm.notefy.view.fragments.NoteViewFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
 
     private DrawerLayout drawer;
 
+    public Menu toolbarMenu;
+
     NoteListFragment noteListFragment;
-    NoteViewFragment noteViewFragment;
+    NoteFragment noteFragment;
 
     NoteViewModel noteViewModel;
 
@@ -41,15 +45,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         setContentView(R.layout.activity_main);
 
         setToolbarDrawer();
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        LiveData<List<Note>> notesData = noteViewModel.getNotes();
 
         noteListFragment = new NoteListFragment();
-        noteViewFragment = new NoteViewFragment();
+        initNoteListener();
+        //noteFragment = new NoteFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -61,11 +67,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //  landscape
             //  first note as default selected note
             noteListFragment.setArguments(getIntent().getExtras());
-            noteViewFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).addToBackStack(null).commit();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteViewFragment).addToBackStack(null).commit();
-
-            noteViewModel.setSelectedNote(notesData.getValue().get(0));
+            //noteFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
         }
         else{
             //  portrait
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //  Intent, pass the Intent's extras to the fragment as arguments
             noteListFragment.setArguments(getIntent().getExtras());
             //  Replace the Fragment on the 'fragmentContainer' FrameLayout
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).commit();
         }
 
     }
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu,menu);
+        this.toolbarMenu = menu;
         return true;
     }
 
@@ -117,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 System.out.println("Add item selected");
 
                 break;
+            case R.id.save_toolbar:
+                Note note = noteFragment.getNoteToSave();
+                saveNote(note);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -145,9 +153,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void changeToTextEditor() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteViewFragment).addToBackStack(null).commit();
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
 
+    private void saveNote(Note note){
+        Toast.makeText(this,"Saved",Toast.LENGTH_LONG).show();
+    }
+
+    private void initNoteListener(){
+        noteViewModel.getSelectedNote().observe(this,new Observer<Note>() {
+            @Override
+            public void onChanged(Note note) {
+
+
+                if (note != null) {
+                    //  Check orientation
+                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                        // landscape
+                        System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
+                        noteFragment = new NoteFragment(note);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+                    }
+                    else{
+                        // portrait
+                        System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
+                        //noteViewModel.setText(note.getContent());
+                        /*Intent intent = new Intent(getActivity(), TextEditorPortraitActivity.class);
+                        intent.putExtra("selectedNote", note);
+                        intent.putExtra("selectedNoteContent",note.getContent());
+                        startActivity(intent);*/
+                        noteFragment = new NoteFragment(note);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
+
+                    }
+                }
+            }
+        });
+    }
     /*private void switchToolbar(String currentFragment){
         if(currentFragment == ){
             return;
