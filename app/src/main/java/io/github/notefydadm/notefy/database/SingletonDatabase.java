@@ -77,7 +77,7 @@ public class SingletonDatabase {
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             for (int i = 0; i<list.size();i++) {
-                if(list.get(i).getNoteId().equals(note.getNoteId())){
+                if(list.get(i).equals(note)){
                     list.set(i,note);
                     mutableNoteList.setValue(list);
                     return;
@@ -92,7 +92,7 @@ public class SingletonDatabase {
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             for (int i = 0; i<list.size();i++) {
-                if(list.get(i).getNoteId().equals(noteToRemove.getNoteId())){
+                if(list.get(i).equals(noteToRemove)){
                     list.remove(i);
                     mutableNoteList.setValue(list);
                     return;

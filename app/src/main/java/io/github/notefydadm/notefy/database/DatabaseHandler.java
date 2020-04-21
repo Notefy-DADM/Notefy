@@ -46,10 +46,7 @@ public class DatabaseHandler {
 
     }
     
-    public static void addNoteToUser(String userId, Note note, final addNoteToUserCallback callback){
-
-
-
+    public static void addNoteToUser(String userId, Note note, final addNoteToUserCallback callback) {
         Timestamp timestampCreationDate = new Timestamp(note.getCreationDate().getSecond(),note.getCreationDate().getNano());
         Timestamp timestampLastModifiedDate = new Timestamp(note.getLastModifiedDate().getSecond(),note.getLastModifiedDate().getNano());
 
@@ -63,7 +60,7 @@ public class DatabaseHandler {
         noteMap.put("last_modified_date", timestampLastModifiedDate);
         noteMap.put("blocks",note.getBlocks());
 
-        if(note.getNoteId() == null || note.getNoteId().equals("")){
+        if (note.getNoteId() == null || note.getNoteId().isEmpty()) {
             FirebaseFirestore.getInstance().collection("notes")
                     .add(noteMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
@@ -78,7 +75,7 @@ public class DatabaseHandler {
                     callback.onFailureAdded();
                 }
             });
-        }else{
+        } else {
             FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId())
                     .set(noteMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -94,10 +91,6 @@ public class DatabaseHandler {
                 }
             });
         }
-
-
-
-
     }
 
     public static List<Note> getUserNotes(String userId) {
