@@ -21,13 +21,11 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void initAll(){
-
-
         if(FirebaseAuth.getInstance().getCurrentUser()==null){
             openLogin();
         }else{
-            openMain();
             SingletonDatabase.getInstance().init();
+            openMain();
         }
     }
 

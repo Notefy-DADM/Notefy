@@ -7,8 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,13 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.List;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Note;
@@ -54,8 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
 
         noteListFragment = new NoteListFragment();
-        initNoteListener();
-        //noteFragment = new NoteFragment();
+        noteFragment = new NoteFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -119,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.add_toolbar:
                 System.out.println("Add item selected");
-                noteViewModel.setSelectedNoteNew(true);
-                MainActivity.this.changeToTextEditor(true);
+                noteViewModel.setSelectedNote(new Note());
+                MainActivity.this.changeToTextEditor();
                 break;
             case R.id.save_toolbar:
                 noteFragment.saveNote();
@@ -147,48 +141,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        //outState.p
     }
 
     @Override
     public void changeToTextEditor() {
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
 
-    @Override
-    public void changeToTextEditor(boolean isEditing) {
-
-    }
-
-    private void initNoteListener(){
-        noteViewModel.getSelectedNote().observe(this,new Observer<Note>() {
-            @Override
-            public void onChanged(Note note) {
-                if (note != null) {
-                    //  Check orientation
-                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                        // landscape
-                        System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
-                        noteFragment = new NoteFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
-                    }
-                    else{
-                        // portrait
-                        System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
-                        //noteViewModel.setText(note.getContent());
-                        /*Intent intent = new Intent(getActivity(), TextEditorPortraitActivity.class);
-                        intent.putExtra("selectedNote", note);
-                        intent.putExtra("selectedNoteContent",note.getContent());
-                        startActivity(intent);*/
-                        noteFragment = new NoteFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
-
-                    }
-                }
-            }
-        });
-    }
     /*private void switchToolbar(String currentFragment){
         if(currentFragment == ){
             return;
