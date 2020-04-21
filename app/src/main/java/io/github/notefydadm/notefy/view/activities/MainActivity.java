@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
 
         noteListFragment = new NoteListFragment();
+        noteFragment = new NoteFragment();
         initNoteListener();
-        //noteFragment = new NoteFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -114,8 +114,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.add_toolbar:
                 System.out.println("Add item selected");
-                noteViewModel.setSelectedNoteNew(true);
-                MainActivity.this.changeToTextEditor(true);
+                MainActivity.this.changeToTextEditor();
                 break;
             case R.id.save_toolbar:
                 noteFragment.saveNote();
@@ -142,18 +141,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        //outState.p
     }
 
     @Override
     public void changeToTextEditor() {
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
-    }
-
-    @Override
-    public void changeToTextEditor(boolean isEditing) {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
 
     private void initNoteListener(){
@@ -162,13 +154,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onChanged(Note note) {
                 if (note != null) {
                     //  Check orientation
-                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         // landscape
                         System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
-                        noteFragment = new NoteFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
-                    }
-                    else{
+                    } else {
                         // portrait
                         System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
                         //noteViewModel.setText(note.getContent());
@@ -176,10 +165,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         intent.putExtra("selectedNote", note);
                         intent.putExtra("selectedNoteContent",note.getContent());
                         startActivity(intent);*/
-                        noteFragment = new NoteFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
-
                     }
+                    changeToTextEditor();
                 }
             }
         });

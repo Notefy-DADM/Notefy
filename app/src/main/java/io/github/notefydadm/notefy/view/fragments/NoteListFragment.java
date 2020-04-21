@@ -139,7 +139,6 @@ public class NoteListFragment extends Fragment {
 
     public interface ChangeToTextEditor{
         void changeToTextEditor();
-        void changeToTextEditor(boolean isEditing);
     }
 
     @Override
