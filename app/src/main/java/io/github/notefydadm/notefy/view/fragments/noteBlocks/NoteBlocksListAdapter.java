@@ -83,6 +83,30 @@ public class NoteBlocksListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    @Override
+    public int getItemCount() {
+        return blockList.size();
+    }
+
+    public ArrayList<Block> getBlocks() {
+        return blockList;
+    }
+
+    public void deleteBlockAtPosition(int position) {
+        blockList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void addBlock(Block block) {
+        blockList.add(block);
+        notifyDataSetChanged();
+    }
+
+    @FunctionalInterface
+    public interface TextWatcherOnTextChanged {
+        void onTextChanged(CharSequence s, int start, int before, int count);
+    }
+
     @BindingAdapter({"onTextChanged"})
     public static void onTextChanged(EditText editText, final TextWatcherOnTextChanged handler) {
         editText.addTextChangedListener(new TextWatcher() {
@@ -101,24 +125,5 @@ public class NoteBlocksListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             }
         });
-    }
-
-    @Override
-    public int getItemCount() {
-        return blockList.size();
-    }
-
-    public ArrayList<Block> getBlocks() {
-        return blockList;
-    }
-
-    public void deleteBlockAtPosition(int position) {
-        blockList.remove(position);
-        notifyDataSetChanged();
-    }
-
-    public void addBlock(Block block) {
-        blockList.add(block);
-        notifyDataSetChanged();
     }
 }
