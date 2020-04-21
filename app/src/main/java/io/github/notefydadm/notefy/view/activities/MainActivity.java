@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         noteListFragment = new NoteListFragment();
         noteFragment = new NoteFragment();
-        initNoteListener();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -114,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.add_toolbar:
                 System.out.println("Add item selected");
+                noteViewModel.setSelectedNote(new Note());
                 MainActivity.this.changeToTextEditor();
                 break;
             case R.id.save_toolbar:
@@ -148,29 +148,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
 
-    private void initNoteListener(){
-        noteViewModel.getSelectedNote().observe(this,new Observer<Note>() {
-            @Override
-            public void onChanged(Note note) {
-                if (note != null) {
-                    //  Check orientation
-                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        // landscape
-                        System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
-                    } else {
-                        // portrait
-                        System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
-                        //noteViewModel.setText(note.getContent());
-                        /*Intent intent = new Intent(getActivity(), TextEditorPortraitActivity.class);
-                        intent.putExtra("selectedNote", note);
-                        intent.putExtra("selectedNoteContent",note.getContent());
-                        startActivity(intent);*/
-                    }
-                    changeToTextEditor();
-                }
-            }
-        });
-    }
     /*private void switchToolbar(String currentFragment){
         if(currentFragment == ){
             return;

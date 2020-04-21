@@ -157,6 +157,4 @@ public class NoteFragment extends Fragment {
         }
         return blockArrayListReturn;
     }
-
-
 }
