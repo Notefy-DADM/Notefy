@@ -5,8 +5,7 @@
 
     <!--fragment_note_edit-->
     <string name="notSelected_noteText">Please, select a note!</string>
-    <string name="hint_noteView">This note is empty. Press the edit button to start typing!</string>
-    <string name="hint_noteEdit">This note is empty. Start typing!</string>
+    <string name="hint_text">Type here</string>
 
     <!--drawer_menu.xml (NavigationDrawer)-->
     <string name="nav_about">About</string>

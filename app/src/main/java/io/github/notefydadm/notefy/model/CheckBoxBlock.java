@@ -28,6 +28,10 @@ public class CheckBoxBlock extends TextBlock {
 
     private boolean isChecked;
 
+    public CheckBoxBlock(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
     public CheckBoxBlock(String text, boolean isChecked) {
         super(text);
         this.isChecked = isChecked;
