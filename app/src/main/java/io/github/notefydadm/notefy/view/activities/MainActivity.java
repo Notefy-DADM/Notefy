@@ -21,11 +21,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.LoadingDialog;
 import io.github.notefydadm.notefy.view.fragments.NoteFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
@@ -163,7 +167,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void saveNote(Note note){
-        Toast.makeText(this,"Saved",Toast.LENGTH_LONG).show();
+        String userId  = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final LoadingDialog loadingDialog = new LoadingDialog();
+        loadingDialog.show(getSupportFragmentManager(), null);
+        DatabaseHandler.addNoteToUserCallback callback = new DatabaseHandler.addNoteToUserCallback() {
+            @Override
+            public void onSuccessfulAdded() {
+                loadingDialog.dismiss();
+                Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailureAdded() {
+
+            }
+        };
+
+        DatabaseHandler.addNoteToUser(userId,note,callback);
+
+
     }
 
     private void initNoteListener(){

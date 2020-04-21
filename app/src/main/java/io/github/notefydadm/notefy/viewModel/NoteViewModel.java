@@ -8,25 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.github.notefydadm.notefy.database.SingletonDatabase;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.model.TextBlock;
 
 public class NoteViewModel extends ViewModel {
-    private MutableLiveData<List<Note>> notes;
+    //private MutableLiveData<List<Note>> notes;
     private MutableLiveData<Note> selectedNote;
 
     private boolean isSelectedNoteNew;
 
     public LiveData<List<Note>> getNotes() {
-        if (notes == null) {
+        return SingletonDatabase.getInstance().getMutableNoteList();
+        /*if (notes == null) {
             notes = new MutableLiveData<>();
             loadNotes();
         }
-        return notes;
+        return notes;*/
     }
 
     public void setNotes(List<Note> notes){
-        this.notes.setValue(notes);
+        //this.notes.setValue(notes);
     }
     public void setSelectedNote(Note note){
         this.selectedNote.setValue(note);
@@ -48,8 +50,10 @@ public class NoteViewModel extends ViewModel {
         ArrayList<Note> loadedNotes = new ArrayList<>();
         // TODO: Do an asynchronous operation to fetch notes from database
         // For now, we will use mock notes
-        getMockNotes(loadedNotes);
-        notes.postValue(loadedNotes);
+        //getMockNotes(loadedNotes);
+        //notes.postValue(loadedNotes);
+        //notes = SingletonDatabase.getMutableNoteList();
+        //notes.getValue().add(new Note("",""));
     }
 
     // Used for testing
@@ -76,13 +80,13 @@ public class NoteViewModel extends ViewModel {
        if (selectedNote != null) {
            selectedNote.setContent(input.toString());
            if (isSelectedNoteNew) {
-               final List<Note> noteList = Objects.requireNonNull(this.notes.getValue());
-               noteList.add(selectedNote);
+               //final List<Note> noteList = Objects.requireNonNull(this.notes.getValue());
+               //noteList.add(selectedNote);
                isSelectedNoteNew = false;
 
                // In order to notify observers that the values in the list have changed,
                // you have to set the value of the LiveData to itself (it's the only way)
-               this.notes.setValue(noteList);
+               //this.notes.setValue(noteList);
            }
        }
     }

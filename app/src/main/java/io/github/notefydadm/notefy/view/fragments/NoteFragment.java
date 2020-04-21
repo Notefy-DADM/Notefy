@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Block;
@@ -65,9 +67,7 @@ public class NoteFragment extends Fragment {
                 showButtonSave();
             }
         };
-        ArrayList<Block> blocks = new ArrayList<>();
-        blocks.addAll(noteToShow.getBlocks());
-        adapter = new NoteBlocksListAdapter(blocks,onItemModifiedCallback);
+        adapter = new NoteBlocksListAdapter(getCopyOfBlocks(noteToShow.getBlocks()),onItemModifiedCallback);
         LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -120,6 +120,23 @@ public class NoteFragment extends Fragment {
         MainActivity activity = (MainActivity) getActivity();
         activity.toolbarMenu.findItem(R.id.save_toolbar).setVisible(false);
         activity.toolbarMenu.findItem(R.id.save_toolbar).setEnabled(false);
+    }
+
+    private ArrayList<Block> getCopyOfBlocks(ArrayList<Block> blocks){
+        ArrayList<Block> blockArrayListReturn = new ArrayList<>();
+        for(Block actBlock: blocks){
+            if(actBlock.getClass() == TextBlock.class){
+                TextBlock oldTextBlock = (TextBlock) actBlock;
+                TextBlock textBlock = new TextBlock(oldTextBlock.getText(),oldTextBlock.getFontFamily(),oldTextBlock.getFontSize(),oldTextBlock.getTextStyle());
+
+                blockArrayListReturn.add(textBlock);
+            }else{
+                CheckBoxBlock oldCheckboxBlock = (CheckBoxBlock) actBlock;
+                CheckBoxBlock checkBoxBlock = new CheckBoxBlock(oldCheckboxBlock.getText(),oldCheckboxBlock.isChecked(),oldCheckboxBlock.getFontFamily(),oldCheckboxBlock.getFontSize(),oldCheckboxBlock.getTextStyle());
+                blockArrayListReturn.add(checkBoxBlock);
+            }
+        }
+        return blockArrayListReturn;
     }
 
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.notefydadm.notefy.model.Note;
@@ -14,11 +15,12 @@ import io.github.notefydadm.notefy.model.User;
 public class SingletonDatabase {
 
     private static SingletonDatabase instance;
-    private static MutableLiveData<List<Note>> mutableNoteList;
-    private static User user;
+    private MutableLiveData<List<Note>> mutableNoteList;
+
 
     private SingletonDatabase(){
         mutableNoteList = new MutableLiveData<>();
+        mutableNoteList.setValue(new ArrayList<Note>());
 
     }
 
@@ -30,17 +32,17 @@ public class SingletonDatabase {
         return instance;
     }
 
-    public static void init(){
+    public void init(){
 
         DatabaseHandler.userGetNoteListListenerCallback callback = new DatabaseHandler.userGetNoteListListenerCallback() {
             @Override
             public void onNoteAdded(Note note) {
-                addNoteToMutableList(note);
+                changeOrAddNote(note);
             }
 
             @Override
             public void onNoteModified(Note note) {
-                changeNote(note);
+                changeOrAddNote(note);
             }
 
             @Override
@@ -62,7 +64,11 @@ public class SingletonDatabase {
         return null;//TODO implementar
     }
 
-    static private void addNoteToMutableList(Note noteToAdd){
+    public MutableLiveData<List<Note>> getMutableNoteList(){
+        return mutableNoteList;
+    }
+
+    private void addNoteToMutableList(Note noteToAdd){
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             list.add(noteToAdd);
@@ -70,20 +76,22 @@ public class SingletonDatabase {
         mutableNoteList.setValue(list);
     }
 
-    static private void changeNote(Note noteToChange){
+    private void changeOrAddNote(Note note){
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             for (int i = 0; i<list.size();i++) {
-                if(list.get(i).getNoteId().equals(noteToChange.getNoteId())){
-                    list.set(i,noteToChange);
+                if(list.get(i).getNoteId().equals(note.getNoteId())){
+                    list.set(i,note);
                     mutableNoteList.setValue(list);
                     return;
                 }
             }
+            list.add(note);
+            mutableNoteList.setValue(list);
         }
     }
 
-    static private void removeNote(Note noteToRemove){
+    private void removeNote(Note noteToRemove){
         List<Note> list = mutableNoteList.getValue();
         if (list != null) {
             for (int i = 0; i<list.size();i++) {

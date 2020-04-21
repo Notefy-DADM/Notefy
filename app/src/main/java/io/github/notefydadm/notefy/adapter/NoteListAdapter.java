@@ -61,8 +61,12 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     }
 
     public void addNotes(List<Note> repos) {
-        this.notes.addAll(repos);
-        notifyDataSetChanged();
+        for(Note actNote : repos){
+            if(!notes.contains(actNote)){
+                notes.add(actNote);
+                notifyDataSetChanged();
+            }
+        }
     }
 
     interface PositionClickedListener {
