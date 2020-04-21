@@ -8,36 +8,48 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder> {
 
-    private ArrayList<Note> notes = new ArrayList<>();
+    private LiveData<List<Note>> notes;
     private Context fragmentContext;
     private NoteViewModel viewModel;
 
     private PositionClickedListener positionListener;
 
-    public NoteListAdapter(Activity activity, Context context) {
+    public NoteListAdapter(@NonNull Activity activity, Context context) {
         this.viewModel = new ViewModelProvider((MainActivity)activity).get(NoteViewModel.class);
         this.fragmentContext = context;
         this.positionListener = new PositionClickedListener() {
             @Override
             public void itemClicked(int position) {
-                Note note = notes.get(position);
-                viewModel.postSelectedNote(note);
+                List<Note> noteList = notes.getValue();
+                if (noteList != null) {
+                    Note note = noteList.get(position);
+                    viewModel.postSelectedNote(note);
+                }
             }
         };
+        this.notes = viewModel.getNotes();
+        this.notes.observe((LifecycleOwner) activity, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                NoteListAdapter.this.notifyDataSetChanged();
+            }
+        });
     }
 
     @NonNull
@@ -50,23 +62,17 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull NoteListViewHolder holder, int position) {
-
-        Note note = notes.get(position);
-        holder.bind(note, fragmentContext);
+        List<Note> noteList = notes.getValue();
+        if (noteList != null) {
+            Note note = noteList.get(position);
+            holder.bind(note, fragmentContext);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return notes.size();
-    }
-
-    public void addNotes(List<Note> repos) {
-        for(Note actNote : repos){
-            if(!notes.contains(actNote)){
-                notes.add(actNote);
-                notifyDataSetChanged();
-            }
-        }
+        List<Note> noteList = notes.getValue();
+        return noteList == null ? 0 : noteList.size();
     }
 
     interface PositionClickedListener {
@@ -74,7 +80,6 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     }
 
     class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
         private TextView title, content;
         private PositionClickedListener listener;
 

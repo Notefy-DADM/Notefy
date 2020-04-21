@@ -48,14 +48,13 @@ public class NoteFragment extends Fragment {
         if (note != null) {
             String userId  = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final LoadingDialog loadingDialog = new LoadingDialog();
-            loadingDialog.show(getFragmentManager(), null);
+            loadingDialog.show(requireFragmentManager(), null);
             DatabaseHandler.addNoteToUserCallback callback = new DatabaseHandler.addNoteToUserCallback() {
                 @Override
                 public void onSuccessfulAdded() {
                     note.setBlocks(adapter.getBlocks());
                     loadingDialog.dismiss();
                     Toast.makeText(getActivity(),"Saved",Toast.LENGTH_LONG).show();
-
                 }
 
                 @Override

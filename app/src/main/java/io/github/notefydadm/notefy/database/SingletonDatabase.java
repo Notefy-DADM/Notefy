@@ -18,22 +18,19 @@ public class SingletonDatabase {
     private MutableLiveData<List<Note>> mutableNoteList;
 
 
-    private SingletonDatabase(){
+    private SingletonDatabase() {
         mutableNoteList = new MutableLiveData<>();
         mutableNoteList.setValue(new ArrayList<Note>());
-
     }
 
     public static SingletonDatabase getInstance(){
-        if(instance == null){
+        if(instance == null) {
             instance = new SingletonDatabase();
         }
-
         return instance;
     }
 
-    public void init(){
-
+    public void init() {
         DatabaseHandler.userGetNoteListListenerCallback callback = new DatabaseHandler.userGetNoteListListenerCallback() {
             @Override
             public void onNoteAdded(Note note) {
@@ -61,7 +58,7 @@ public class SingletonDatabase {
     static private User getUserFromFirebase(){
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //User user = new user()
-        return null;//TODO implementar
+        return null; //TODO implementar
     }
 
     public MutableLiveData<List<Note>> getMutableNoteList(){
@@ -98,7 +95,7 @@ public class SingletonDatabase {
                 if(list.get(i).getNoteId().equals(noteToRemove.getNoteId())){
                     list.remove(i);
                     mutableNoteList.setValue(list);
-                    return ;
+                    return;
                 }
             }
         }

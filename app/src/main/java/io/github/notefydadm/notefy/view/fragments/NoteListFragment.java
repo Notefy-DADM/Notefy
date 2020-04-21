@@ -96,15 +96,7 @@ public class NoteListFragment extends Fragment {
             noteViewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
 
             // We need to have an Adapter for the RecyclerView
-            myAdapter = new NoteListAdapter(this.getActivity(), getContext());
-
-            // Update the adapter whenever the ViewModel gets new notes
-            noteViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
-                @Override
-                public void onChanged(List<Note> notes) {
-                    myAdapter.addNotes(notes);
-                }
-            });
+            myAdapter = new NoteListAdapter(requireActivity(), getContext());
 
             // When a note is selected, open it
             noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
