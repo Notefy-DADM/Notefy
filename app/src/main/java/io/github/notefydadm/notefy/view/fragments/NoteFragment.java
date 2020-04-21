@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
@@ -22,11 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.databinding.FragmentNoteBinding;
 import io.github.notefydadm.notefy.model.Block;
 import io.github.notefydadm.notefy.model.CheckBoxBlock;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.model.TextBlock;
+import io.github.notefydadm.notefy.view.LoadingDialog;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
 import io.github.notefydadm.notefy.view.fragments.noteBlocks.NoteBlocksListAdapter;
 import io.github.notefydadm.notefy.view.fragments.noteBlocks.OnItemModifiedCallback;
@@ -41,7 +45,31 @@ public class NoteFragment extends Fragment {
 
     public void saveNote() {
         final Note note = noteViewModel.getSelectedNote().getValue();
-        if (note != null) note.setBlocks(adapter.getBlocks());
+        if (note != null) {
+            String userId  = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            final LoadingDialog loadingDialog = new LoadingDialog();
+            loadingDialog.show(getFragmentManager(), null);
+            DatabaseHandler.addNoteToUserCallback callback = new DatabaseHandler.addNoteToUserCallback() {
+                @Override
+                public void onSuccessfulAdded() {
+                    note.setBlocks(adapter.getBlocks());
+                    loadingDialog.dismiss();
+                    Toast.makeText(getActivity(),"Saved",Toast.LENGTH_LONG).show();
+
+                }
+
+                @Override
+                public void onFailureAdded() {
+                    loadingDialog.dismiss();
+                    Toast.makeText(getActivity(),"Error saving",Toast.LENGTH_LONG).show();
+                }
+            };
+
+            DatabaseHandler.addNoteToUser(userId,note,callback);
+        }
+
+
+
     }
 
     @Override
@@ -58,8 +86,7 @@ public class NoteFragment extends Fragment {
 
         RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerViewBlocks);
 
-        ArrayList<Block> blocks = new ArrayList<>(note.getBlocks());
-        adapter = new NoteBlocksListAdapter(blocks, new OnItemModifiedCallback() {
+        adapter = new NoteBlocksListAdapter(getCopyOfBlocks(note.getBlocks()), new OnItemModifiedCallback() {
             @Override
             public void onItemModified() {
                 showButtonSave();

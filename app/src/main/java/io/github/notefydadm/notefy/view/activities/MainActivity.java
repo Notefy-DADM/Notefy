@@ -165,28 +165,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void saveNote(Note note){
-        String userId  = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final LoadingDialog loadingDialog = new LoadingDialog();
-        loadingDialog.show(getSupportFragmentManager(), null);
-        DatabaseHandler.addNoteToUserCallback callback = new DatabaseHandler.addNoteToUserCallback() {
-            @Override
-            public void onSuccessfulAdded() {
-                loadingDialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailureAdded() {
-
-            }
-        };
-
-        DatabaseHandler.addNoteToUser(userId,note,callback);
-
-
-    }
-
     private void initNoteListener(){
         noteViewModel.getSelectedNote().observe(this,new Observer<Note>() {
             @Override
