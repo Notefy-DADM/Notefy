@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
@@ -24,18 +26,18 @@ import java.util.List;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Note;
-import io.github.notefydadm.notefy.view.fragments.NoteEditFragment;
+import io.github.notefydadm.notefy.view.fragments.NoteFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
-import io.github.notefydadm.notefy.view.fragments.NoteViewFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
 
     private DrawerLayout drawer;
 
+    public Menu toolbarMenu;
+
     NoteListFragment noteListFragment;
-    NoteViewFragment noteViewFragment;
-    NoteEditFragment noteEditFragment;
+    NoteFragment noteFragment;
 
     NoteViewModel noteViewModel;
 
@@ -50,11 +52,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setToolbarDrawer();
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        LiveData<List<Note>> notesData = noteViewModel.getNotes();
 
         noteListFragment = new NoteListFragment();
-        noteViewFragment = new NoteViewFragment();
-        noteEditFragment = new NoteEditFragment();
+        initNoteListener();
+        //noteFragment = new NoteFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -62,23 +63,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //return;
         }
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //  landscape
             //  first note as default selected note
             noteListFragment.setArguments(getIntent().getExtras());
-            noteViewFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).addToBackStack(null).commit();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteViewFragment).addToBackStack(null).commit();
-
-            noteViewModel.setSelectedNote(notesData.getValue().get(0));
-        }
-        else{
+            //noteFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+        } else {
             //  portrait
             //  If the activity was started with special instructions from an
             //  Intent, pass the Intent's extras to the fragment as arguments
             noteListFragment.setArguments(getIntent().getExtras());
             //  Replace the Fragment on the 'fragmentContainer' FrameLayout
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).commit();
         }
 
     }
@@ -112,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu,menu);
+        this.toolbarMenu = menu;
         return true;
     }
 
@@ -123,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 noteViewModel.setSelectedNoteNew(true);
                 MainActivity.this.changeToTextEditor(true);
                 break;
+            case R.id.save_toolbar:
+                noteFragment.saveNote();
+                Toast.makeText(this,"Saved", Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -151,18 +153,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void changeToTextEditor() {
-        changeToTextEditor(false);
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
 
     @Override
     public void changeToTextEditor(boolean isEditing) {
-        if (isEditing) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteEditFragment).addToBackStack(null).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteViewFragment).addToBackStack(null).commit();
-        }
+
     }
 
+    private void initNoteListener(){
+        noteViewModel.getSelectedNote().observe(this,new Observer<Note>() {
+            @Override
+            public void onChanged(Note note) {
+                if (note != null) {
+                    //  Check orientation
+                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                        // landscape
+                        System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
+                        noteFragment = new NoteFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+                    }
+                    else{
+                        // portrait
+                        System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
+                        //noteViewModel.setText(note.getContent());
+                        /*Intent intent = new Intent(getActivity(), TextEditorPortraitActivity.class);
+                        intent.putExtra("selectedNote", note);
+                        intent.putExtra("selectedNoteContent",note.getContent());
+                        startActivity(intent);*/
+                        noteFragment = new NoteFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
+
+                    }
+                }
+            }
+        });
+    }
     /*private void switchToolbar(String currentFragment){
         if(currentFragment == ){
             return;

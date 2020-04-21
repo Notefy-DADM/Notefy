@@ -77,6 +77,10 @@ public class Note implements Parcelable {
         return noteId;
     }
 
+    public void setBlocks(ArrayList<Block> blocks) {
+        this.blocks = blocks;
+    }
+
     public ArrayList<Block> getBlocks() {
         return blocks;
     }
