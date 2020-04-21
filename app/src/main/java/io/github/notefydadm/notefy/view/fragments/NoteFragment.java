@@ -46,13 +46,14 @@ public class NoteFragment extends Fragment {
     public void saveNote() {
         final Note note = noteViewModel.getSelectedNote().getValue();
         if (note != null) {
+            note.setBlocks(adapter.getBlocks());
+
             String userId  = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final LoadingDialog loadingDialog = new LoadingDialog();
             loadingDialog.show(requireFragmentManager(), null);
             DatabaseHandler.addNoteToUserCallback callback = new DatabaseHandler.addNoteToUserCallback() {
                 @Override
                 public void onSuccessfulAdded() {
-                    note.setBlocks(adapter.getBlocks());
                     loadingDialog.dismiss();
                     Toast.makeText(getActivity(),"Saved",Toast.LENGTH_LONG).show();
                 }
@@ -66,9 +67,6 @@ public class NoteFragment extends Fragment {
 
             DatabaseHandler.addNoteToUser(userId,note,callback);
         }
-
-
-
     }
 
     @Override
