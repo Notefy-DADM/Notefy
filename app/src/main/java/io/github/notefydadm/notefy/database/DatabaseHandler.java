@@ -29,8 +29,7 @@ import io.github.notefydadm.notefy.model.CheckBoxBlock;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.model.TextBlock;
 
-import static io.github.notefydadm.notefy.model.Note.*;
-import static io.github.notefydadm.notefy.model.Note.NoteState.*;
+import static io.github.notefydadm.notefy.model.Note.NoteState;
 
 public class DatabaseHandler {
 
