@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -78,7 +79,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     }
 
     public void removeNote(int position){
-        notes.remove(position);
+        //notes.remove(position);
         //  DO IT IN DATABASE
         notifyDataSetChanged();
     }

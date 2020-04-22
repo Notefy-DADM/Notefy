@@ -29,7 +29,7 @@ import io.github.notefydadm.notefy.view.dialogs.DeleteDialog;
 import io.github.notefydadm.notefy.view.dialogs.ShareDialog;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
-public class NoteListFragment extends Fragment {
+public class NoteListFragment extends Fragment implements ShareDialog.ShareDialogListener, DeleteDialog.DeleteDialogListener {
     private FragmentNoteListBinding binding;
     private NoteViewModel noteViewModel;
     private ChangeToTextEditor listener;
@@ -163,7 +163,8 @@ public class NoteListFragment extends Fragment {
     }
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog, MenuItem item) {
-        myAdapter.removeNote(item.getGroupId());
+        //myAdapter.removeNote(item.getGroupId());
+        //binding.getAdapter().removeNote(item.getGroupId());
         displayContextMenuMessage(getString(R.string.delete_notelist_context));
     }
 
