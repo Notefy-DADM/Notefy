@@ -14,14 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.database.DatabaseHandler;
@@ -51,7 +46,7 @@ public class NoteFragment extends Fragment {
             String userId  = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final LoadingDialog loadingDialog = new LoadingDialog();
             loadingDialog.show(requireFragmentManager(), null);
-            DatabaseHandler.addNoteToUserCallback callback = new DatabaseHandler.addNoteToUserCallback() {
+            DatabaseHandler.AddNoteToUserCallback callback = new DatabaseHandler.AddNoteToUserCallback() {
                 @Override
                 public void onSuccessfulAdded() {
                     loadingDialog.dismiss();

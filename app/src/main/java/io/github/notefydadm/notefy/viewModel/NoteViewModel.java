@@ -1,18 +1,14 @@
 package io.github.notefydadm.notefy.viewModel;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.github.notefydadm.notefy.database.SingletonDatabase;
 import io.github.notefydadm.notefy.model.Note;
-import io.github.notefydadm.notefy.model.TextBlock;
 
 public class NoteViewModel extends ViewModel {
 
@@ -63,10 +59,10 @@ public class NoteViewModel extends ViewModel {
         }
         switch (noteMode) {
             case MINE:
-                databaseNotes = SingletonDatabase.getInstance().getMutableNoteList();
+                databaseNotes = SingletonDatabase.getInstance().getMyNotes();
                 break;
             case SHARED_WITH_ME:
-                // TODO: Create shared notes mutable list, and reference it here
+                databaseNotes = SingletonDatabase.getInstance().getSharedWithMeNotes();
                 break;
         }
         if (databaseNotes != null) {
