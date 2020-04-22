@@ -26,4 +26,5 @@
     <string name="Sshare_button_notelist_dialog">Compartir</string>
     <string name="Scancel_button_notelist_dialog">Cancelar</string>
     <string name="delete_notelist_context">Nota eliminada</string>
+    <string name="nav_share">Notas compartidas</string>
 </resources>
