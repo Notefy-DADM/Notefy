@@ -15,4 +15,5 @@
     <string name="authentication_failed">Error en autenticación</string>
     <string name="app_logo_description">Logo de la app</string>
     <string name="notes">Notas</string>
+    <string name="add_text">Añadir</string>
 </resources>

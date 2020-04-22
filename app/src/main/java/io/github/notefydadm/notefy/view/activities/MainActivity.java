@@ -117,12 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.add_toolbar:
-                System.out.println("Add item selected");
-                noteViewModel.setSelectedNote(new Note());
-                MainActivity.this.changeToTextEditor();
-                break;
+        switch (item.getItemId()) {
             case R.id.save_toolbar:
                 noteFragment.saveNote();
                 Toast.makeText(this,"Saved", Toast.LENGTH_LONG).show();

@@ -9,11 +9,5 @@
         android:title=""
         android:visible="false"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/add_toolbar"
-        android:icon="@drawable/ic_add_circle"
-        android:title=""
-        app:showAsAction="ifRoom"
-        />
 
 </menu>

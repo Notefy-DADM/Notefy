@@ -129,16 +129,20 @@ public class NoteFragment extends Fragment {
 
     private void showButtonSave(){
         MainActivity activity = (MainActivity) requireActivity();
-        final MenuItem saveItem = activity.toolbarMenu.findItem(R.id.save_toolbar);
-        saveItem.setVisible(true);
-        saveItem.setEnabled(true);
+        if (activity.toolbarMenu != null) {
+            final MenuItem saveItem = activity.toolbarMenu.findItem(R.id.save_toolbar);
+            saveItem.setVisible(true);
+            saveItem.setEnabled(true);
+        }
     }
 
     private void hideButtonSave(){
         MainActivity activity = (MainActivity) requireActivity();
-        final MenuItem saveItem = activity.toolbarMenu.findItem(R.id.save_toolbar);
-        saveItem.setVisible(false);
-        saveItem.setEnabled(false);
+        if (activity.toolbarMenu != null) {
+            final MenuItem saveItem = activity.toolbarMenu.findItem(R.id.save_toolbar);
+            saveItem.setVisible(false);
+            saveItem.setEnabled(false);
+        }
     }
 
     private ArrayList<Block> getCopyOfBlocks(ArrayList<Block> blocks){

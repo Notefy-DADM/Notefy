@@ -107,7 +107,7 @@ public class NoteBlocksListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         void onTextChanged(CharSequence s, int start, int before, int count);
     }
 
-    @BindingAdapter({"onTextChanged"})
+    @BindingAdapter("onTextChanged")
     public static void onTextChanged(EditText editText, final TextWatcherOnTextChanged handler) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override

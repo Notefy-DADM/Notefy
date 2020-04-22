@@ -34,4 +34,5 @@
     <string name="authentication_failed">Authentication failed</string>
     <string name="app_logo_description">App logo</string>
     <string name="notes">Notes</string>
+    <string name="add_text">Add</string>
 </resources>
