@@ -2,8 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="addNewTextBlock" type="Runnable" />
-        <variable name="addNewCheckBoxBlock" type="Runnable" />
+        <variable name="layoutManager" type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
+        <variable name="adapter" type="io.github.notefydadm.notefy.view.fragments.noteBlocks.NoteBlocksListAdapter" />
+        <variable name="addNewTextBlock" type="android.view.View.OnClickListener" />
+        <variable name="addNewCheckBoxBlock" type="android.view.View.OnClickListener" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -14,6 +16,9 @@
             android:id="@+id/recyclerViewBlocks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layoutManager="@{layoutManager}"
+            app:adapter="@{adapter}"
+            app:hasFixedSize="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +43,7 @@
                 android:id="@+id/buttonAddText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> addNewTextBlock.run()}"
+                android:onClick="@{addNewTextBlock}"
                 fab:fab_colorNormal="@android:color/white"
                 fab:fab_colorPressed="@android:color/darker_gray"
                 fab:fab_icon="@drawable/icon_text_fields"
@@ -49,7 +54,7 @@
                 android:id="@+id/buttonAddCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> addNewCheckBoxBlock.run()}"
+                android:onClick="@{addNewCheckBoxBlock}"
                 fab:fab_size="mini"
                 fab:fab_colorNormal="@android:color/white"
                 fab:fab_colorPressed="@android:color/darker_gray"

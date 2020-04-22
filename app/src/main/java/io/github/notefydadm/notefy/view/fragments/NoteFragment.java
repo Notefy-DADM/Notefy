@@ -8,20 +8,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.database.DatabaseHandler;
@@ -81,8 +77,6 @@ public class NoteFragment extends Fragment {
         FragmentNoteBinding binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_note, container,false);
 
-        RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerViewBlocks);
-
         adapter = new NoteBlocksListAdapter(getCopyOfBlocks(note.getBlocks()), new OnItemModifiedCallback() {
             @Override
             public void onItemModified() {
@@ -90,27 +84,30 @@ public class NoteFragment extends Fragment {
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        binding.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
+        binding.setAdapter(adapter);
 
         initFab(binding);
 
         return binding.getRoot();
     }
 
+    @BindingAdapter("hasFixedSize")
+    public static void setHasFixedSize(RecyclerView recyclerView, boolean hasFixedSize) {
+        recyclerView.setHasFixedSize(hasFixedSize);
+    }
+
     private void initFab(FragmentNoteBinding binding) {
-        binding.setAddNewTextBlock(new Runnable() {
+        binding.setAddNewTextBlock(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View view) {
                 showButtonSave();
                 addNewTextBlock();
             }
         });
-        binding.setAddNewCheckBoxBlock(new Runnable() {
+        binding.setAddNewCheckBoxBlock(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View view) {
                 showButtonSave();
                 addNewCheckboxBlock();
             }

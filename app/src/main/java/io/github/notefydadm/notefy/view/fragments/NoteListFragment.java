@@ -1,8 +1,6 @@
 package io.github.notefydadm.notefy.view.fragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -164,7 +162,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog, MenuItem item) {
         //myAdapter.removeNote(item.getGroupId());
-        //binding.getAdapter().removeNote(item.getGroupId());
+        binding.getAdapter().removeNote(item.getGroupId());
         displayContextMenuMessage(getString(R.string.delete_notelist_context));
     }
 
