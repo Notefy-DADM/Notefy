@@ -22,30 +22,16 @@ public class ShareDialog extends DialogFragment {
     private String username;
     private MenuItem item;
 
-    ShareDialogListener listener;
+    private ShareDialogListener listener;
 
-    public ShareDialog(MenuItem item) {
+    public ShareDialog(MenuItem item, ShareDialogListener listener) {
         this.item = item;
-    }
-
-    public interface ShareDialogListener{
-        public void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item);
-        public void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item);
-    }
-
-    public void setListener(ShareDialogListener listener){
         this.listener = listener;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try{
-            listener = (ShareDialogListener) context;
-        }catch (ClassCastException e){
-            throw new ClassCastException(context.toString()
-                    + " must implement ShareDialogListener");
-        }
+    public interface ShareDialogListener {
+        void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item);
+        void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item);
     }
 
     @NonNull
@@ -54,10 +40,7 @@ public class ShareDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.share_dialog, null);
-
-        builder.setView(view)
+        builder.setView(R.layout.share_dialog)
                 .setTitle(R.string.Stitle_notelist_dialog)
                 .setPositiveButton(R.string.Sshare_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
@@ -72,15 +55,13 @@ public class ShareDialog extends DialogFragment {
                         listener.onShareDialogNegativeClick(ShareDialog.this, item);
                     }
                 });
+        
         return builder.create();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.share_dialog, container, false);
-
-        return view;
-
+        return inflater.inflate(R.layout.share_dialog, container, false);
     }
 }

@@ -203,8 +203,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
     }
 
     public void openShareDialog(MenuItem item){
-        shareDialog = new ShareDialog(item);
-        shareDialog.setListener(this);
+        shareDialog = new ShareDialog(item, this);
         shareDialog.show(NoteListFragment.this.getChildFragmentManager(), "shareDialog");
     }
 
