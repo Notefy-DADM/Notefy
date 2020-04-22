@@ -17,4 +17,13 @@
     <string name="app_logo_description">Logo de la app</string>
     <string name="remove_adapter_context">Borrar</string>
     <string name="share_adapter_context">Compartir</string>
+    <string name="share_notelist_context">Nota compartida</string>
+    <string name="Dmessage_notelist_dialog">¿Seguro que quieres borrarlo?</string>
+    <string name="Ddelete_button_notelist_dialog">Borrar</string>
+    <string name="Dcancel_button_notelist_dialog">Cancelar</string>
+    <string name="Stitle_notelist_dialog">Compartir nota con</string>
+    <string name="Ssignin_button_notelist_dialog">Registrarse</string>
+    <string name="Sshare_button_notelist_dialog">Compartir</string>
+    <string name="Scancel_button_notelist_dialog">Cancelar</string>
+    <string name="delete_notelist_context">Nota eliminada</string>
 </resources>

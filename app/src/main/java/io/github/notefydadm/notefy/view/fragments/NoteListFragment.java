@@ -24,6 +24,7 @@ import java.util.List;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.dialogs.DeleteDialog;
 import io.github.notefydadm.notefy.view.dialogs.ShareDialog;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
@@ -32,7 +33,7 @@ import io.github.notefydadm.notefy.viewModel.NoteViewModel;
  * Use the {@link NoteListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoteListFragment extends Fragment implements ShareDialog.ShareDialogListener {
+public class NoteListFragment extends Fragment implements ShareDialog.ShareDialogListener, DeleteDialog.DeleteDialogListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +54,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
     private ChangeToTextEditor listener;
 
     private ShareDialog shareDialog;
+    private DeleteDialog deleteDialog;
 
     public NoteListFragment() {
         // Required empty public constructor
@@ -183,12 +185,10 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case 121:
-                //deleteDialog(item);
-                //openDeleteDialog(item);
+                openDeleteDialog(item);
                 return true;
 
             case 122:
-                //shareDialog(item);
                 openShareDialog(item);
                 return true;
 
@@ -202,73 +202,37 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
+    //  SHARE NOTE DIALOG
     public void openShareDialog(MenuItem item){
         shareDialog = new ShareDialog(item, this);
         shareDialog.show(NoteListFragment.this.getChildFragmentManager(), "shareDialog");
     }
-
     @Override
     public void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item) {
+        displayContextMenuMessage(getString(R.string.share_notelist_context));
+    }
+    @Override
+    public void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item) {
+        //  Dismiss dialog
+    }
+
+    //  DELETE NOTE DIALOG
+    public void openDeleteDialog(MenuItem item){
+        deleteDialog = new DeleteDialog(item, this);
+        deleteDialog.show(NoteListFragment.this.getChildFragmentManager(), "deleteDialog");
+    }
+    @Override
+    public void onDeleteDialogPositiveClick(DeleteDialog dialog, MenuItem item) {
         myAdapter.removeNote(item.getGroupId());
-        displayContextMenuMessage(getString(R.string.remove_notelist_context));
+        displayContextMenuMessage(getString(R.string.delete_notelist_context));
     }
 
     @Override
-    public void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item) {
-        //  Cancels dialog
+    public void onDeleteDialogNegativeClick(DeleteDialog dialog, MenuItem item) {
+        //  Dismiss dialog
     }
 
-    /*private void deleteDialog(final MenuItem item){
-        try{
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-            builder.setMessage(R.string.Dmessage_notelist_dialog)
-                .setPositiveButton(R.string.Ddelete_button_notelist_dialog, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        myAdapter.removeNote(item.getGroupId());
-                        displayContextMenuMessage(getString(R.string.remove_notelist_context));
-                    }
-                })
-                .setNegativeButton(R.string.Dcancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void shareDialog(MenuItem item){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        builder.setView(inflater.inflate(R.layout.share_dialog,null))
-            .setTitle(R.string.Stitle_notelist_dialog)
-            .setPositiveButton(R.string.Sshare_button_notelist_dialog, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    displayContextMenuMessage(getString(R.string.share_notelist_context));
-                }
-            })
-            .setNegativeButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-    */
     @Override
     public void onPause() {
         System.out.println("Pause");

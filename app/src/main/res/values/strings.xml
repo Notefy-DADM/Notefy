@@ -41,7 +41,7 @@
 
     <!--NoteListFragment-->
         <!--Context Menu-->
-        <string name="remove_notelist_context">Note deleted</string>
+        <string name="delete_notelist_context">Note deleted</string>
         <string name="share_notelist_context">Note shared</string>
         <!--Delete dialog-->
         <string name="Dmessage_notelist_dialog">Are you sure you want to delete it?</string>
