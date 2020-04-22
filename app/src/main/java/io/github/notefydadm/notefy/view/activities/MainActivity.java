@@ -21,6 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.fragments.AboutFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
@@ -77,13 +78,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Intent intent = null;
         switch (menuItem.getItemId()){
+            case R.id.nav_notes:
+                openNotesFragment();
+                break;
+
             case R.id.nav_about:
-                intent = new Intent(this, AboutActivity.class);
+                openAboutFragment();
                 break;
         }
-        startActivity(intent);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -147,6 +150,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void changeToTextEditor() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
+
+    private void openAboutFragment(){
+        AboutFragment fragment = new AboutFragment();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //  landscape
+            //  first note as default selected note
+            noteListFragment.setArguments(getIntent().getExtras());
+            //noteFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, fragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+        } else {
+            //  portrait
+            //  If the activity was started with special instructions from an
+            //  Intent, pass the Intent's extras to the fragment as arguments
+            noteListFragment.setArguments(getIntent().getExtras());
+            //  Replace the Fragment on the 'fragmentContainer' FrameLayout
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, fragment).commit();
+        }
+    }
+
+    private void openNotesFragment(){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //  landscape
+            //  first note as default selected note
+            noteListFragment.setArguments(getIntent().getExtras());
+            //noteFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+        } else {
+            //  portrait
+            //  If the activity was started with special instructions from an
+            //  Intent, pass the Intent's extras to the fragment as arguments
+            noteListFragment.setArguments(getIntent().getExtras());
+            //  Replace the Fragment on the 'fragmentContainer' FrameLayout
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).commit();
+        }
+    }
+
 
     /*private void switchToolbar(String currentFragment){
         if(currentFragment == ){
