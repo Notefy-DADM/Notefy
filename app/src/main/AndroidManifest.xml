@@ -23,15 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activities.AboutActivity"
-            android:label="About"
-            android:parentActivityName=".view.activities.MainActivity"
-            android:screenOrientation="sensor">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.activities.MainActivity" />
-        </activity>
-        <activity
             android:name=".view.activities.MainActivity"
             android:screenOrientation="sensor"
             android:theme="@style/AppTheme.NoActionBar">
