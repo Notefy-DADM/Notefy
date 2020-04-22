@@ -13,7 +13,7 @@
     <!--nav_header.xml (NavegationDrawer Header)-->
 
     <!--TEMPORAL-->
-    <string name="username">User name</string>
+    <string name="username">Username</string>
     <string name="email">Email</string>
 
     <!--MainActivity-->
@@ -43,4 +43,14 @@
         <!--Context Menu-->
         <string name="remove_notelist_context">Note deleted</string>
         <string name="share_notelist_context">Note shared</string>
+        <!--Delete dialog-->
+        <string name="Dmessage_notelist_dialog">Are you sure you want to delete it?</string>
+        <string name="Ddelete_button_notelist_dialog">Delete</string>
+        <string name="Dcancel_button_notelist_dialog">Cancel</string>
+        <!--Share dialog-->
+        <string name="Stitle_notelist_dialog">Share note with</string>
+        <string name="Ssignin_button_notelist_dialog">Sign in</string>
+        <string name="Sshare_button_notelist_dialog">Share</string>
+        <string name="Scancel_button_notelist_dialog">Cancel</string>
+
 </resources>

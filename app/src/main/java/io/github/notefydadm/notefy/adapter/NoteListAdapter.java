@@ -69,6 +69,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
     public void removeNote(int position){
         notes.remove(position);
+        //  DO IT IN DATABASE
         notifyDataSetChanged();
     }
 
