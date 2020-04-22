@@ -1,17 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.fragments.NoteListFragment">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myRecycler"
-        android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="layoutManager" type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
+        <variable name="adapter" type="androidx.recyclerview.widget.RecyclerView.Adapter" />
+        <variable name="addNewNote" type="Runnable" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:scrollbars="vertical"
-        android:padding="4dp"
-        android:background="@android:color/darker_gray"/>
+        android:layout_height="match_parent"
+        tools:context=".view.fragments.NoteListFragment">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myRecycler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/darker_gray"
+            android:padding="4dp"
+            android:scrollbars="vertical"
+            app:layoutManager="@{layoutManager}"
+            app:adapter="@{adapter}"
+            app:layout_constraintBottom_toTopOf="@+id/addButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:icon="@android:drawable/ic_input_add"
+            app:iconTint="@color/colorToolbarItem"
+            app:iconGravity="textStart"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/add_text"
+            android:onClick="@{() -> addNewNote.run()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myRecycler" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

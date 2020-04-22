@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class Note implements Parcelable {
+public class Note implements Parcelable, Comparable<Note> {
 
     private String noteId;
     private String title;
@@ -77,6 +78,10 @@ public class Note implements Parcelable {
         return noteId;
     }
 
+    public void setBlocks(ArrayList<Block> blocks) {
+        this.blocks = blocks;
+    }
+
     public ArrayList<Block> getBlocks() {
         return blocks;
     }
@@ -123,6 +128,16 @@ public class Note implements Parcelable {
 
     public Location getCreatedLocation() {
         return createdLocation;
+    }
+
+    @Override
+    public int compareTo(Note note) {
+        return noteId.compareTo(note.noteId);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof Note && noteId.equals(((Note) obj).noteId);
     }
 
     public enum NoteState {DRAFT, PUBLISHED, HIDDEN, ARCHIVED, DELETED}

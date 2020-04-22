@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Notefy</string>
-    <string name="hint_noteView">La nota está vacía. ¡Pulsa el botón editar para empezar a escribir!</string>
-    <string name="hint_noteEdit">La nota está vacía. ¡Empieza a escribir!</string>
+    <string name="hint_text">Escriba aquí</string>
     <string name="notSelected_noteText">¡Por favor, selecciona una nota!</string>
     <string name="label_textEditor">Editor</string>
     <string name="nav_about">Ajustes</string>
@@ -15,6 +14,8 @@
     <string name="loading">Cargando...</string>
     <string name="authentication_failed">Error en autenticación</string>
     <string name="app_logo_description">Logo de la app</string>
+    <string name="notes">Notas</string>
+    <string name="add_text">Añadir</string>
     <string name="remove_adapter_context">Borrar</string>
     <string name="share_adapter_context">Compartir</string>
     <string name="share_notelist_context">Nota compartida</string>

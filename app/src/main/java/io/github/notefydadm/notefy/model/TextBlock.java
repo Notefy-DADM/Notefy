@@ -8,17 +8,20 @@ public class TextBlock implements Block {
     private String textStyle;
 
     @Dimension(unit = Dimension.SP)
-    private float fontSize;
+    private double fontSize;
+
+    public TextBlock() {}
 
     public TextBlock(String text) {
         this(text, "sans-serif", 18, "normal");
     }
 
-    public TextBlock(String text, String fontFamily, float fontSize, String textStyle) {
+    public TextBlock(String text, String fontFamily, double fontSize, String textStyle) {
         this.text = text;
         this.fontFamily = fontFamily;
         this.fontSize = fontSize;
         this.textStyle = textStyle;
+
     }
 
     public String getText() {
@@ -37,7 +40,7 @@ public class TextBlock implements Block {
         this.fontFamily = fontFamily;
     }
 
-    public float getFontSize() {
+    public double getFontSize() {
         return fontSize;
     }
 
@@ -57,4 +60,6 @@ public class TextBlock implements Block {
     public String getContent() {
         return this.getText();
     }
+
+
 }

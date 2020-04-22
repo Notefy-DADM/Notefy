@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,27 +16,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.database.SplashScreenActivity;
 import io.github.notefydadm.notefy.model.Note;
-import io.github.notefydadm.notefy.view.fragments.NoteEditFragment;
+import io.github.notefydadm.notefy.view.fragments.AboutFragment;
+import io.github.notefydadm.notefy.view.fragments.NoteFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
-import io.github.notefydadm.notefy.view.fragments.NoteViewFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
 
     private DrawerLayout drawer;
 
+    public Menu toolbarMenu;
+
     NoteListFragment noteListFragment;
-    NoteViewFragment noteViewFragment;
-    NoteEditFragment noteEditFragment;
+    NoteFragment noteFragment;
 
     NoteViewModel noteViewModel;
 
@@ -48,11 +52,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setToolbarDrawer();
 
         noteViewModel = new ViewModelProvider(this).get(NoteViewModel.class);
-        LiveData<List<Note>> notesData = noteViewModel.getNotes();
 
         noteListFragment = new NoteListFragment();
-        noteViewFragment = new NoteViewFragment();
-        noteEditFragment = new NoteEditFragment();
+        noteFragment = new NoteFragment();
 
         //  if we're being restored from a previous state
         //  we don't need to do anything.
@@ -60,36 +62,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //return;
         }
 
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //  landscape
             //  first note as default selected note
             noteListFragment.setArguments(getIntent().getExtras());
-            noteViewFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).addToBackStack(null).commit();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteViewFragment).addToBackStack(null).commit();
-
-            noteViewModel.setSelectedNote(notesData.getValue().get(0));
-        }
-        else{
+            //noteFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+        } else {
             //  portrait
             //  If the activity was started with special instructions from an
             //  Intent, pass the Intent's extras to the fragment as arguments
             noteListFragment.setArguments(getIntent().getExtras());
             //  Replace the Fragment on the 'fragmentContainer' FrameLayout
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).commit();
         }
 
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Intent intent = null;
         switch (menuItem.getItemId()){
+            case R.id.nav_notes:
+                openNotesFragment();
+                break;
+
             case R.id.nav_about:
-                intent = new Intent(this, AboutActivity.class);
+                openAboutFragment();
                 break;
         }
-        startActivity(intent);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -110,7 +111,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu,menu);
+        this.toolbarMenu = menu;
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_toolbar:
+                noteFragment.saveNote();
+                Toast.makeText(this,"Saved", Toast.LENGTH_LONG).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setToolbarDrawer(){
@@ -121,7 +133,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, toolbar,
+        View headerView = navigationView.getHeaderView(0);
+        final ImageButton logOutButton = headerView.findViewById(R.id.buttonLogOut);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logOut();
+            }
+        });
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -134,16 +155,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void changeToTextEditor() {
-        changeToTextEditor(false);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
+    }
+  
+    private void logOut(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        MainActivity.this.finish();
     }
 
-    @Override
-    public void changeToTextEditor(boolean isEditing) {
-        if (isEditing) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteEditFragment).addToBackStack(null).commit();
+    private void openAboutFragment(){
+        AboutFragment fragment = new AboutFragment();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //  landscape
+            //  first note as default selected note
+            noteListFragment.setArguments(getIntent().getExtras());
+            //noteFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, fragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
         } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteViewFragment).addToBackStack(null).commit();
+            //  portrait
+            //  If the activity was started with special instructions from an
+            //  Intent, pass the Intent's extras to the fragment as arguments
+            noteListFragment.setArguments(getIntent().getExtras());
+            //  Replace the Fragment on the 'fragmentContainer' FrameLayout
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, fragment).commit();
         }
     }
 
+    private void openNotesFragment(){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //  landscape
+            //  first note as default selected note
+            noteListFragment.setArguments(getIntent().getExtras());
+            //noteFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+        } else {
+            //  portrait
+            //  If the activity was started with special instructions from an
+            //  Intent, pass the Intent's extras to the fragment as arguments
+            noteListFragment.setArguments(getIntent().getExtras());
+            //  Replace the Fragment on the 'fragmentContainer' FrameLayout
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteListFragment).commit();
+        }
+    }
 }

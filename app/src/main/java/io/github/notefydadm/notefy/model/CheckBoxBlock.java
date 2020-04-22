@@ -28,12 +28,16 @@ public class CheckBoxBlock extends TextBlock {
 
     private boolean isChecked;
 
+    public CheckBoxBlock(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
     public CheckBoxBlock(String text, boolean isChecked) {
         super(text);
         this.isChecked = isChecked;
     }
 
-    public CheckBoxBlock(String text, boolean isChecked, String fontFamily, float fontSize, String textStyle) {
+    public CheckBoxBlock(String text, boolean isChecked, String fontFamily, double fontSize, String textStyle) {
         super(text, fontFamily, fontSize, textStyle);
         this.isChecked = isChecked;
     }
@@ -50,4 +54,5 @@ public class CheckBoxBlock extends TextBlock {
     public String getContent() {
         return "- [" + (isChecked ? "x" : " ") + "] " + super.getContent();
     }
+
 }
