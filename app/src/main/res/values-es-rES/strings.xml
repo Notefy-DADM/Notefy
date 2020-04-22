@@ -16,4 +16,5 @@
     <string name="app_logo_description">Logo de la app</string>
     <string name="notes">Notas</string>
     <string name="add_text">Añadir</string>
+    <string name="shared_notes">Compartidas conmigo</string>
 </resources>
