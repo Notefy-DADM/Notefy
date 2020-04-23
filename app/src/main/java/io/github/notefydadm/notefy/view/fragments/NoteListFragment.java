@@ -59,6 +59,9 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         // Get view model for notes
         noteViewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
 
+        // Load notes from database
+        noteViewModel.loadNotes();
+
         // When a note is selected, open it
         noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
             @Override

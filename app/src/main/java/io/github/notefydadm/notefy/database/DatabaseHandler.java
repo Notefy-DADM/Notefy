@@ -4,15 +4,19 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -33,20 +37,112 @@ import static io.github.notefydadm.notefy.model.Note.NoteState;
 
 public class DatabaseHandler {
 
-    public interface userGetNoteListListenerCallback{
+    public interface UserGetNoteListListenerCallback {
         void onNoteAdded(Note note);
         void onNoteModified(Note note);
         void onNoteRemoved(Note note);
         void onFailureOnListener(Exception exception);
     }
 
-    public interface addNoteToUserCallback{
+    public static UserGetNoteListListenerCallback getNoteListListenerCallback(final MutableLiveData<List<Note>> noteList) {
+        return new DatabaseHandler.UserGetNoteListListenerCallback() {
+            @Override
+            public void onNoteAdded(Note note) {
+                changeOrAddNote(noteList, note);
+            }
+
+            @Override
+            public void onNoteModified(Note note) {
+                changeOrAddNote(noteList, note);
+            }
+
+            @Override
+            public void onNoteRemoved(Note note) {
+                removeNote(noteList, note);
+            }
+
+            @Override
+            public void onFailureOnListener(Exception exception) {
+
+            }
+        };
+    }
+
+    private static void changeOrAddNote(MutableLiveData<List<Note>> noteList, Note note) {
+        List<Note> list = noteList.getValue();
+        if (list != null) {
+            for (int i = 0; i<list.size();i++) {
+                if(list.get(i).equals(note)){
+                    list.set(i,note);
+                    noteList.setValue(list);
+                    return;
+                }
+            }
+            list.add(note);
+            noteList.setValue(list);
+        }
+    }
+
+    private static void removeNote(MutableLiveData<List<Note>> noteList, Note noteToRemove) {
+        List<Note> list = noteList.getValue();
+        if (list != null) {
+            for (int i = 0; i<list.size();i++) {
+                if(list.get(i).equals(noteToRemove)){
+                    list.remove(i);
+                    noteList.setValue(list);
+                    return;
+                }
+            }
+        }
+    }
+
+    public interface AddNoteToUserCallback {
         void onSuccessfulAdded();
         void onFailureAdded();
+    }
+
+    public interface removeNoteCallback{
+        void onSuccessfulRemoved();
+        void onFailureRemoved();
+        void noteNotHaveId();
+
+    }
+
+    public interface createUserCallback {
+        void onSuccessfulAdded();
+        void onFailureAdded();
+    }
+
+    public interface shareNoteWithUserCallback{
+        void onSuccessfulShared();
+        void onFailureShared();
+        void onUserToShareNotExists();
+    }
+
+
+    public static void createUser(String userId, String userName,final createUserCallback callback){
+        Map<String, Object> noteMap = new HashMap<>();
+        noteMap.put("user_name", userName);
+        FirebaseFirestore.getInstance().collection("users").document(userId)
+                .set(noteMap, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("Add_Notes", "DocumentSnapshot successfully updated!");
+                callback.onSuccessfulAdded();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Add_Notes", "Error updating document", e);
+                callback.onFailureAdded();
+            }
+        });
 
     }
     
-    public static void addNoteToUser(String userId, Note note, final addNoteToUserCallback callback) {
+    public static void addNoteToUser(Note note, final AddNoteToUserCallback callback) {
+        String userId = note.getUserID();
+
         Timestamp timestampCreationDate = new Timestamp(note.getCreationDate().getSecond(),note.getCreationDate().getNano());
         Timestamp timestampLastModifiedDate = new Timestamp(note.getLastModifiedDate().getSecond(),note.getLastModifiedDate().getNano());
 
@@ -93,58 +189,95 @@ public class DatabaseHandler {
         }
     }
 
-    public static List<Note> getUserNotes(String userId) {
-        QuerySnapshot queryDocumentSnapshots = FirebaseFirestore.getInstance().collection("notes").whereEqualTo("user_id",userId)
-                .get().getResult();
-        if(queryDocumentSnapshots!=null) {
-            if (!queryDocumentSnapshots.isEmpty()) {
-                List<Note> noteList = new ArrayList<>();
-                for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                    Note item = getNoteFromQueryDocumentSnapshot(snapshot);
-                    noteList.add(item);
+    public static void removeNote(Note note, final removeNoteCallback callback){
+        if(!note.getNoteId().isEmpty()){
+            FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    callback.onSuccessfulRemoved();
                 }
-                return noteList;
-            } else {
-                return null;
-            }
-
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    callback.onFailureRemoved();
+                }
+            });
         }else{
-            return null;
+            callback.noteNotHaveId();
         }
-
     }
 
-    public static void userGetNoteListListener(final userGetNoteListListenerCallback callback, String userId){
-        FirebaseFirestore.getInstance().collection("notes").whereEqualTo("user_id",userId)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            callback.onFailureOnListener(e);
-                            return;
-                        }else{
-                            for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                                Note note = getNoteFromQueryDocumentSnapshot(dc.getDocument());
-                                switch (dc.getType()) {
-                                    case ADDED:
-                                        callback.onNoteAdded(note);
-                                        break;
-                                    case MODIFIED:
-                                        callback.onNoteModified(note);
-                                        break;
-                                    case REMOVED:
-                                        callback.onNoteRemoved(note);
-                                        break;
-                                }
+    public static void shareNoteWithUser(final Note note, final String userName, final shareNoteWithUserCallback callback){
+        FirebaseFirestore.getInstance().collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                boolean userFound = false;
+                for(DocumentSnapshot documentSnapshot :queryDocumentSnapshots.getDocuments()){
+                    if(documentSnapshot.get("user_name").equals(userName)){
+                        userFound = true;
+                        String userToShareId = documentSnapshot.getId();
+                        FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId())
+                                .update("users_shared", FieldValue.arrayUnion(userToShareId)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                callback.onSuccessfulShared();
                             }
-
-                        }
-
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                callback.onFailureShared();
+                            }
+                        });
                     }
-                });
+                }
+                if(!userFound){
+                    callback.onUserToShareNotExists();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailureShared();
+            }
+        });
     }
 
+    public static void userGetNoteListListener(final UserGetNoteListListenerCallback callback, String userId){
+        Query query = FirebaseFirestore.getInstance().collection("notes").whereEqualTo("user_id", userId);
+        addNoteListListener(query, callback);
+    }
+
+    public static void sharedWithUserGetNoteListListener(final UserGetNoteListListenerCallback callback, String userId) {
+        Query query = FirebaseFirestore.getInstance().collection("notes").whereArrayContains("users_shared", userId);
+        addNoteListListener(query, callback);
+    }
+
+    private static void addNoteListListener(Query query, final UserGetNoteListListenerCallback callback) {
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    callback.onFailureOnListener(e);
+                } else if (snapshots != null) {
+                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                        Note note = getNoteFromQueryDocumentSnapshot(dc.getDocument());
+                        switch (dc.getType()) {
+                            case ADDED:
+                                callback.onNoteAdded(note);
+                                break;
+                            case MODIFIED:
+                                callback.onNoteModified(note);
+                                break;
+                            case REMOVED:
+                                callback.onNoteRemoved(note);
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+    }
 
 
     private static Note getNoteFromQueryDocumentSnapshot (QueryDocumentSnapshot snapshot){
