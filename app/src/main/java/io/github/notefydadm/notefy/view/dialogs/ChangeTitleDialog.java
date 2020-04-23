@@ -28,7 +28,7 @@ public class ChangeTitleDialog extends DialogFragment {
 
     public interface ChangeTitleDialogListener{
         void onChangeTitleDialogPositiveClick(ChangeTitleDialog changeTitleDialog, MenuItem item);
-        void onChangeTitleDialogNegativeClick(ChangeTitleDialog changeTitleDialog, MenuItem item);
+        void onChangeTitleDialogNeutralClick(ChangeTitleDialog changeTitleDialog, MenuItem item);
     }
 
     @NonNull
@@ -36,10 +36,10 @@ public class ChangeTitleDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        System.out.println("HOLA?!?!?!");
 
         builder.setView(R.layout.change_title_dialog)
                 .setTitle(R.string.Ctitle_notelist_dialog)
+                .setCancelable(true)
                 .setPositiveButton(R.string.Cchange_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -49,10 +49,10 @@ public class ChangeTitleDialog extends DialogFragment {
                         //setTitle(title);    username from EditText in change_title_dialog.xml
                     }
                 })
-                .setNegativeButton(R.string.Ccancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.Ccancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onChangeTitleDialogNegativeClick(ChangeTitleDialog.this,item);
+                        listener.onChangeTitleDialogNeutralClick(ChangeTitleDialog.this,item);
                     }
                 });
 

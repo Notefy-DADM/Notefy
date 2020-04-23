@@ -31,7 +31,7 @@ public class ShareDialog extends DialogFragment {
 
     public interface ShareDialogListener {
         void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item);
-        void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item);
+        void onShareDialogNeutralClick(ShareDialog dialog, MenuItem item);
     }
 
     @NonNull
@@ -42,6 +42,7 @@ public class ShareDialog extends DialogFragment {
 
         builder.setView(R.layout.share_dialog)
                 .setTitle(R.string.Stitle_notelist_dialog)
+                .setCancelable(true)
                 .setPositiveButton(R.string.Sshare_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -51,10 +52,10 @@ public class ShareDialog extends DialogFragment {
                         //setUsername(username);    username from EditText in share_dialog.xml
                     }
                 })
-                .setNegativeButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onShareDialogNegativeClick(ShareDialog.this, item);
+                        listener.onShareDialogNeutralClick(ShareDialog.this,item);
                     }
                 });
         

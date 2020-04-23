@@ -26,7 +26,7 @@ public class DeleteDialog extends DialogFragment {
 
     public interface DeleteDialogListener{
         void onDeleteDialogPositiveClick(DeleteDialog dialog, MenuItem item);
-        void onDeleteDialogNegativeClick(DeleteDialog dialog, MenuItem item);
+        void onDeleteDialogNeutralClick(DeleteDialog dialog, MenuItem item);
     }
 
     @NonNull
@@ -38,16 +38,17 @@ public class DeleteDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         builder.setMessage(R.string.Dmessage_notelist_dialog)
+                .setCancelable(true)
                 .setPositiveButton(R.string.Ddelete_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.onDeleteDialogPositiveClick(DeleteDialog.this,item);
                     }
                 })
-                .setNegativeButton(R.string.Dcancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.Dcancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onDeleteDialogNegativeClick(DeleteDialog.this,item);
+                        listener.onDeleteDialogNeutralClick(DeleteDialog.this,item);
                     }
                 });
 

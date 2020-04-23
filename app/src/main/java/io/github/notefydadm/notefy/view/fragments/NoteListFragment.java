@@ -157,7 +157,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         displayContextMenuMessage(getString(R.string.share_notelist_context));
     }
     @Override
-    public void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item) {
+    public void onShareDialogNeutralClick(ShareDialog dialog, MenuItem item) {
         //  Dismiss dialog
     }
 
@@ -172,9 +172,8 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         binding.getAdapter().removeNote(item.getGroupId());
         displayContextMenuMessage(getString(R.string.delete_notelist_context));
     }
-
     @Override
-    public void onDeleteDialogNegativeClick(DeleteDialog dialog, MenuItem item) {
+    public void onDeleteDialogNeutralClick(DeleteDialog dialog, MenuItem item) {
         //  Dismiss dialog
     }
 
@@ -189,7 +188,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         //  TODO: Change note title
     }
     @Override
-    public void onChangeTitleDialogNegativeClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {
+    public void onChangeTitleDialogNeutralClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {
         //  Dismiss dialog
     }
 
