@@ -228,6 +228,7 @@ public class DatabaseHandler {
                                 callback.onFailureShared();
                             }
                         });
+                        break;
                     }
                 }
                 if(!userFound){

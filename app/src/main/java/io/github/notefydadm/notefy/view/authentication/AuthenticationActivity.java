@@ -198,5 +198,6 @@ public class AuthenticationActivity extends AppCompatActivity {
         SingletonDatabase.getInstance().init();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }
