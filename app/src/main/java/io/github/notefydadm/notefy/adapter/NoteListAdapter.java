@@ -119,6 +119,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.add(this.getAdapterPosition(), 121,0,R.string.remove_adapter_context);
             menu.add(this.getAdapterPosition(),122,1,R.string.share_adapter_context);
+            menu.add(this.getAdapterPosition(),123,2,R.string.change_adapter_context);
         }
     }
 }

@@ -47,6 +47,8 @@ public class ShareDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         //  Send the event back to the host
                         listener.onShareDialogPositiveClick(ShareDialog.this, item);
+                        //  TODO: Binding with username in share_dialog.xml layout
+                        //setUsername(username);    username from EditText in share_dialog.xml
                     }
                 })
                 .setNegativeButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
@@ -63,5 +65,13 @@ public class ShareDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.share_dialog, container, false);
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public void setUsername(String username){
+        this.username = username;
     }
 }

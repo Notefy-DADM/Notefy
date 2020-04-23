@@ -157,7 +157,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void changeToTextEditor() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
-  
+
+    /*@Override
+    public void changeToLandTextEditor() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+
+    }*/
+
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, SplashScreenActivity.class);

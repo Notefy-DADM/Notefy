@@ -23,17 +23,19 @@ import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.databinding.FragmentNoteListBinding;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.dialogs.ChangeTitleDialog;
 import io.github.notefydadm.notefy.view.dialogs.DeleteDialog;
 import io.github.notefydadm.notefy.view.dialogs.ShareDialog;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
-public class NoteListFragment extends Fragment implements ShareDialog.ShareDialogListener, DeleteDialog.DeleteDialogListener {
+public class NoteListFragment extends Fragment implements ShareDialog.ShareDialogListener, DeleteDialog.DeleteDialogListener, ChangeTitleDialog.ChangeTitleDialogListener {
     private FragmentNoteListBinding binding;
     private NoteViewModel noteViewModel;
     private ChangeToTextEditor listener;
 
     private ShareDialog shareDialog;
     private DeleteDialog deleteDialog;
+    private ChangeTitleDialog changeTitleDialog;
 
     public NoteListFragment() {
         // Required empty public constructor
@@ -67,6 +69,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
                         // landscape
                         System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
                         // TODO: Open text editor on landscape mode
+                        //listener.changeToLandTextEditor();
                     }
                     else{
                         // portrait
@@ -96,6 +99,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
 
     public interface ChangeToTextEditor{
         void changeToTextEditor();
+        //void changeToLandTextEditor();
     }
 
 
@@ -119,17 +123,20 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         recyclerView.setAdapter(adapter);
     }
 
+    //  Context Menu from NoteListAdapter
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
+            //  Delete option
             case 121:
                 openDeleteDialog(item);
                 return true;
-
+            //  Share option
             case 122:
                 openShareDialog(item);
                 return true;
-
+            case 123:
+                openChangeTitleDialog(item);
             default:
                 return super.onContextItemSelected(item);
         }
@@ -171,6 +178,20 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         //  Dismiss dialog
     }
 
+    //  CHANGE NOTE TITLE DIALOG
+    public void openChangeTitleDialog(MenuItem item){
+        changeTitleDialog = new ChangeTitleDialog(item,this);
+        changeTitleDialog.show(NoteListFragment.this.getChildFragmentManager(),"changeTitleDialog");
+    }
+    @Override
+    public void onChangeTitleDialogPositiveClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {
+        displayContextMenuMessage(getString(R.string.changeTitle_notelist_context));
+        //  TODO: Change note title
+    }
+    @Override
+    public void onChangeTitleDialogNegativeClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {
+        //  Dismiss dialog
+    }
 
     @Override
     public void onPause() {
