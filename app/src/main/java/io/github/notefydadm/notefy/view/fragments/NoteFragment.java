@@ -43,7 +43,10 @@ public class NoteFragment extends Fragment {
         if (note != null) {
             note.setBlocks(adapter.getBlocks());
 
-            String userId  = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            if (note.getUserID() == null) {
+                note.setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            }
+
             final LoadingDialog loadingDialog = new LoadingDialog();
             loadingDialog.show(requireFragmentManager(), null);
             DatabaseHandler.AddNoteToUserCallback callback = new DatabaseHandler.AddNoteToUserCallback() {
@@ -60,7 +63,7 @@ public class NoteFragment extends Fragment {
                 }
             };
 
-            DatabaseHandler.addNoteToUser(userId,note,callback);
+            DatabaseHandler.addNoteToUser(note,callback);
         }
     }
 

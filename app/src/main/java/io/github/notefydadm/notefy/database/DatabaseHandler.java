@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.github.notefydadm.notefy.model.Block;
@@ -139,7 +140,9 @@ public class DatabaseHandler {
 
     }
     
-    public static void addNoteToUser(String userId, Note note, final AddNoteToUserCallback callback) {
+    public static void addNoteToUser(Note note, final AddNoteToUserCallback callback) {
+        String userId = note.getUserID();
+
         Timestamp timestampCreationDate = new Timestamp(note.getCreationDate().getSecond(),note.getCreationDate().getNano());
         Timestamp timestampLastModifiedDate = new Timestamp(note.getLastModifiedDate().getSecond(),note.getLastModifiedDate().getNano());
 
