@@ -132,12 +132,12 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
 
     //  SHARE NOTE DIALOG
     public void openShareDialog(MenuItem item){
-        shareDialog = new ShareDialog(item, this);
+        shareDialog = new ShareDialog(item, this, getContext());
         shareDialog.show(NoteListFragment.this.getChildFragmentManager(), "shareDialog");
     }
     @Override
     public void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item) {
-        displayContextMenuMessage(getString(R.string.share_notelist_context));
+
     }
     @Override
     public void onShareDialogNeutralClick(ShareDialog dialog, MenuItem item) {

@@ -31,12 +31,14 @@ public class ShareDialog extends DialogFragment {
     private MenuItem item;
     private ShareDialogBinding binding;
     private NoteViewModel viewModel;
+    private Context context;
 
     private ShareDialogListener listener;
 
-    public ShareDialog(MenuItem item, ShareDialogListener listener) {
+    public ShareDialog(MenuItem item, ShareDialogListener listener, Context context) {
         this.item = item;
         this.listener = listener;
+        this.context = context;
     }
 
     public interface ShareDialogListener {
@@ -48,10 +50,10 @@ public class ShareDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
-        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.share_dialog,null,false);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.share_dialog,null,false);
 
         builder.setView(binding.getRoot())
                 .setTitle(R.string.Stitle_notelist_dialog)
@@ -64,17 +66,17 @@ public class ShareDialog extends DialogFragment {
                         DatabaseHandler.shareNoteWithUser(viewModel.getSelectedNote().getValue(), binding.getUsername(), new DatabaseHandler.shareNoteWithUserCallback() {
                             @Override
                             public void onSuccessfulShared() {
-                                //Toast.makeText(requireContext(),"Shared note",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,R.string.SSuccesful,Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onFailureShared() {
-
+                                Toast.makeText(context,R.string.SFailure, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onUserToShareNotExists() {
-
+                                Toast.makeText(context,R.string.SUser_no_exists,Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
