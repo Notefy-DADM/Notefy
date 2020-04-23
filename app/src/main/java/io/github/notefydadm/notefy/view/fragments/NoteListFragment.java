@@ -17,10 +17,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.databinding.FragmentNoteListBinding;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.view.SetNoteNameDialog;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class NoteListFragment extends Fragment {
@@ -43,7 +46,7 @@ public class NoteListFragment extends Fragment {
         binding.setAddNewNote(new Runnable() {
             @Override
             public void run() {
-                noteViewModel.setSelectedNote(new Note());
+                askNoteTittle();
             }
         });
 
@@ -125,6 +128,22 @@ public class NoteListFragment extends Fragment {
         //saved.get("notes");
         //noteViewModel.loadNotes();
         System.out.println("Resume");
+    }
+
+    private void askNoteTittle(){
+        SetNoteNameDialog.SetNoteNameCallback callback = new SetNoteNameDialog.SetNoteNameCallback() {
+            @Override
+            public void onClickSet(String name) {
+                noteViewModel.setSelectedNote(new Note(name, FirebaseAuth.getInstance().getUid()));
+            }
+
+            @Override
+            public void onClickCancel() {
+
+            }
+        };
+        final SetNoteNameDialog loadingDialog = new SetNoteNameDialog(callback,"");
+        loadingDialog.show(requireFragmentManager(), null);
     }
 
 }

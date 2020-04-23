@@ -35,4 +35,8 @@
     <string name="app_logo_description">App logo</string>
     <string name="notes">Notes</string>
     <string name="add_text">Add</string>
+    <string name="note_name">Note name</string>
+    <string name="add_note">Add note</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_name">Change name</string>
 </resources>
