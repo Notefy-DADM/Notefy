@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -23,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.github.notefydadm.notefy.model.Block;
@@ -34,17 +37,68 @@ import static io.github.notefydadm.notefy.model.Note.NoteState;
 
 public class DatabaseHandler {
 
-    public interface userGetNoteListListenerCallback{
+    public interface UserGetNoteListListenerCallback {
         void onNoteAdded(Note note);
         void onNoteModified(Note note);
         void onNoteRemoved(Note note);
         void onFailureOnListener(Exception exception);
     }
 
-    public interface addNoteToUserCallback{
+    public static UserGetNoteListListenerCallback getNoteListListenerCallback(final MutableLiveData<List<Note>> noteList) {
+        return new DatabaseHandler.UserGetNoteListListenerCallback() {
+            @Override
+            public void onNoteAdded(Note note) {
+                changeOrAddNote(noteList, note);
+            }
+
+            @Override
+            public void onNoteModified(Note note) {
+                changeOrAddNote(noteList, note);
+            }
+
+            @Override
+            public void onNoteRemoved(Note note) {
+                removeNote(noteList, note);
+            }
+
+            @Override
+            public void onFailureOnListener(Exception exception) {
+
+            }
+        };
+    }
+
+    private static void changeOrAddNote(MutableLiveData<List<Note>> noteList, Note note) {
+        List<Note> list = noteList.getValue();
+        if (list != null) {
+            for (int i = 0; i<list.size();i++) {
+                if(list.get(i).equals(note)){
+                    list.set(i,note);
+                    noteList.setValue(list);
+                    return;
+                }
+            }
+            list.add(note);
+            noteList.setValue(list);
+        }
+    }
+
+    private static void removeNote(MutableLiveData<List<Note>> noteList, Note noteToRemove) {
+        List<Note> list = noteList.getValue();
+        if (list != null) {
+            for (int i = 0; i<list.size();i++) {
+                if(list.get(i).equals(noteToRemove)){
+                    list.remove(i);
+                    noteList.setValue(list);
+                    return;
+                }
+            }
+        }
+    }
+
+    public interface AddNoteToUserCallback {
         void onSuccessfulAdded();
         void onFailureAdded();
-
     }
 
     public interface removeNoteCallback{
@@ -86,7 +140,9 @@ public class DatabaseHandler {
 
     }
     
-    public static void addNoteToUser(String userId, Note note, final addNoteToUserCallback callback) {
+    public static void addNoteToUser(Note note, final AddNoteToUserCallback callback) {
+        String userId = note.getUserID();
+
         Timestamp timestampCreationDate = new Timestamp(note.getCreationDate().getSecond(),note.getCreationDate().getNano());
         Timestamp timestampLastModifiedDate = new Timestamp(note.getLastModifiedDate().getSecond(),note.getLastModifiedDate().getNano());
 
@@ -186,37 +242,42 @@ public class DatabaseHandler {
         });
     }
 
-    public static void userGetNoteListListener(final userGetNoteListListenerCallback callback, String userId){
-        FirebaseFirestore.getInstance().collection("notes").whereEqualTo("user_id",userId)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            callback.onFailureOnListener(e);
-                            return;
-                        }else{
-                            for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                                Note note = getNoteFromQueryDocumentSnapshot(dc.getDocument());
-                                switch (dc.getType()) {
-                                    case ADDED:
-                                        callback.onNoteAdded(note);
-                                        break;
-                                    case MODIFIED:
-                                        callback.onNoteModified(note);
-                                        break;
-                                    case REMOVED:
-                                        callback.onNoteRemoved(note);
-                                        break;
-                                }
-                            }
-
-                        }
-
-                    }
-                });
+    public static void userGetNoteListListener(final UserGetNoteListListenerCallback callback, String userId){
+        Query query = FirebaseFirestore.getInstance().collection("notes").whereEqualTo("user_id", userId);
+        addNoteListListener(query, callback);
     }
 
+    public static void sharedWithUserGetNoteListListener(final UserGetNoteListListenerCallback callback, String userId) {
+        Query query = FirebaseFirestore.getInstance().collection("notes").whereArrayContains("users_shared", userId);
+        addNoteListListener(query, callback);
+    }
+
+    private static void addNoteListListener(Query query, final UserGetNoteListListenerCallback callback) {
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    callback.onFailureOnListener(e);
+                } else if (snapshots != null) {
+                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                        Note note = getNoteFromQueryDocumentSnapshot(dc.getDocument());
+                        switch (dc.getType()) {
+                            case ADDED:
+                                callback.onNoteAdded(note);
+                                break;
+                            case MODIFIED:
+                                callback.onNoteModified(note);
+                                break;
+                            case REMOVED:
+                                callback.onNoteRemoved(note);
+                                break;
+                        }
+                    }
+                }
+            }
+        });
+    }
 
 
     private static Note getNoteFromQueryDocumentSnapshot (QueryDocumentSnapshot snapshot){

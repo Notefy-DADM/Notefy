@@ -85,8 +85,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.nav_notes:
                 openNotesFragment();
+                noteViewModel.setNoteMode(NoteViewModel.NoteMode.MINE);
                 break;
-
+            case R.id.nav_shared:
+                openNotesFragment();
+                noteViewModel.setNoteMode(NoteViewModel.NoteMode.SHARED_WITH_ME);
+                break;
             case R.id.nav_about:
                 openAboutFragment();
                 break;

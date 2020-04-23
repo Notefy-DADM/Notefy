@@ -130,6 +130,10 @@ public class Note implements Parcelable, Comparable<Note> {
         return createdLocation;
     }
 
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
     @Override
     public int compareTo(Note note) {
         return noteId.compareTo(note.noteId);
