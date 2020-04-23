@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.database.SingletonDatabase;
 import io.github.notefydadm.notefy.view.LoadingDialog;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
@@ -100,13 +101,26 @@ public class AuthenticationActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        hideLoading();
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("auth", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            goToMain();
+                            DatabaseHandler.createUser(user.getUid(), user.getDisplayName(), new DatabaseHandler.createUserCallback() {
+                                @Override
+                                public void onSuccessfulAdded() {
+                                    hideLoading();
+                                    goToMain();
+                                }
+
+                                @Override
+                                public void onFailureAdded() {
+                                    hideLoading();
+                                    FirebaseAuth.getInstance().signOut();
+                                }
+                            });
+
                         } else {
+                            hideLoading();
                             // If sign in fails, display a message to the user.
                             Log.w("auth", "signInWithEmail:failure", task.getException());
                             Toast.makeText(AuthenticationActivity.this, R.string.authentication_failed,
@@ -122,27 +136,45 @@ public class AuthenticationActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        hideLoading();
+
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("auth", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(userName)
-                                    .build();
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            DatabaseHandler.createUserCallback createUserCallback = new DatabaseHandler.createUserCallback() {
+                                @Override
+                                public void onSuccessfulAdded() {
+                                    hideLoading();
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(userName)
+                                            .build();
 
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Log.d("auth", "User profile updated.");
-                                                goToMain();
-                                            }
-                                        }
-                                    });
+                                    user.updateProfile(profileUpdates)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Log.d("auth", "User profile updated.");
+                                                        goToMain();
+                                                    }
+                                                }
+                                            });
+                                }
+
+                                @Override
+                                public void onFailureAdded() {
+                                    hideLoading();
+                                    FirebaseAuth.getInstance().signOut();
+                                }
+                            };
+                            DatabaseHandler.createUser(user.getUid(),userName,createUserCallback);
+
+
+
+
 
                         } else {
+                            hideLoading();
                             // If sign in fails, display a message to the user.
                             Log.w("auth", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(AuthenticationActivity.this, R.string.authentication_failed,
