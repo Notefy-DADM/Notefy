@@ -21,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import java.util.List;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
+import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder> {
@@ -31,11 +33,15 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     private Context fragmentContext;
     private NoteViewModel viewModel;
 
-    private static PositionClickedListener positionListener;
+    private PositionClickedListener positionListener;
 
-    public NoteListAdapter(@NonNull Activity activity, Context context) {
+    private NoteListFragment.ChangeToTextEditor listener;
+
+
+    public NoteListAdapter(@NonNull Activity activity, Context context, final NoteListFragment.ChangeToTextEditor listener) {
         this.viewModel = new ViewModelProvider((MainActivity)activity).get(NoteViewModel.class);
         this.fragmentContext = context;
+        this.listener = listener;
         positionListener = new PositionClickedListener() {
             @Override
             public void itemClicked(int position) {
@@ -43,6 +49,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
                 if (noteList != null) {
                     Note note = noteList.get(position);
                     viewModel.postSelectedNote(note);
+                    listener.changeToTextEditor();
                 }
             }
         };
@@ -79,8 +86,22 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     }
 
     public void removeNote(int position){
-        //  TODO: Remove note in database
-        notifyDataSetChanged();
+        DatabaseHandler.removeNote(notes.getValue().get(position), new DatabaseHandler.removeNoteCallback() {
+            @Override
+            public void onSuccessfulRemoved() {
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailureRemoved() {
+
+            }
+
+            @Override
+            public void noteNotHaveId() {
+
+            }
+        });
     }
 
     interface PositionClickedListener {
@@ -117,6 +138,7 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            viewModel.postSelectedNote(notes.getValue().get(getAdapterPosition()));
             menu.add(this.getAdapterPosition(), 121,0,R.string.remove_adapter_context);
             menu.add(this.getAdapterPosition(),122,1,R.string.share_adapter_context);
             menu.add(this.getAdapterPosition(),123,2,R.string.change_adapter_context);

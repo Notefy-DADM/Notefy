@@ -27,7 +27,7 @@
     <string name="Sshare_button_notelist_dialog">Compartir</string>
     <string name="Scancel_button_notelist_dialog">Cancelar</string>
     <string name="delete_notelist_context">Nota eliminada</string>
-    <string name="nav_share">Notas compartidas</string>
+    <string name="nav_share">Compartidas conmigo</string>
     <string name="change_adapter_context">Cambiar título</string>
     <string name="Chint_notelist_dialog">Nuevo título</string>
     <string name="Ctitle_notelist_dialog">Título</string>

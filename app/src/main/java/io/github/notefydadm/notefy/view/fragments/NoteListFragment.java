@@ -53,6 +53,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
             @Override
             public void run() {
                 noteViewModel.setSelectedNote(new Note());
+                listener.changeToTextEditor();
             }
         });
 
@@ -62,27 +63,6 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         // Load notes from database
         noteViewModel.loadNotes();
 
-        // When a note is selected, open it
-        noteViewModel.getSelectedNote().observe(getViewLifecycleOwner(), new Observer<Note>() {
-            @Override
-            public void onChanged(Note note) {
-                if (note != null) {
-                    //  Check orientation
-                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                        // landscape
-                        System.out.println("Selected note landscape: " + note+ " Content: "+note.getContent());
-                        // TODO: Open text editor on landscape mode
-                        //listener.changeToLandTextEditor();
-                    }
-                    else{
-                        // portrait
-                        System.out.println("Selected note portrait: " + note+ " Content: "+note.getContent());
-                        listener.changeToTextEditor();
-                    }
-                }
-            }
-        });
-
         //  You can't cast a Fragment to a Context.
         binding.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL,false));
 
@@ -90,7 +70,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         //myRecyclerView.addItemDecoration(separator);
 
         // We need to have an Adapter for the RecyclerView
-        binding.setAdapter(new NoteListAdapter(requireActivity(), getContext()));
+        binding.setAdapter(new NoteListAdapter(requireActivity(), getContext(),listener));
 
         return binding.getRoot();
     }

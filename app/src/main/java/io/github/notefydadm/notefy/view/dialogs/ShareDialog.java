@@ -9,18 +9,28 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+
+import java.util.zip.Inflater;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.database.DatabaseHandler;
+import io.github.notefydadm.notefy.databinding.ShareDialogBinding;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
+import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class ShareDialog extends DialogFragment {
-    private String username;
     private MenuItem item;
+    private ShareDialogBinding binding;
+    private NoteViewModel viewModel;
 
     private ShareDialogListener listener;
 
@@ -38,9 +48,12 @@ public class ShareDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
-        builder.setView(R.layout.share_dialog)
+        viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.share_dialog,null,false);
+
+        builder.setView(binding.getRoot())
                 .setTitle(R.string.Stitle_notelist_dialog)
                 .setCancelable(true)
                 .setPositiveButton(R.string.Sshare_button_notelist_dialog, new DialogInterface.OnClickListener() {
@@ -48,8 +61,22 @@ public class ShareDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         //  Send the event back to the host
                         listener.onShareDialogPositiveClick(ShareDialog.this, item);
-                        //  TODO: Binding with username in share_dialog.xml layout
-                        //setUsername(username);    username from EditText in share_dialog.xml
+                        DatabaseHandler.shareNoteWithUser(viewModel.getSelectedNote().getValue(), binding.getUsername(), new DatabaseHandler.shareNoteWithUserCallback() {
+                            @Override
+                            public void onSuccessfulShared() {
+                                //Toast.makeText(requireContext(),"Shared note",Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailureShared() {
+
+                            }
+
+                            @Override
+                            public void onUserToShareNotExists() {
+
+                            }
+                        });
                     }
                 })
                 .setNeutralButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
@@ -62,17 +89,4 @@ public class ShareDialog extends DialogFragment {
         return builder.create();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.share_dialog, container, false);
-    }
-
-    public String getUsername(){
-        return username;
-    }
-
-    public void setUsername(String username){
-        this.username = username;
-    }
 }

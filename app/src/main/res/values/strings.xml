@@ -9,7 +9,7 @@
 
     <!--drawer_menu.xml (NavigationDrawer)-->
     <string name="nav_about">About</string>
-    <string name="nav_share">Shared Notes</string>
+    <string name="nav_share">Shared with me</string>
     <!--nav_header.xml (NavegationDrawer Header)-->
 
     <!--TEMPORAL-->
