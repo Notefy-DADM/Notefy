@@ -57,7 +57,7 @@ public class ShareDialog extends DialogFragment {
                         DatabaseHandler.shareNoteWithUser(viewModel.getSelectedNote().getValue(), binding.getUsername(), new DatabaseHandler.shareNoteWithUserCallback() {
                             @Override
                             public void onSuccessfulShared() {
-                                Toast.makeText(context,R.string.SSuccesful,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,R.string.SSuccessful,Toast.LENGTH_SHORT).show();
                             }
 
                             @Override

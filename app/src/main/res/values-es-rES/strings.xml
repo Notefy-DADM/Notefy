@@ -32,9 +32,9 @@
     <string name="Ccancel_button_notelist_dialog">Cancelar</string>
     <string name="Cchange_notelist_dialog">Guardar</string>
     <string name="changeTitle_notelist_context">Título de nota cambiado</string>
-    <string name="DSuccesful">Nota eliminada</string>
+    <string name="DSuccessful">Nota eliminada</string>
     <string name="DFailure">Fallo al eliminar</string>
-    <string name="SSuccesful">Nota compartida</string>
+    <string name="SSuccessful">Nota compartida</string>
     <string name="SFailure">Fallo al compartir</string>
     <string name="SUser_no_exists">El usuario no existe</string>
 </resources>

@@ -56,7 +56,7 @@ public class DeleteDialog extends DialogFragment {
                         DatabaseHandler.removeNote(viewModel.getSelectedNote().getValue(), new DatabaseHandler.removeNoteCallback() {
                             @Override
                             public void onSuccessfulRemoved() {
-                                Toast.makeText(context,R.string.DSuccesful,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,R.string.DSuccessful,Toast.LENGTH_SHORT).show();
                                 mAdapter.notifyDataSetChanged();
                             }
 

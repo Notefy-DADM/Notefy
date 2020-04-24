@@ -48,14 +48,14 @@
         <string name="Dmessage_notelist_dialog">Are you sure you want to delete it?</string>
         <string name="Ddelete_button_notelist_dialog">Delete</string>
         <string name="Dcancel_button_notelist_dialog">Cancel</string>
-        <string name="DSuccesful">Note deleted</string>
+        <string name="DSuccessful">Note deleted</string>
         <string name="DFailure">Failed to delete</string>
         <!--Share dialog-->
         <string name="Stitle_notelist_dialog">Share note with</string>
         <string name="Ssignin_button_notelist_dialog">Sign in</string>
         <string name="Sshare_button_notelist_dialog">Share</string>
         <string name="Scancel_button_notelist_dialog">Cancel</string>
-        <string name="SSuccesful">Note Shared</string>
+        <string name="SSuccessful">Note Shared</string>
         <string name="SFailure">Share failed</string>
         <string name="SUser_no_exists">User does not exist</string>
         <!--Change dialog-->
