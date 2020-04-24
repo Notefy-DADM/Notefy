@@ -17,10 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.notefydadm.notefy.databinding.UserItemBinding;
+import io.github.notefydadm.notefy.model.User;
 
 public class UserListAdapter extends Adapter<UserListAdapter.UserListViewHolder> {
 
-    private MutableLiveData<List<String>> users;
+    private MutableLiveData<List<User>> users;
     private Context fragmentContext;
 
     private UserItemBinding selectedItemBinding;
@@ -45,41 +46,45 @@ public class UserListAdapter extends Adapter<UserListAdapter.UserListViewHolder>
             }
         };
         this.users = new MutableLiveData<>();
-        this.users.setValue(new ArrayList<String>());
-        this.users.observe(owner, new Observer<List<String>>() {
+        this.users.setValue(new ArrayList<User>());
+        this.users.observe(owner, new Observer<List<User>>() {
             @Override
-            public void onChanged(List<String> users) {
+            public void onChanged(List<User> users) {
                 UserListAdapter.this.notifyDataSetChanged();
             }
         });
     }
 
-    public LiveData<List<String>> getUsers() {
+    public LiveData<List<User>> getUsers() {
         return users;
     }
 
-    public void setUsers(List<String> users) {
+    public void setUsers(List<User> users) {
         this.users.setValue(users);
     }
 
-    public String get(int position) {
-        List<String> usersList = users.getValue();
+    public User get(int position) {
+        List<User> usersList = users.getValue();
         if (usersList != null) {
             return usersList.get(position);
         }
         return null;
     }
 
-    public void add(String username) {
-        List<String> usersList = users.getValue();
+    public void add(User username) {
+        List<User> usersList = users.getValue();
         if (usersList != null) {
-            usersList.add(username);
-            notifyDataSetChanged();
+            if (!usersList.contains(username)) {
+                usersList.add(username);
+                notifyDataSetChanged();
+            } else {
+                throw new IllegalArgumentException("No duplicates allowed");
+            }
         }
     }
 
-    public void remove(String username) {
-        List<String> usersList = users.getValue();
+    public void remove(User username) {
+        List<User> usersList = users.getValue();
         if (usersList != null) {
             selectedItemBinding.setSelected(false);
             selectedItemBinding = null;
@@ -99,22 +104,22 @@ public class UserListAdapter extends Adapter<UserListAdapter.UserListViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull UserListViewHolder holder, int position) {
-        List<String> usersList = users.getValue();
+        List<User> usersList = users.getValue();
         if (usersList != null) {
-            String username = usersList.get(position);
+            User username = usersList.get(position);
             holder.bind(username, fragmentContext);
         }
     }
 
     @Override
     public int getItemCount() {
-        List<String> usersList = users.getValue();
+        List<User> usersList = users.getValue();
         return usersList == null ? 0 : usersList.size();
     }
 
     public interface ItemListener {
         void itemClicked(int position);
-        void itemRemoved(String item);
+        void itemRemoved(User item);
     }
 
     private interface ItemListenerInternal {
@@ -135,8 +140,8 @@ public class UserListAdapter extends Adapter<UserListAdapter.UserListViewHolder>
             this.listener = listener;
         }
 
-        public void bind(String username, Context context) {
-            binding.setText(username);
+        public void bind(User username, Context context) {
+            binding.setText(username.toString());
         }
 
         @Override

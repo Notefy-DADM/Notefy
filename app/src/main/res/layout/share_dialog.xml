@@ -5,8 +5,8 @@
     <data>
         <variable name="layoutManager" type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
         <variable name="adapter" type="io.github.notefydadm.notefy.adapter.UserListAdapter" />
-        <variable name="selectedUser" type="String" />
-        <variable name="userToAdd" type="String" />
+        <variable name="selectedUser" type="io.github.notefydadm.notefy.model.User" />
+        <variable name="addUser" type="java.util.function.BiConsumer" />
     </data>
 
     <LinearLayout
@@ -50,7 +50,6 @@
                 android:gravity="center_vertical"
                 android:hint="@string/username"
                 android:inputType="textPersonName"
-                android:text="@={userToAdd}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/addSharedUserButton"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="16dp"
-                android:onClick="@{() -> adapter.add(userToAdd)}"
+                android:onClick="@{() -> addUser.accept(adapter, shareDialogUsername.getText())}"
                 android:text="@string/add_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

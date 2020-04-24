@@ -1,6 +1,5 @@
 package io.github.notefydadm.notefy.view.dialogs;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.LiveData;
@@ -20,12 +20,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.UserListAdapter;
 import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.databinding.ShareDialogBinding;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.model.User;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class ShareDialog extends DialogFragment {
@@ -44,7 +47,7 @@ public class ShareDialog extends DialogFragment {
 
     public interface ShareDialogListener {
         void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item);
-        void onShareDialogNeutralClick(ShareDialog dialog, MenuItem item);
+        void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item);
     }
 
     @NonNull
@@ -64,14 +67,38 @@ public class ShareDialog extends DialogFragment {
             }
 
             @Override
-            public void itemRemoved(String item) {
+            public void itemRemoved(User item) {
                 binding.setSelectedUser(null);
             }
         }));
 
-        DatabaseHandler.getSharedListNoteListener(new DatabaseHandler.DatabaseListener<List<String>>() {
+        binding.setAddUser(new BiConsumer() {
             @Override
-            public void onSnapshot(List<String> users) {
+            public void accept(final Object adapter, Object username) {
+                DatabaseHandler.getUser(username.toString(), new Consumer<User>() {
+                    @Override
+                    public void accept(User user) {
+                        if (user != null) {
+                            try {
+                                ((UserListAdapter) adapter).add(user);
+                            } catch (IllegalArgumentException ignored) {
+                                Toast
+                                    .makeText(context, R.string.SUser_already_shared, Toast.LENGTH_SHORT)
+                                    .show();
+                            }
+                        } else {
+                            Toast
+                                .makeText(context, R.string.SUser_no_exists, Toast.LENGTH_SHORT)
+                                .show();
+                        }
+                    }
+                });
+            }
+        });
+
+        DatabaseHandler.getSharedListNoteListener(new DatabaseHandler.DatabaseListener<List<User>>() {
+            @Override
+            public void onSnapshot(List<User> users) {
                 if (users != null) binding.getAdapter().setUsers(users);
             }
 
@@ -111,7 +138,7 @@ public class ShareDialog extends DialogFragment {
                 .setNegativeButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onShareDialogNeutralClick(ShareDialog.this,item);
+                        listener.onShareDialogNegativeClick(ShareDialog.this,item);
                     }
                 });
         

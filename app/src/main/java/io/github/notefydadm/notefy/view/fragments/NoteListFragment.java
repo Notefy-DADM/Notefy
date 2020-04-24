@@ -151,7 +151,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
 
     }
     @Override
-    public void onShareDialogNeutralClick(ShareDialog dialog, MenuItem item) {
+    public void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item) {
         //  Dismiss dialog
     }
 

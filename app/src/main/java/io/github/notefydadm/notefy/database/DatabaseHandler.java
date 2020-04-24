@@ -15,7 +15,6 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -26,17 +25,22 @@ import com.google.firebase.firestore.SetOptions;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import io.github.notefydadm.notefy.model.Block;
 import io.github.notefydadm.notefy.model.CheckBoxBlock;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.model.TextBlock;
+import io.github.notefydadm.notefy.model.User;
 
 import static io.github.notefydadm.notefy.model.Note.NoteState;
 
@@ -209,34 +213,66 @@ public class DatabaseHandler {
         }
     }
 
-    public static boolean userExists(String username) {
-        final AtomicBoolean exists = new AtomicBoolean();
-        final CountDownLatch done = new CountDownLatch(1);
+    public static void getUser(final String username, final Consumer<User> callback) {
         FirebaseFirestore.getInstance().collection("users")
-                .whereEqualTo("user_name", username).limit(1).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot result = task.getResult();
-                            if (result != null && !result.isEmpty()) {
-                                exists.set(true);
-                            }
+            .whereEqualTo("user_name", username).limit(1).get()
+            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot result) {
+                    if (result != null) {
+                        if (result.isEmpty()) {
+                            callback.accept(null);
+                        } else {
+                            DocumentSnapshot userDocument = result.getDocuments().get(0);
+                            callback.accept(getUserFromSnapshot(userDocument));
                         }
-                        done.countDown();
                     }
-                });
-        try {
-            done.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return exists.get();
+                }
+            });
     }
 
-    public static void updateSharedListNote(final Note note, final List<String> userNames, final UpdateSharedListNoteCallback callback) {
+    public static void getUsersFromNames(final List<String> userNames, final Consumer<List<User>> callback) {
+        FirebaseFirestore.getInstance().collection("users")
+            .whereIn("user_name", userNames).get()
+            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot result) {
+                    List<User> users = new ArrayList<>();
+                    for (DocumentSnapshot snapshot : result.getDocuments()) {
+                        users.add(getUserFromSnapshot(snapshot));
+                    }
+                    callback.accept(users);
+                }
+            });
+    }
+
+    public static void getUsersFromIds(final HashSet<String> userIds, final Consumer<List<User>> callback) {
+        FirebaseFirestore.getInstance().collection("users").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot result) {
+                        List<User> users = new ArrayList<>();
+                        for (DocumentSnapshot snapshot : result.getDocuments()) {
+                            if (userIds.contains(snapshot.getId())) {
+                                users.add(getUserFromSnapshot(snapshot));
+                            }
+                        }
+                        callback.accept(users);
+                    }
+                });
+    }
+
+    private static User getUserFromSnapshot(DocumentSnapshot snapshot) {
+        return new User(snapshot.getId(), snapshot.getString("user_name"));
+    }
+
+    public static void updateSharedListNote(final Note note, final List<User> users, final UpdateSharedListNoteCallback callback) {
+        List<String> userIds = new ArrayList<>();
+        for (User user : users) {
+            userIds.add(user.getUserId());
+        }
         FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId())
-        .update("users_shared", userNames)
+        .update("users_shared", userIds)
         .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -250,12 +286,15 @@ public class DatabaseHandler {
         });
     }
 
-    public static void getSharedListNoteListener(final DatabaseListener<List<String>> callback, Note note) {
+    public static void getSharedListNoteListener(final DatabaseListener<List<User>> callback, Note note) {
         DocumentReference reference = FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId());
-        addDocumentListener(reference, new Function<DocumentSnapshot, List<String>>() {
+        addDocumentListener(reference, new BiConsumer<DocumentSnapshot, Consumer<List<User>>>() {
             @Override
-            public List<String> apply(DocumentSnapshot documentSnapshot) {
-                return (List<String>) documentSnapshot.get("users_shared");
+            public void accept(DocumentSnapshot documentSnapshot, Consumer<List<User>> callback) {
+                List<String> usersShared = (List<String>) documentSnapshot.get("users_shared");
+                if (usersShared != null) {
+                    getUsersFromIds(new HashSet<>(usersShared), callback);
+                }
             }
         }, callback);
     }
@@ -271,15 +310,15 @@ public class DatabaseHandler {
     }
 
     private static void addNoteListListener(Query query, final DatabaseListListener<Note> callback) {
-        DatabaseHandler.addListListener(query, new Function<QueryDocumentSnapshot, Note>() {
+        DatabaseHandler.addListListener(query, new BiConsumer<QueryDocumentSnapshot, Consumer<Note>>() {
             @Override
-            public Note apply(QueryDocumentSnapshot snapshot) {
-                return getNoteFromQueryDocumentSnapshot(snapshot);
+            public void accept(QueryDocumentSnapshot snapshot, Consumer<Note> callback) {
+                callback.accept(getNoteFromQueryDocumentSnapshot(snapshot));
             }
         }, callback);
     }
 
-    private static <T> void addDocumentListener(DocumentReference reference, final Function<DocumentSnapshot, T> converter, final DatabaseListener<T> callback) {
+    private static <T> void addDocumentListener(DocumentReference reference, final BiConsumer<DocumentSnapshot, Consumer<T>> converter, final DatabaseListener<T> callback) {
         reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -288,8 +327,12 @@ public class DatabaseHandler {
                     if (callback != null) callback.onFailureOnListener(e);
                 } else if (snapshot != null) {
                     try {
-                        T item = converter.apply(snapshot);
-                        if (callback != null) callback.onSnapshot(item);
+                        converter.accept(snapshot, new Consumer<T>() {
+                            @Override
+                            public void accept(T item) {
+                                if (callback != null) callback.onSnapshot(item);
+                            }
+                        });
                     } catch (IllegalArgumentException ignored) {
                     }
                 }
@@ -297,7 +340,7 @@ public class DatabaseHandler {
         });
     }
 
-    private static <T> void addListListener(Query query, final Function<QueryDocumentSnapshot, T> converter, final DatabaseListListener<T> callback) {
+    private static <T> void addListListener(Query query, final BiConsumer<QueryDocumentSnapshot, Consumer<T>> converter, final DatabaseListListener<T> callback) {
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
@@ -305,20 +348,24 @@ public class DatabaseHandler {
                 if (e != null) {
                     callback.onFailureOnListener(e);
                 } else if (snapshots != null) {
-                    for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                    for (final DocumentChange dc : snapshots.getDocumentChanges()) {
                         try {
-                            T item = converter.apply(dc.getDocument());
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    callback.onAdded(item);
-                                    break;
-                                case MODIFIED:
-                                    callback.onModified(item);
-                                    break;
-                                case REMOVED:
-                                    callback.onRemoved(item);
-                                    break;
-                            }
+                            converter.accept(dc.getDocument(), new Consumer<T>() {
+                                @Override
+                                public void accept(T item) {
+                                    switch (dc.getType()) {
+                                        case ADDED:
+                                            callback.onAdded(item);
+                                            break;
+                                        case MODIFIED:
+                                            callback.onModified(item);
+                                            break;
+                                        case REMOVED:
+                                            callback.onRemoved(item);
+                                            break;
+                                    }
+                                }
+                            });
                         } catch (IllegalArgumentException ignored) {
                         }
                     }
