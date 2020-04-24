@@ -18,25 +18,23 @@ import androidx.lifecycle.ViewModelProvider;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.databinding.ChangeTitleDialogBinding;
+import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class ChangeTitleDialog extends DialogFragment {
-    private MenuItem item;
-    private Context context;
-    private NoteViewModel viewModel;
     private ChangeTitleDialogBinding binding;
 
-    ChangeTitleDialogListener listener;
+    ChangeTitleDialogCallback listener;
+    Note note;
 
-    public ChangeTitleDialog(MenuItem item, ChangeTitleDialogListener listener, Context context) {
-        this.item = item;
+    public ChangeTitleDialog(Note note, ChangeTitleDialogCallback listener) {
         this.listener = listener;
-        this.context = context;
+        this.note = note;
     }
 
-    public interface ChangeTitleDialogListener{
-        void onChangeTitleDialogPositiveClick(ChangeTitleDialog changeTitleDialog, MenuItem item);
-        void onChangeTitleDialogNeutralClick(ChangeTitleDialog changeTitleDialog, MenuItem item);
+    public interface ChangeTitleDialogCallback {
+        void onChangeTittleClick( String tittle);
+        void onCancelClick();
     }
 
     @NonNull
@@ -45,9 +43,7 @@ public class ChangeTitleDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
-        binding = DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.change_title_dialog,null,false);
-
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.change_title_dialog,null,false);
         builder.setView(binding.getRoot())
                 .setTitle(R.string.Ctitle_notelist_dialog)
                 .setCancelable(true)
@@ -55,14 +51,13 @@ public class ChangeTitleDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //  Send the event back to the host
-                        listener.onChangeTitleDialogPositiveClick(ChangeTitleDialog.this,item);
-                        //  TODO: Binding with title in change_title_dialog.xml layout
+                        listener.onChangeTittleClick(binding.getTitle());
                     }
                 })
-                .setNeutralButton(R.string.Ccancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.Ccancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onChangeTitleDialogNeutralClick(ChangeTitleDialog.this,item);
+                        listener.onCancelClick();
                     }
                 });
 

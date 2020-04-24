@@ -21,32 +21,25 @@ import io.github.notefydadm.notefy.databinding.ShareDialogBinding;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class ShareDialog extends DialogFragment {
-    private MenuItem item;
     private ShareDialogBinding binding;
-    private NoteViewModel viewModel;
-    private Context context;
 
     private ShareDialogListener listener;
 
-    public ShareDialog(MenuItem item, ShareDialogListener listener, Context context) {
-        this.item = item;
+    public ShareDialog(ShareDialogListener listener) {
         this.listener = listener;
-        this.context = context;
     }
 
     public interface ShareDialogListener {
-        void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item);
-        void onShareDialogNeutralClick(ShareDialog dialog, MenuItem item);
+        void onShareDialogPositiveClick(String userName);
+        void onShareDialogNeutralClick();
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
-        binding = DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.share_dialog,null,false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.share_dialog,null,false);
 
         builder.setView(binding.getRoot())
                 .setTitle(R.string.Stitle_notelist_dialog)
@@ -54,30 +47,14 @@ public class ShareDialog extends DialogFragment {
                 .setPositiveButton(R.string.Sshare_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DatabaseHandler.shareNoteWithUser(viewModel.getSelectedNote().getValue(), binding.getUsername(), new DatabaseHandler.shareNoteWithUserCallback() {
-                            @Override
-                            public void onSuccessfulShared() {
-                                Toast.makeText(context,R.string.SSuccessful,Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onFailureShared() {
-                                Toast.makeText(context,R.string.SFailure, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onUserToShareNotExists() {
-                                Toast.makeText(context,R.string.SUser_no_exists,Toast.LENGTH_SHORT).show();
-                            }
-                        });
                         //  Send the event back to the host
-                        listener.onShareDialogPositiveClick(ShareDialog.this, item);
+                        listener.onShareDialogPositiveClick(binding.getUsername());
                     }
                 })
                 .setNeutralButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onShareDialogNeutralClick(ShareDialog.this,item);
+                        listener.onShareDialogNeutralClick();
                     }
                 });
         

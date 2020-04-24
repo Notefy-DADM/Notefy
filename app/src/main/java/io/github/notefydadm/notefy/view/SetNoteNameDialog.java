@@ -63,6 +63,7 @@ public class SetNoteNameDialog extends DialogFragment {
                 .setPositiveButton(nameButtonChangeName, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+
                         callback.onClickSet(editTextName.getEditText().getText().toString());
                     }
                 })
