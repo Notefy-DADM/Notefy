@@ -23,6 +23,7 @@ public class NoteViewModel extends ViewModel {
 
     public NoteViewModel() {
         notes = new MutableLiveData<>();
+        selectedNote = new MutableLiveData<>();
         databaseNotesObserver = new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> notes) {
@@ -80,7 +81,9 @@ public class NoteViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        databaseNotes.removeObserver(databaseNotesObserver);
+        if(databaseNotes != null){
+            databaseNotes.removeObserver(databaseNotesObserver);
+        }
         super.onCleared();
     }
 }

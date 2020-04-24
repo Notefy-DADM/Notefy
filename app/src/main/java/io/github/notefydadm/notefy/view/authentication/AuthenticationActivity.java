@@ -20,7 +20,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.database.SingletonDatabase;
-import io.github.notefydadm.notefy.view.LoadingDialog;
+import io.github.notefydadm.notefy.view.dialogs.LoadingDialog;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
 
 public class AuthenticationActivity extends AppCompatActivity {

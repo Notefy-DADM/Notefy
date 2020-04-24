@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,8 +26,8 @@ import io.github.notefydadm.notefy.model.Block;
 import io.github.notefydadm.notefy.model.CheckBoxBlock;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.model.TextBlock;
-import io.github.notefydadm.notefy.view.LoadingDialog;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
+import io.github.notefydadm.notefy.view.dialogs.LoadingDialog;
 import io.github.notefydadm.notefy.view.fragments.noteBlocks.NoteBlocksListAdapter;
 import io.github.notefydadm.notefy.view.fragments.noteBlocks.OnItemModifiedCallback;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
@@ -79,8 +80,6 @@ public class NoteFragment extends Fragment {
         FragmentNoteBinding binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_note, container,false);
 
-        RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerViewBlocks);
-
         adapter = new NoteBlocksListAdapter(getCopyOfBlocks(note.getBlocks()), new OnItemModifiedCallback() {
             @Override
             public void onItemModified() {
@@ -88,27 +87,30 @@ public class NoteFragment extends Fragment {
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        binding.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
+        binding.setAdapter(adapter);
 
         initFab(binding);
 
         return binding.getRoot();
     }
 
+    @BindingAdapter("hasFixedSize")
+    public static void setHasFixedSize(RecyclerView recyclerView, boolean hasFixedSize) {
+        recyclerView.setHasFixedSize(hasFixedSize);
+    }
+
     private void initFab(FragmentNoteBinding binding) {
-        binding.setAddNewTextBlock(new Runnable() {
+        binding.setAddNewTextBlock(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View view) {
                 showButtonSave();
                 addNewTextBlock();
             }
         });
-        binding.setAddNewCheckBoxBlock(new Runnable() {
+        binding.setAddNewCheckBoxBlock(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View view) {
                 showButtonSave();
                 addNewCheckboxBlock();
             }

@@ -1,4 +1,4 @@
-package io.github.notefydadm.notefy.view;
+package io.github.notefydadm.notefy.view.dialogs;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
