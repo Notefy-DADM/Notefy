@@ -15,90 +15,48 @@ import io.github.notefydadm.notefy.model.User;
 public class SingletonDatabase {
 
     private static SingletonDatabase instance;
-    private MutableLiveData<List<Note>> mutableNoteList;
+    private MutableLiveData<List<Note>> myNotes, sharedWithMeNotes;
 
 
     private SingletonDatabase() {
-        mutableNoteList = new MutableLiveData<>();
-        mutableNoteList.setValue(new ArrayList<Note>());
+        myNotes = new MutableLiveData<List<Note>>(new ArrayList<Note>());
+        sharedWithMeNotes = new MutableLiveData<List<Note>>(new ArrayList<Note>());
     }
 
-    public static SingletonDatabase getInstance(){
-        if(instance == null) {
+    public static SingletonDatabase getInstance() {
+        if (instance == null) {
             instance = new SingletonDatabase();
         }
         return instance;
     }
 
     public void init() {
-        DatabaseHandler.userGetNoteListListenerCallback callback = new DatabaseHandler.userGetNoteListListenerCallback() {
-            @Override
-            public void onNoteAdded(Note note) {
-                changeOrAddNote(note);
-            }
-
-            @Override
-            public void onNoteModified(Note note) {
-                changeOrAddNote(note);
-            }
-
-            @Override
-            public void onNoteRemoved(Note note) {
-                removeNote(note);
-            }
-
-            @Override
-            public void onFailureOnListener(Exception exception) {
-
-            }
-        };
-        DatabaseHandler.userGetNoteListListener(callback, FirebaseAuth.getInstance().getCurrentUser().getUid());
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            final String userUid = user.getUid();
+            DatabaseHandler.userGetNoteListListener(DatabaseHandler.getNoteListListenerCallback(myNotes), userUid);
+            DatabaseHandler.sharedWithUserGetNoteListListener(DatabaseHandler.getNoteListListenerCallback(sharedWithMeNotes), userUid);
+        }
     }
 
-    static private User getUserFromFirebase(){
+    private static User getUserFromFirebase() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //User user = new user()
-        return null; //TODO implementar
+        return null; // TODO: Get User object from FirebaseUser
     }
 
-    public MutableLiveData<List<Note>> getMutableNoteList(){
-        return mutableNoteList;
+    public MutableLiveData<List<Note>> getMyNotes(){
+        return myNotes;
+    }
+    public MutableLiveData<List<Note>> getSharedWithMeNotes(){
+        return sharedWithMeNotes;
     }
 
     private void addNoteToMutableList(Note noteToAdd){
-        List<Note> list = mutableNoteList.getValue();
+        List<Note> list = myNotes.getValue();
         if (list != null) {
             list.add(noteToAdd);
         }
-        mutableNoteList.setValue(list);
+        myNotes.setValue(list);
     }
-
-    private void changeOrAddNote(Note note){
-        List<Note> list = mutableNoteList.getValue();
-        if (list != null) {
-            for (int i = 0; i<list.size();i++) {
-                if(list.get(i).equals(note)){
-                    list.set(i,note);
-                    mutableNoteList.setValue(list);
-                    return;
-                }
-            }
-            list.add(note);
-            mutableNoteList.setValue(list);
-        }
-    }
-
-    private void removeNote(Note noteToRemove){
-        List<Note> list = mutableNoteList.getValue();
-        if (list != null) {
-            for (int i = 0; i<list.size();i++) {
-                if(list.get(i).equals(noteToRemove)){
-                    list.remove(i);
-                    mutableNoteList.setValue(list);
-                    return;
-                }
-            }
-        }
-    }
-
 }

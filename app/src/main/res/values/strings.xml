@@ -9,10 +9,11 @@
 
     <!--drawer_menu.xml (NavigationDrawer)-->
     <string name="nav_about">About</string>
+    <string name="nav_share">Shared with me</string>
     <!--nav_header.xml (NavegationDrawer Header)-->
 
     <!--TEMPORAL-->
-    <string name="username">User name</string>
+    <string name="username">Username</string>
     <string name="email">Email</string>
 
     <!--MainActivity-->
@@ -25,6 +26,11 @@
     <string name="andres_about" translatable="false">Sen Moya, Andrés \n\nansemo@inf.upv.es</string>
     <string name="marcos_about" translatable="false">Haba Claramunt, Marcos \n\nmarhacla@inf.upv.es</string>
     <string name="DADM_about" translatable="false">DADM \n\n2019-2020</string>
+
+    <!--Adapter-->
+    <string name="remove_adapter_context">Remove</string>
+    <string name="share_adapter_context">Share</string>
+    <string name="change_adapter_context">Change title</string>
 
     <!-- Authentication -->
     <string name="password">Password</string>
@@ -39,4 +45,28 @@
     <string name="add_note">Add note</string>
     <string name="cancel">Cancel</string>
     <string name="change_name">Change name</string>
+
+    <!--Context Menu-->
+        <string name="changeTitle_notelist_context">Note title changed</string>
+        <!--Delete dialog-->
+        <string name="Dmessage_notelist_dialog">Are you sure you want to delete it?</string>
+        <string name="Ddelete_button_notelist_dialog">Delete</string>
+        <string name="Dcancel_button_notelist_dialog">Cancel</string>
+        <string name="DSuccessful">Note deleted</string>
+        <string name="DFailure">Failed to delete</string>
+        <!--Share dialog-->
+        <string name="Stitle_notelist_dialog">Share note with</string>
+        <string name="Ssignin_button_notelist_dialog">Sign in</string>
+        <string name="Sshare_button_notelist_dialog">Share</string>
+        <string name="Scancel_button_notelist_dialog">Cancel</string>
+        <string name="SSuccessful">Note Shared</string>
+        <string name="SFailure">Share failed</string>
+        <string name="SUser_no_exists">User does not exist</string>
+        <!--Change dialog-->
+        <string name="Chint_notelist_dialog">New title</string>
+        <string name="Ctitle_notelist_dialog">Title</string>
+        <string name="Cchange_notelist_dialog">Save</string>
+        <string name="Ccancel_button_notelist_dialog">Cancel</string>
+
+
 </resources>

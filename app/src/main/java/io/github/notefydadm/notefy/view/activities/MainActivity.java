@@ -85,8 +85,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.nav_notes:
                 openNotesFragment();
+                noteViewModel.setNoteMode(NoteViewModel.NoteMode.MINE);
                 break;
-
+            case R.id.nav_shared:
+                openNotesFragment();
+                noteViewModel.setNoteMode(NoteViewModel.NoteMode.SHARED_WITH_ME);
+                break;
             case R.id.nav_about:
                 openAboutFragment();
                 break;
@@ -127,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setToolbarDrawer(){
         toolbar = findViewById(R.id.toolbar);
-        //currentToolbarLayout = R.id.toolbar;
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -158,7 +161,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void changeToTextEditor() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
     }
-  
+
+    /*@Override
+    public void changeToLandTextEditor() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+
+    }*/
+
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, SplashScreenActivity.class);
