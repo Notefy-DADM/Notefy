@@ -6,8 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,6 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 
 import io.github.notefydadm.notefy.model.Block;
 import io.github.notefydadm.notefy.model.CheckBoxBlock;
@@ -37,28 +42,33 @@ import static io.github.notefydadm.notefy.model.Note.NoteState;
 
 public class DatabaseHandler {
 
-    public interface UserGetNoteListListenerCallback {
-        void onNoteAdded(Note note);
-        void onNoteModified(Note note);
-        void onNoteRemoved(Note note);
-        void onFailureOnListener(Exception exception);
+    public abstract static class DatabaseListener<T> {
+        public abstract void onSnapshot(T snapshot);
+        public abstract void onFailureOnListener(Exception exception);
     }
 
-    public static UserGetNoteListListenerCallback getNoteListListenerCallback(final MutableLiveData<List<Note>> noteList) {
-        return new DatabaseHandler.UserGetNoteListListenerCallback() {
+    public abstract static class DatabaseListListener<T> {
+        public abstract void onAdded(T item);
+        public abstract void onModified(T item);
+        public abstract void onRemoved(T item);
+        public abstract void onFailureOnListener(Exception exception);
+    }
+
+    static <T> DatabaseListListener<T> getListListenerCallback(final MutableLiveData<List<T>> list) {
+        return new DatabaseListListener<T>() {
             @Override
-            public void onNoteAdded(Note note) {
-                changeOrAddNote(noteList, note);
+            public void onAdded(T item) {
+                changeOrAddItem(list, item);
             }
 
             @Override
-            public void onNoteModified(Note note) {
-                changeOrAddNote(noteList, note);
+            public void onModified(T item) {
+                changeOrAddItem(list, item);
             }
 
             @Override
-            public void onNoteRemoved(Note note) {
-                removeNote(noteList, note);
+            public void onRemoved(T item) {
+                removeItem(list, item);
             }
 
             @Override
@@ -68,31 +78,24 @@ public class DatabaseHandler {
         };
     }
 
-    private static void changeOrAddNote(MutableLiveData<List<Note>> noteList, Note note) {
-        List<Note> list = noteList.getValue();
+    private static <T> void changeOrAddItem(MutableLiveData<List<T>> listData, T item) {
+        List<T> list = listData.getValue();
         if (list != null) {
-            for (int i = 0; i<list.size();i++) {
-                if(list.get(i).equals(note)){
-                    list.set(i,note);
-                    noteList.setValue(list);
-                    return;
-                }
+            final int index = list.indexOf(item);
+            if (index < 0) { // Item was not in the list
+                list.add(item);
+            } else {
+                list.set(index, item);
             }
-            list.add(note);
-            noteList.setValue(list);
+            listData.setValue(list);
         }
     }
 
-    private static void removeNote(MutableLiveData<List<Note>> noteList, Note noteToRemove) {
-        List<Note> list = noteList.getValue();
+    private static <T> void removeItem(MutableLiveData<List<T>> listData, T itemToRemove) {
+        List<T> list = listData.getValue();
         if (list != null) {
-            for (int i = 0; i<list.size();i++) {
-                if(list.get(i).equals(noteToRemove)){
-                    list.remove(i);
-                    noteList.setValue(list);
-                    return;
-                }
-            }
+            boolean removed = list.remove(itemToRemove);
+            if (removed) listData.setValue(list);
         }
     }
 
@@ -101,26 +104,25 @@ public class DatabaseHandler {
         void onFailureAdded();
     }
 
-    public interface removeNoteCallback{
+    public interface RemoveNoteCallback {
         void onSuccessfulRemoved();
         void onFailureRemoved();
         void noteNotHaveId();
 
     }
 
-    public interface createUserCallback {
+    public interface CreateUserCallback {
         void onSuccessfulAdded();
         void onFailureAdded();
     }
 
-    public interface shareNoteWithUserCallback{
+    public interface UpdateSharedListNoteCallback {
         void onSuccessfulShared();
         void onFailureShared();
-        void onUserToShareNotExists();
     }
 
 
-    public static void createUser(String userId, String userName,final createUserCallback callback){
+    public static void createUser(String userId, String userName,final CreateUserCallback callback){
         Map<String, Object> noteMap = new HashMap<>();
         noteMap.put("user_name", userName);
         FirebaseFirestore.getInstance().collection("users").document(userId)
@@ -189,7 +191,7 @@ public class DatabaseHandler {
         }
     }
 
-    public static void removeNote(Note note, final removeNoteCallback callback){
+    public static void removeNote(Note note, final RemoveNoteCallback callback){
         if(!note.getNoteId().isEmpty()){
             FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -207,33 +209,38 @@ public class DatabaseHandler {
         }
     }
 
-    public static void shareNoteWithUser(final Note note, final String userName, final shareNoteWithUserCallback callback){
-        FirebaseFirestore.getInstance().collection("users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                boolean userFound = false;
-                for(DocumentSnapshot documentSnapshot :queryDocumentSnapshots.getDocuments()){
-                    if(documentSnapshot.get("user_name").equals(userName)){
-                        userFound = true;
-                        String userToShareId = documentSnapshot.getId();
-                        FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId())
-                                .update("users_shared", FieldValue.arrayUnion(userToShareId)).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                callback.onSuccessfulShared();
+    public static boolean userExists(String username) {
+        final AtomicBoolean exists = new AtomicBoolean();
+        final CountDownLatch done = new CountDownLatch(1);
+        FirebaseFirestore.getInstance().collection("users")
+                .whereEqualTo("user_name", username).limit(1).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot result = task.getResult();
+                            if (result != null && !result.isEmpty()) {
+                                exists.set(true);
                             }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                callback.onFailureShared();
-                            }
-                        });
-                        break;
+                        }
+                        done.countDown();
                     }
-                }
-                if(!userFound){
-                    callback.onUserToShareNotExists();
-                }
+                });
+        try {
+            done.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return exists.get();
+    }
+
+    public static void updateSharedListNote(final Note note, final List<String> userNames, final UpdateSharedListNoteCallback callback) {
+        FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId())
+        .update("users_shared", userNames)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callback.onSuccessfulShared();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -243,17 +250,54 @@ public class DatabaseHandler {
         });
     }
 
-    public static void userGetNoteListListener(final UserGetNoteListListenerCallback callback, String userId){
+    public static void getSharedListNoteListener(final DatabaseListener<List<String>> callback, Note note) {
+        DocumentReference reference = FirebaseFirestore.getInstance().collection("notes").document(note.getNoteId());
+        addDocumentListener(reference, new Function<DocumentSnapshot, List<String>>() {
+            @Override
+            public List<String> apply(DocumentSnapshot documentSnapshot) {
+                return (List<String>) documentSnapshot.get("users_shared");
+            }
+        }, callback);
+    }
+
+    public static void userGetNoteListListener(final DatabaseListListener<Note> callback, String userId){
         Query query = FirebaseFirestore.getInstance().collection("notes").whereEqualTo("user_id", userId);
         addNoteListListener(query, callback);
     }
 
-    public static void sharedWithUserGetNoteListListener(final UserGetNoteListListenerCallback callback, String userId) {
+    public static void sharedWithUserGetNoteListListener(final DatabaseListListener<Note> callback, String userId) {
         Query query = FirebaseFirestore.getInstance().collection("notes").whereArrayContains("users_shared", userId);
         addNoteListListener(query, callback);
     }
 
-    private static void addNoteListListener(Query query, final UserGetNoteListListenerCallback callback) {
+    private static void addNoteListListener(Query query, final DatabaseListListener<Note> callback) {
+        DatabaseHandler.addListListener(query, new Function<QueryDocumentSnapshot, Note>() {
+            @Override
+            public Note apply(QueryDocumentSnapshot snapshot) {
+                return getNoteFromQueryDocumentSnapshot(snapshot);
+            }
+        }, callback);
+    }
+
+    private static <T> void addDocumentListener(DocumentReference reference, final Function<DocumentSnapshot, T> converter, final DatabaseListener<T> callback) {
+        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    if (callback != null) callback.onFailureOnListener(e);
+                } else if (snapshot != null) {
+                    try {
+                        T item = converter.apply(snapshot);
+                        if (callback != null) callback.onSnapshot(item);
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }
+            }
+        });
+    }
+
+    private static <T> void addListListener(Query query, final Function<QueryDocumentSnapshot, T> converter, final DatabaseListListener<T> callback) {
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots,
@@ -262,24 +306,26 @@ public class DatabaseHandler {
                     callback.onFailureOnListener(e);
                 } else if (snapshots != null) {
                     for (DocumentChange dc : snapshots.getDocumentChanges()) {
-                        Note note = getNoteFromQueryDocumentSnapshot(dc.getDocument());
-                        switch (dc.getType()) {
-                            case ADDED:
-                                callback.onNoteAdded(note);
-                                break;
-                            case MODIFIED:
-                                callback.onNoteModified(note);
-                                break;
-                            case REMOVED:
-                                callback.onNoteRemoved(note);
-                                break;
+                        try {
+                            T item = converter.apply(dc.getDocument());
+                            switch (dc.getType()) {
+                                case ADDED:
+                                    callback.onAdded(item);
+                                    break;
+                                case MODIFIED:
+                                    callback.onModified(item);
+                                    break;
+                                case REMOVED:
+                                    callback.onRemoved(item);
+                                    break;
+                            }
+                        } catch (IllegalArgumentException ignored) {
                         }
                     }
                 }
             }
         });
     }
-
 
     private static Note getNoteFromQueryDocumentSnapshot (QueryDocumentSnapshot snapshot){
         String id = snapshot.getId();

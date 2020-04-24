@@ -53,7 +53,7 @@ public class DeleteDialog extends DialogFragment {
                 .setPositiveButton(R.string.Ddelete_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DatabaseHandler.removeNote(viewModel.getSelectedNote().getValue(), new DatabaseHandler.removeNoteCallback() {
+                        DatabaseHandler.removeNote(viewModel.getSelectedNote().getValue(), new DatabaseHandler.RemoveNoteCallback() {
                             @Override
                             public void onSuccessfulRemoved() {
                                 Toast.makeText(context,R.string.DSuccessful,Toast.LENGTH_SHORT).show();

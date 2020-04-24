@@ -105,7 +105,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("auth", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            DatabaseHandler.createUser(user.getUid(), user.getDisplayName(), new DatabaseHandler.createUserCallback() {
+                            DatabaseHandler.createUser(user.getUid(), user.getDisplayName(), new DatabaseHandler.CreateUserCallback() {
                                 @Override
                                 public void onSuccessfulAdded() {
                                     hideLoading();
@@ -141,7 +141,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("auth", "createUserWithEmail:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
-                            DatabaseHandler.createUserCallback createUserCallback = new DatabaseHandler.createUserCallback() {
+                            DatabaseHandler.CreateUserCallback createUserCallback = new DatabaseHandler.CreateUserCallback() {
                                 @Override
                                 public void onSuccessfulAdded() {
                                     hideLoading();

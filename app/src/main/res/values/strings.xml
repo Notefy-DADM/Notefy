@@ -55,8 +55,8 @@
         <string name="Ssignin_button_notelist_dialog">Sign in</string>
         <string name="Sshare_button_notelist_dialog">Share</string>
         <string name="Scancel_button_notelist_dialog">Cancel</string>
-        <string name="SSuccessful">Note Shared</string>
-        <string name="SFailure">Share failed</string>
+        <string name="SSuccessful">Changes saved</string>
+        <string name="SFailure">Saving failed</string>
         <string name="SUser_no_exists">User does not exist</string>
         <!--Change dialog-->
         <string name="Chint_notelist_dialog">New title</string>

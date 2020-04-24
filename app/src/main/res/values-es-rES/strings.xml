@@ -34,7 +34,7 @@
     <string name="changeTitle_notelist_context">Título de nota cambiado</string>
     <string name="DSuccessful">Nota eliminada</string>
     <string name="DFailure">Fallo al eliminar</string>
-    <string name="SSuccessful">Nota compartida</string>
-    <string name="SFailure">Fallo al compartir</string>
+    <string name="SSuccessful">Cambios guardados</string>
+    <string name="SFailure">Fallo al guardar</string>
     <string name="SUser_no_exists">El usuario no existe</string>
 </resources>

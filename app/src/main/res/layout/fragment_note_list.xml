@@ -24,7 +24,7 @@
             android:scrollbars="vertical"
             app:layoutManager="@{layoutManager}"
             app:adapter="@{adapter}"
-            app:layout_constraintBottom_toTopOf="@+id/addButton"
+            app:layout_constraintBottom_toTopOf="@+id/addNoteButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -32,7 +32,7 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/addButton"
+            android:id="@+id/addNoteButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
