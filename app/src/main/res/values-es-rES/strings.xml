@@ -18,7 +18,6 @@
     <string name="add_text">Añadir</string>
     <string name="remove_adapter_context">Borrar</string>
     <string name="share_adapter_context">Compartir</string>
-    <string name="share_notelist_context">Nota compartida</string>
     <string name="Dmessage_notelist_dialog">¿Seguro que quieres borrarlo?</string>
     <string name="Ddelete_button_notelist_dialog">Borrar</string>
     <string name="Dcancel_button_notelist_dialog">Cancelar</string>
@@ -26,7 +25,6 @@
     <string name="Ssignin_button_notelist_dialog">Registrarse</string>
     <string name="Sshare_button_notelist_dialog">Compartir</string>
     <string name="Scancel_button_notelist_dialog">Cancelar</string>
-    <string name="delete_notelist_context">Nota eliminada</string>
     <string name="nav_share">Compartidas conmigo</string>
     <string name="change_adapter_context">Cambiar título</string>
     <string name="Chint_notelist_dialog">Nuevo título</string>
@@ -34,4 +32,9 @@
     <string name="Ccancel_button_notelist_dialog">Cancelar</string>
     <string name="Cchange_notelist_dialog">Guardar</string>
     <string name="changeTitle_notelist_context">Título de nota cambiado</string>
+    <string name="DSuccesful">Nota eliminada</string>
+    <string name="DFailure">Fallo al eliminar</string>
+    <string name="SSuccesful">Nota compartida</string>
+    <string name="SFailure">Fallo al compartir</string>
+    <string name="SUser_no_exists">El usuario no existe</string>
 </resources>

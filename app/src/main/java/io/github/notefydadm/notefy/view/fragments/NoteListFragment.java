@@ -146,14 +146,12 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
 
     //  DELETE NOTE DIALOG
     public void openDeleteDialog(MenuItem item){
-        deleteDialog = new DeleteDialog(item, this);
+        deleteDialog = new DeleteDialog(item, this, binding.getAdapter(), getContext());
         deleteDialog.show(NoteListFragment.this.getChildFragmentManager(), "deleteDialog");
     }
     @Override
     public void onDeleteDialogPositiveClick(DeleteDialog dialog, MenuItem item) {
-        //myAdapter.removeNote(item.getGroupId());
-        binding.getAdapter().removeNote(item.getGroupId());
-        displayContextMenuMessage(getString(R.string.delete_notelist_context));
+
     }
     @Override
     public void onDeleteDialogNeutralClick(DeleteDialog dialog, MenuItem item) {
@@ -162,13 +160,12 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
 
     //  CHANGE NOTE TITLE DIALOG
     public void openChangeTitleDialog(MenuItem item){
-        changeTitleDialog = new ChangeTitleDialog(item,this);
+        changeTitleDialog = new ChangeTitleDialog(item,this, getContext());
         changeTitleDialog.show(NoteListFragment.this.getChildFragmentManager(),"changeTitleDialog");
     }
     @Override
     public void onChangeTitleDialogPositiveClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {
-        displayContextMenuMessage(getString(R.string.changeTitle_notelist_context));
-        //  TODO: Change note title
+        //displayContextMenuMessage(getString(R.string.changeTitle_notelist_context));
     }
     @Override
     public void onChangeTitleDialogNeutralClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {

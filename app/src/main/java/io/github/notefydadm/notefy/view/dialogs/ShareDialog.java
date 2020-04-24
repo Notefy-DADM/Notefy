@@ -7,24 +7,17 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-
-import java.util.zip.Inflater;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.databinding.ShareDialogBinding;
-import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class ShareDialog extends DialogFragment {
@@ -61,8 +54,6 @@ public class ShareDialog extends DialogFragment {
                 .setPositiveButton(R.string.Sshare_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //  Send the event back to the host
-                        listener.onShareDialogPositiveClick(ShareDialog.this, item);
                         DatabaseHandler.shareNoteWithUser(viewModel.getSelectedNote().getValue(), binding.getUsername(), new DatabaseHandler.shareNoteWithUserCallback() {
                             @Override
                             public void onSuccessfulShared() {
@@ -79,6 +70,8 @@ public class ShareDialog extends DialogFragment {
                                 Toast.makeText(context,R.string.SUser_no_exists,Toast.LENGTH_SHORT).show();
                             }
                         });
+                        //  Send the event back to the host
+                        listener.onShareDialogPositiveClick(ShareDialog.this, item);
                     }
                 })
                 .setNeutralButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {

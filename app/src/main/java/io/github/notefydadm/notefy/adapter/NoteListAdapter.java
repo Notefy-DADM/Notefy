@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -83,25 +84,6 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     public int getItemCount() {
         List<Note> noteList = notes.getValue();
         return noteList == null ? 0 : noteList.size();
-    }
-
-    public void removeNote(int position){
-        DatabaseHandler.removeNote(notes.getValue().get(position), new DatabaseHandler.removeNoteCallback() {
-            @Override
-            public void onSuccessfulRemoved() {
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailureRemoved() {
-
-            }
-
-            @Override
-            public void noteNotHaveId() {
-
-            }
-        });
     }
 
     interface PositionClickedListener {
