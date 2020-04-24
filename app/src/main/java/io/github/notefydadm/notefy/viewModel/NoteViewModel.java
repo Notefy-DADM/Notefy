@@ -19,7 +19,7 @@ public class NoteViewModel extends ViewModel {
 
     public enum NoteMode { MINE, SHARED_WITH_ME }
 
-    private NoteMode noteMode;
+    private MutableLiveData<NoteMode> noteMode;
 
     public NoteViewModel() {
         notes = new MutableLiveData<>();
@@ -30,7 +30,7 @@ public class NoteViewModel extends ViewModel {
                 NoteViewModel.this.notes.setValue(notes);
             }
         };
-        noteMode = NoteMode.MINE;
+        noteMode = new MutableLiveData<>(NoteMode.MINE);
     }
 
     public LiveData<List<Note>> getNotes() {
@@ -43,13 +43,13 @@ public class NoteViewModel extends ViewModel {
 
     public void postSelectedNote(Note note) { this.selectedNote.postValue(note); }
 
-    public NoteMode getNoteMode() {
+    public LiveData<NoteMode> getNoteMode() {
         return noteMode;
     }
 
     public void setNoteMode(NoteMode noteMode) {
-        boolean reload = this.noteMode != noteMode;
-        this.noteMode = noteMode;
+        boolean reload = this.noteMode.getValue() != noteMode;
+        this.noteMode.setValue(noteMode);
         if (reload) loadNotes();
     }
 
@@ -58,13 +58,16 @@ public class NoteViewModel extends ViewModel {
         if (databaseNotes != null) {
             databaseNotes.removeObserver(databaseNotesObserver);
         }
-        switch (noteMode) {
-            case MINE:
-                databaseNotes = SingletonDatabase.getInstance().getMyNotes();
-                break;
-            case SHARED_WITH_ME:
-                databaseNotes = SingletonDatabase.getInstance().getSharedWithMeNotes();
-                break;
+        NoteMode mode = noteMode.getValue();
+        if (mode != null) {
+            switch (mode) {
+                case MINE:
+                    databaseNotes = SingletonDatabase.getInstance().getMyNotes();
+                    break;
+                case SHARED_WITH_ME:
+                    databaseNotes = SingletonDatabase.getInstance().getSharedWithMeNotes();
+                    break;
+            }
         }
         if (databaseNotes != null) {
             notes.setValue(databaseNotes.getValue());

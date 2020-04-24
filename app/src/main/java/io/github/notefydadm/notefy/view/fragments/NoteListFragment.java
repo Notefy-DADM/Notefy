@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -62,6 +63,16 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
 
         // Load notes from database
         noteViewModel.loadNotes();
+
+        // Add note mode to binding, and update it when it changes
+        LiveData<NoteViewModel.NoteMode> noteModeLiveData = noteViewModel.getNoteMode();
+        binding.setNoteMode(noteModeLiveData.getValue());
+        noteModeLiveData.observe(this, new Observer<NoteViewModel.NoteMode>() {
+            @Override
+            public void onChanged(NoteViewModel.NoteMode noteMode) {
+                binding.setNoteMode(noteMode);
+            }
+        });
 
         //  You can't cast a Fragment to a Context.
         binding.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL,false));
