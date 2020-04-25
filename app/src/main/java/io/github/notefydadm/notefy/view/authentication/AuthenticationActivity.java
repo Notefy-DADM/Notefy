@@ -62,7 +62,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         // and add the transaction to the back stack
         transaction.replace(R.id.fragment_auth, loginFragment);
 
-// Commit the transaction
+        // Commit the transaction
         transaction.commit();
 
     }

@@ -61,11 +61,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteListFragment = new NoteListFragment();
         noteFragment = new NoteFragment();
 
-        //  if we're being restored from a previous state
-        //  we don't need to do anything.
-        if (savedInstanceState != null) {
-            //return;
-        }
         noteViewModel.getSelectedNote().observe(this, new Observer<Note>() {
             @Override
             public void onChanged(Note note) {
@@ -179,18 +174,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
-
-/*
-    @Override
-    public void changeToTextEditor() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
-    }*/
-
-    /*@Override
-    public void changeToLandTextEditor() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
-
-    }*/
 
     private void logOut(){
         FirebaseAuth.getInstance().signOut();

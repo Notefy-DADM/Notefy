@@ -76,9 +76,6 @@ public class NoteListFragment extends Fragment{
         //  You can't cast a Fragment to a Context.
         binding.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL,false));
 
-        //RecyclerView.ItemDecoration separator = new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL);
-        //myRecyclerView.addItemDecoration(separator);
-
         // We need to have an Adapter for the RecyclerView
         binding.setAdapter(new NoteListAdapter(requireActivity(), getContext(), new NoteListAdapter.AdapterNoteListCallbacks() {
             @Override
@@ -98,23 +95,6 @@ public class NoteListFragment extends Fragment{
         }));
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
     }
 
     @BindingAdapter("layoutManager")
@@ -205,7 +185,7 @@ public class NoteListFragment extends Fragment{
             public void onChangeTitleClick(String title) {
                 if (note.getNoteId() == null || note.getNoteId().isEmpty()) {
                     note.setTitle(title);
-                    note.setUserID(FirebaseAuth.getInstance().getUid());
+                    note.setUserId(FirebaseAuth.getInstance().getUid());
                     noteViewModel.postSelectedNote(note);
                 } else {
                     final LoadingDialog loadingDialog = new LoadingDialog();
@@ -237,39 +217,4 @@ public class NoteListFragment extends Fragment{
         changeTitleDialog = new ChangeTitleDialog(note,listener);
         changeTitleDialog.show(NoteListFragment.this.getChildFragmentManager(),"changeTitleDialog");
     }
-
-    @Override
-    public void onPause() {
-        System.out.println("Pause");
-        //saved.putParcelableArray("notes", (Parcelable[]) noteViewModel.getNotes().getValue().toArray());
-        super.onPause();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //saved.get("notes");
-        //noteViewModel.loadNotes();
-        System.out.println("Resume");
-    }
-/*
-    private void askNoteTittle(){
-        SetNoteNameDialog.SetNoteNameCallback callback = new SetNoteNameDialog.SetNoteNameCallback() {
-            @Override
-            public void onClickSet(String name) {
-                noteViewModel.setSelectedNote(new Note(name, FirebaseAuth.getInstance().getUid()));
-            }
-
-            @Override
-            public void onClickCancel() {
-
-            }
-        };
-        final SetNoteNameDialog loadingDialog = new SetNoteNameDialog(callback,"");
-        loadingDialog.show(requireFragmentManager(), null);
-    }*/
-
-
-
 }

@@ -44,8 +44,8 @@ public class NoteFragment extends Fragment {
         if (note != null) {
             note.setBlocks(adapter.getBlocks());
 
-            if (note.getUserID() == null) {
-                note.setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            if (note.getUserId() == null) {
+                note.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
             }
 
             final LoadingDialog loadingDialog = new LoadingDialog();

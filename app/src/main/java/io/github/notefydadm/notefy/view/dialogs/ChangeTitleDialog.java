@@ -20,8 +20,8 @@ import io.github.notefydadm.notefy.model.Note;
 public class ChangeTitleDialog extends DialogFragment {
     private ChangeTitleDialogBinding binding;
 
-    ChangeTitleDialogCallback listener;
-    Note note;
+    private ChangeTitleDialogCallback listener;
+    private Note note;
 
     public ChangeTitleDialog(Note note, ChangeTitleDialogCallback listener) {
         this.listener = listener;
@@ -29,7 +29,7 @@ public class ChangeTitleDialog extends DialogFragment {
     }
 
     public interface ChangeTitleDialogCallback {
-        void onChangeTitleClick(String tittle);
+        void onChangeTitleClick(String title);
         void onCancelClick();
     }
 
@@ -37,7 +37,7 @@ public class ChangeTitleDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.change_title_dialog,null,false);
         String nameButtonChangeName;

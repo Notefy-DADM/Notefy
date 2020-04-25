@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class Note implements Parcelable, Comparable<Note> {
 
@@ -23,7 +22,7 @@ public class Note implements Parcelable, Comparable<Note> {
     private LocalDateTime creationDate;
     private LocalDateTime lastModifiedDate;
 
-    private String userID;
+    private String userId;
 
     private ArrayList<Block> blocks;
 
@@ -49,16 +48,16 @@ public class Note implements Parcelable, Comparable<Note> {
         creationDate = lastModifiedDate = currentDateTime;
     }
 
-    public Note(String title, String userID) {
+    public Note(String title, String userId) {
         this();
         this.title = title;
-        this.userID = userID;
+        this.userId = userId;
     }
 
-    public Note(String noteId, String title, String userID, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate, ArrayList<Block> blocks) {
+    public Note(String noteId, String title, String userId, NoteState state, boolean isFavorite, @ColorInt int color, LocalDateTime creationDate, LocalDateTime lastModifiedDate, ArrayList<Block> blocks) {
         this.noteId = noteId;
         this.title = title;
-        this.userID = userID;
+        this.userId = userId;
 
         this.state = state;
         this.isFavorite = isFavorite;
@@ -118,8 +117,8 @@ public class Note implements Parcelable, Comparable<Note> {
         return lastModifiedDate;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getUserId() {
+        return userId;
     }
 
     public NoteState getState() {
@@ -130,8 +129,8 @@ public class Note implements Parcelable, Comparable<Note> {
         return createdLocation;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -207,7 +206,7 @@ public class Note implements Parcelable, Comparable<Note> {
     // Parcelable
     protected Note(Parcel in) {
         title = in.readString();
-        userID = in.readString();
+        userId = in.readString();
         isFavorite = in.readByte() != 0;
         color = in.readInt();
         createdLocation = in.readParcelable(Location.class.getClassLoader());
@@ -233,7 +232,7 @@ public class Note implements Parcelable, Comparable<Note> {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(title);
-        dest.writeString(userID);
+        dest.writeString(userId);
         dest.writeByte((byte) (isFavorite ? 1 : 0));
         dest.writeInt(color);
         dest.writeParcelable(createdLocation, flags);
