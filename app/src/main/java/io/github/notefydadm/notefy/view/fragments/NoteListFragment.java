@@ -198,15 +198,16 @@ public class NoteListFragment extends Fragment{
     }
 
     //  CHANGE NOTE TITLE DIALOG
-    public void openChangeTitleDialog(final Note note){
+    public void openChangeTitleDialog(@NonNull final Note note) {
         ChangeTitleDialog changeTitleDialog;
         ChangeTitleDialog.ChangeTitleDialogCallback listener = new ChangeTitleDialog.ChangeTitleDialogCallback() {
             @Override
             public void onChangeTitleClick(String title) {
-                if(note.getNoteId()==null || note.getNoteId().isEmpty()){
-                    noteViewModel.setSelectedNote(new Note(title, FirebaseAuth.getInstance().getUid()));
-
-                }else{
+                if (note.getNoteId() == null || note.getNoteId().isEmpty()) {
+                    note.setTitle(title);
+                    note.setUserID(FirebaseAuth.getInstance().getUid());
+                    noteViewModel.postSelectedNote(note);
+                } else {
                     final LoadingDialog loadingDialog = new LoadingDialog();
                     loadingDialog.show(requireFragmentManager(), null);
                     DatabaseHandler.AddNoteToUserCallback callback = new DatabaseHandler.AddNoteToUserCallback() {
@@ -225,7 +226,6 @@ public class NoteListFragment extends Fragment{
 
                     note.setTitle(title);
                     DatabaseHandler.addNoteToUser(note,callback);
-
                 }
             }
 
