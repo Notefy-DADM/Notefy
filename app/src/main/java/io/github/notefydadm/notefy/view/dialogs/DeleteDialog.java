@@ -1,6 +1,5 @@
 package io.github.notefydadm.notefy.view.dialogs;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -49,7 +49,7 @@ public class DeleteDialog extends DialogFragment {
                         listener.onClickDelete();
                     }
                 })
-                .setNeutralButton(R.string.Dcancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.Dcancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listener.onClickCancel();

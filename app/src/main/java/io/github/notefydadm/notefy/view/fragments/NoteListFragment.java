@@ -3,7 +3,6 @@ package io.github.notefydadm.notefy.view.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -21,11 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
+
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.NoteListAdapter;
 import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.databinding.FragmentNoteListBinding;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.model.User;
 import io.github.notefydadm.notefy.view.dialogs.ChangeTitleDialog;
 import io.github.notefydadm.notefy.view.dialogs.DeleteDialog;
 import io.github.notefydadm.notefy.view.dialogs.LoadingDialog;
@@ -128,25 +130,23 @@ public class NoteListFragment extends Fragment{
     //  SHARE NOTE DIALOG
     public void openShareDialog(final Note note){
         ShareDialog shareDialog;
-        ShareDialog.ShareDialogListener listener = new ShareDialog.ShareDialogListener() {
+        ShareDialog.ShareDialogCallback listener = new ShareDialog.ShareDialogCallback() {
             @Override
-            public void onShareDialogPositiveClick(String userName) {
-                DatabaseHandler.shareNoteWithUser(note, userName, new DatabaseHandler.shareNoteWithUserCallback() {
-                    @Override
-                    public void onSuccessfulShared() {
-                        Toast.makeText(getContext(),R.string.SSuccessful,Toast.LENGTH_SHORT).show();
+            public void onShareDialogPositiveClick(List<User> users) {
+                    if (note != null) {
+                        DatabaseHandler.updateSharedListNote(note, users , new DatabaseHandler.UpdateSharedListNoteCallback() {
+                            @Override
+                            public void onSuccessfulShared() {
+                                Toast.makeText(getContext(), R.string.SSuccessful, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailureShared() {
+                                Toast.makeText(getContext(), R.string.SFailure, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
 
-                    @Override
-                    public void onFailureShared() {
-                        Toast.makeText(getContext(),R.string.SFailure, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onUserToShareNotExists() {
-                        Toast.makeText(getContext(),R.string.SUser_no_exists,Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
 
             @Override
@@ -155,7 +155,7 @@ public class NoteListFragment extends Fragment{
             }
         };
 
-        shareDialog = new ShareDialog(listener);
+        shareDialog = new ShareDialog(note,listener);
         shareDialog.show(NoteListFragment.this.getChildFragmentManager(), "shareDialog");
     }
 
@@ -167,7 +167,7 @@ public class NoteListFragment extends Fragment{
             public void onClickDelete() {
                 final LoadingDialog loadingDialog = new LoadingDialog();
                 loadingDialog.show(requireFragmentManager(), null);
-                DatabaseHandler.removeNote(note, new DatabaseHandler.removeNoteCallback() {
+                DatabaseHandler.removeNote(note, new DatabaseHandler.RemoveNoteCallback() {
                     @Override
                     public void onSuccessfulRemoved() {
                         loadingDialog.dismiss();
@@ -223,6 +223,7 @@ public class NoteListFragment extends Fragment{
                         }
                     };
 
+                    note.setTitle(tittle);
                     DatabaseHandler.addNoteToUser(note,callback);
 
                 }
@@ -233,7 +234,7 @@ public class NoteListFragment extends Fragment{
 
             }
         };
-        changeTitleDialog = new ChangeTitleDialog(new Note(),listener);
+        changeTitleDialog = new ChangeTitleDialog(note,listener);
         changeTitleDialog.show(NoteListFragment.this.getChildFragmentManager(),"changeTitleDialog");
     }
 

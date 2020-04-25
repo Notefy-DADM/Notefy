@@ -1,6 +1,5 @@
 package io.github.notefydadm.notefy.view.dialogs;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,11 +43,20 @@ public class ChangeTitleDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
+
+
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.change_title_dialog,null,false);
+        String nameButtonChangeName;
+        if(addNewNote()){
+            nameButtonChangeName = getString(R.string.add_note);
+        }else{
+            nameButtonChangeName = getString(R.string.change_name);
+            binding.setTitle(note.getTitle());
+        }
         builder.setView(binding.getRoot())
                 .setTitle(R.string.Ctitle_notelist_dialog)
                 .setCancelable(true)
-                .setPositiveButton(R.string.Cchange_notelist_dialog, new DialogInterface.OnClickListener() {
+                .setPositiveButton(nameButtonChangeName, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //  Send the event back to the host
@@ -68,6 +77,14 @@ public class ChangeTitleDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.change_title_dialog, container, false);
+    }
+
+    private boolean addNewNote (){
+        if(note==null||note.getNoteId()==null||note.getNoteId().isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }
