@@ -1,11 +1,9 @@
 package io.github.notefydadm.notefy.view.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,8 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,38 +25,32 @@ import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.databinding.ShareDialogBinding;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.model.User;
-import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class ShareDialog extends DialogFragment {
-    private MenuItem item;
     private ShareDialogBinding binding;
-    private NoteViewModel viewModel;
-    private Context context;
 
-    private ShareDialogListener listener;
+    private Note note;
+    private ShareDialogCallback listener;
 
-    public ShareDialog(MenuItem item, ShareDialogListener listener, Context context) {
-        this.item = item;
+    public ShareDialog(Note note, ShareDialogCallback listener) {
         this.listener = listener;
-        this.context = context;
+        this.note = note;
     }
 
-    public interface ShareDialogListener {
-        void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item);
-        void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item);
+    public interface ShareDialogCallback {
+        void onShareDialogPositiveClick(List<User> users);
+        void onShareDialogNeutralClick();
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        viewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
-        binding = DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.share_dialog,null,false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.share_dialog,null,false);
 
         binding.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL,false));
-        binding.setAdapter(new UserListAdapter(this, context, new UserListAdapter.ItemListener() {
+        binding.setAdapter(new UserListAdapter(this, getContext(), new UserListAdapter.ItemListener() {
             @Override
             public void itemClicked(int position) {
                 binding.setSelectedUser(binding.getAdapter().get(position));
@@ -83,12 +73,12 @@ public class ShareDialog extends DialogFragment {
                                 ((UserListAdapter) adapter).add(user);
                             } catch (IllegalArgumentException ignored) {
                                 Toast
-                                    .makeText(context, R.string.SUser_already_shared, Toast.LENGTH_SHORT)
+                                    .makeText(getContext(), R.string.SUser_already_shared, Toast.LENGTH_SHORT)
                                     .show();
                             }
                         } else {
                             Toast
-                                .makeText(context, R.string.SUser_no_exists, Toast.LENGTH_SHORT)
+                                .makeText(getContext(), R.string.SUser_no_exists, Toast.LENGTH_SHORT)
                                 .show();
                         }
                     }
@@ -106,7 +96,7 @@ public class ShareDialog extends DialogFragment {
             public void onFailureOnListener(Exception exception) {
 
             }
-        }, Objects.requireNonNull(viewModel.getSelectedNote().getValue()));
+        },note);
 
         builder.setView(binding.getRoot())
                 .setTitle(R.string.Stitle_notelist_dialog)
@@ -114,31 +104,14 @@ public class ShareDialog extends DialogFragment {
                 .setPositiveButton(R.string.Sshare_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        LiveData<Note> selectedNoteData = viewModel.getSelectedNote();
-                        if (selectedNoteData != null) {
-                            Note selectedNote = selectedNoteData.getValue();
-                            if (selectedNote != null) {
-                                DatabaseHandler.updateSharedListNote(selectedNote, binding.getAdapter().getUsers().getValue(), new DatabaseHandler.UpdateSharedListNoteCallback() {
-                                    @Override
-                                    public void onSuccessfulShared() {
-                                        Toast.makeText(context, R.string.SSuccessful, Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onFailureShared() {
-                                        Toast.makeText(context, R.string.SFailure, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
                         //  Send the event back to the host
-                        listener.onShareDialogPositiveClick(ShareDialog.this, item);
+                        listener.onShareDialogPositiveClick(binding.getAdapter().getUsers().getValue());
                     }
                 })
                 .setNegativeButton(R.string.Scancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        listener.onShareDialogNegativeClick(ShareDialog.this,item);
+                        listener.onShareDialogNeutralClick();
                     }
                 });
         

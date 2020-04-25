@@ -30,7 +30,7 @@ import io.github.notefydadm.notefy.view.fragments.NoteFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NoteListFragment.ChangeToTextEditor {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawer;
 
@@ -61,6 +61,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState != null) {
             //return;
         }
+        noteViewModel.getSelectedNote().observe(this, new Observer<Note>() {
+            @Override
+            public void onChanged(Note note) {
+                if(note!=null){
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
+
+                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
+
+                    }
+                }
+            }
+        });
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //  landscape
@@ -157,10 +171,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onSaveInstanceState(outState);
     }
 
+/*
     @Override
     public void changeToTextEditor() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
-    }
+    }*/
 
     /*@Override
     public void changeToLandTextEditor() {

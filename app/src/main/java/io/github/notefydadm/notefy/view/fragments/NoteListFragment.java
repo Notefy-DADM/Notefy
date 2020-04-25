@@ -1,10 +1,8 @@
 package io.github.notefydadm.notefy.view.fragments;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -20,23 +18,25 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
+
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.adapter.NoteListAdapter;
+import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.databinding.FragmentNoteListBinding;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.model.User;
 import io.github.notefydadm.notefy.view.dialogs.ChangeTitleDialog;
 import io.github.notefydadm.notefy.view.dialogs.DeleteDialog;
+import io.github.notefydadm.notefy.view.dialogs.LoadingDialog;
 import io.github.notefydadm.notefy.view.dialogs.ShareDialog;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
-public class NoteListFragment extends Fragment implements ShareDialog.ShareDialogListener, DeleteDialog.DeleteDialogListener, ChangeTitleDialog.ChangeTitleDialogListener {
+public class NoteListFragment extends Fragment{
     private FragmentNoteListBinding binding;
     private NoteViewModel noteViewModel;
-    private ChangeToTextEditor listener;
-
-    private ShareDialog shareDialog;
-    private DeleteDialog deleteDialog;
-    private ChangeTitleDialog changeTitleDialog;
 
     public NoteListFragment() {
         // Required empty public constructor
@@ -53,8 +53,7 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         binding.setAddNewNote(new Runnable() {
             @Override
             public void run() {
-                noteViewModel.setSelectedNote(new Note());
-                listener.changeToTextEditor();
+                openChangeTitleDialog(new Note());
             }
         });
 
@@ -81,7 +80,22 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         //myRecyclerView.addItemDecoration(separator);
 
         // We need to have an Adapter for the RecyclerView
-        binding.setAdapter(new NoteListAdapter(requireActivity(), getContext(),listener));
+        binding.setAdapter(new NoteListAdapter(requireActivity(), getContext(), new NoteListAdapter.AdapterNoteListCallbacks() {
+            @Override
+            public void changeNameNote(Note note) {
+                openChangeTitleDialog(note);
+            }
+
+            @Override
+            public void shareNote(Note note) {
+                openShareDialog(note);
+            }
+
+            @Override
+            public void deleteNote(Note note) {
+                openDeleteDialog(note);
+            }
+        }));
 
         return binding.getRoot();
     }
@@ -91,17 +105,13 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         super.onActivityCreated(savedInstanceState);
     }
 
-    public interface ChangeToTextEditor{
-        void changeToTextEditor();
-        //void changeToLandTextEditor();
-    }
 
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (ChangeToTextEditor) context;
+
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -117,70 +127,115 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         recyclerView.setAdapter(adapter);
     }
 
-    //  Context Menu from NoteListAdapter
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
-            //  Delete option
-            case 121:
-                openDeleteDialog(item);
-                return true;
-            //  Share option
-            case 122:
-                openShareDialog(item);
-                return true;
-            case 123:
-                openChangeTitleDialog(item);
-            default:
-                return super.onContextItemSelected(item);
-        }
-
-    }
-
-    public void displayContextMenuMessage(String message){
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
     //  SHARE NOTE DIALOG
-    public void openShareDialog(MenuItem item){
-        shareDialog = new ShareDialog(item, this, getContext());
-        shareDialog.show(NoteListFragment.this.getChildFragmentManager(), "shareDialog");
-    }
-    @Override
-    public void onShareDialogPositiveClick(ShareDialog dialog, MenuItem item) {
+    public void openShareDialog(final Note note){
+        ShareDialog shareDialog;
+        ShareDialog.ShareDialogCallback listener = new ShareDialog.ShareDialogCallback() {
+            @Override
+            public void onShareDialogPositiveClick(List<User> users) {
+                    if (note != null) {
+                        DatabaseHandler.updateSharedListNote(note, users , new DatabaseHandler.UpdateSharedListNoteCallback() {
+                            @Override
+                            public void onSuccessfulShared() {
+                                Toast.makeText(getContext(), R.string.SSuccessful, Toast.LENGTH_SHORT).show();
+                            }
 
-    }
-    @Override
-    public void onShareDialogNegativeClick(ShareDialog dialog, MenuItem item) {
-        //  Dismiss dialog
+                            @Override
+                            public void onFailureShared() {
+                                Toast.makeText(getContext(), R.string.SFailure, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+            }
+
+            @Override
+            public void onShareDialogNeutralClick() {
+
+            }
+        };
+
+        shareDialog = new ShareDialog(note,listener);
+        shareDialog.show(NoteListFragment.this.getChildFragmentManager(), "shareDialog");
     }
 
     //  DELETE NOTE DIALOG
-    public void openDeleteDialog(MenuItem item){
-        deleteDialog = new DeleteDialog(item, this, binding.getAdapter(), getContext());
-        deleteDialog.show(NoteListFragment.this.getChildFragmentManager(), "deleteDialog");
-    }
-    @Override
-    public void onDeleteDialogPositiveClick(DeleteDialog dialog, MenuItem item) {
+    public void openDeleteDialog(final Note note){
+        DeleteDialog deleteDialog;
+        DeleteDialog.DeleteDialogListener listener = new DeleteDialog.DeleteDialogListener() {
+            @Override
+            public void onClickDelete() {
+                final LoadingDialog loadingDialog = new LoadingDialog();
+                loadingDialog.show(requireFragmentManager(), null);
+                DatabaseHandler.removeNote(note, new DatabaseHandler.RemoveNoteCallback() {
+                    @Override
+                    public void onSuccessfulRemoved() {
+                        loadingDialog.dismiss();
+                        Toast.makeText(getContext(),R.string.DSuccessful,Toast.LENGTH_SHORT).show();
+                    }
 
-    }
-    @Override
-    public void onDeleteDialogNeutralClick(DeleteDialog dialog, MenuItem item) {
-        //  Dismiss dialog
+                    @Override
+                    public void onFailureRemoved() {
+                        loadingDialog.dismiss();
+                        Toast.makeText(getContext(),R.string.DFailure,Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void noteNotHaveId() {
+                        loadingDialog.dismiss();
+                        Toast.makeText(getContext(),R.string.DFailure,Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onClickCancel() {
+
+            }
+        };
+        deleteDialog = new DeleteDialog(listener, binding.getAdapter());
+        deleteDialog.show(NoteListFragment.this.getChildFragmentManager(), "deleteDialog");
     }
 
     //  CHANGE NOTE TITLE DIALOG
-    public void openChangeTitleDialog(MenuItem item){
-        changeTitleDialog = new ChangeTitleDialog(item,this, getContext());
+    public void openChangeTitleDialog(final Note note){
+        ChangeTitleDialog changeTitleDialog;
+        ChangeTitleDialog.ChangeTitleDialogCallback listener = new ChangeTitleDialog.ChangeTitleDialogCallback() {
+            @Override
+            public void onChangeTitleClick(String title) {
+                if(note.getNoteId()==null || note.getNoteId().isEmpty()){
+                    noteViewModel.setSelectedNote(new Note(title, FirebaseAuth.getInstance().getUid()));
+
+                }else{
+                    final LoadingDialog loadingDialog = new LoadingDialog();
+                    loadingDialog.show(requireFragmentManager(), null);
+                    DatabaseHandler.AddNoteToUserCallback callback = new DatabaseHandler.AddNoteToUserCallback() {
+                        @Override
+                        public void onSuccessfulAdded() {
+                            loadingDialog.dismiss();
+                            Toast.makeText(getActivity(),"Saved",Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFailureAdded() {
+                            loadingDialog.dismiss();
+                            Toast.makeText(getActivity(),"Error saving",Toast.LENGTH_LONG).show();
+                        }
+                    };
+
+                    note.setTitle(title);
+                    DatabaseHandler.addNoteToUser(note,callback);
+
+                }
+            }
+
+            @Override
+            public void onCancelClick() {
+
+            }
+        };
+        changeTitleDialog = new ChangeTitleDialog(note,listener);
         changeTitleDialog.show(NoteListFragment.this.getChildFragmentManager(),"changeTitleDialog");
-    }
-    @Override
-    public void onChangeTitleDialogPositiveClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {
-        //displayContextMenuMessage(getString(R.string.changeTitle_notelist_context));
-    }
-    @Override
-    public void onChangeTitleDialogNeutralClick(ChangeTitleDialog changeTitleDialog, MenuItem item) {
-        //  Dismiss dialog
     }
 
     @Override
@@ -198,5 +253,23 @@ public class NoteListFragment extends Fragment implements ShareDialog.ShareDialo
         //noteViewModel.loadNotes();
         System.out.println("Resume");
     }
+/*
+    private void askNoteTittle(){
+        SetNoteNameDialog.SetNoteNameCallback callback = new SetNoteNameDialog.SetNoteNameCallback() {
+            @Override
+            public void onClickSet(String name) {
+                noteViewModel.setSelectedNote(new Note(name, FirebaseAuth.getInstance().getUid()));
+            }
+
+            @Override
+            public void onClickCancel() {
+
+            }
+        };
+        final SetNoteNameDialog loadingDialog = new SetNoteNameDialog(callback,"");
+        loadingDialog.show(requireFragmentManager(), null);
+    }*/
+
+
 
 }

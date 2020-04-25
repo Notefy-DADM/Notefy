@@ -2,16 +2,16 @@ package io.github.notefydadm.notefy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -22,10 +22,8 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import java.util.List;
 
 import io.github.notefydadm.notefy.R;
-import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
-import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder> {
@@ -36,10 +34,15 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
     private PositionClickedListener positionListener;
 
-    private NoteListFragment.ChangeToTextEditor listener;
+    private AdapterNoteListCallbacks listener;
 
+    public interface AdapterNoteListCallbacks {
+        void changeNameNote(Note note);
+        void shareNote(Note note);
+        void deleteNote(Note note);
+    }
 
-    public NoteListAdapter(@NonNull Activity activity, Context context, final NoteListFragment.ChangeToTextEditor listener) {
+    public NoteListAdapter(@NonNull Activity activity, Context context, final AdapterNoteListCallbacks listener) {
         this.viewModel = new ViewModelProvider((MainActivity)activity).get(NoteViewModel.class);
         this.fragmentContext = context;
         this.listener = listener;
@@ -50,8 +53,37 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
                 if (noteList != null) {
                     Note note = noteList.get(position);
                     viewModel.postSelectedNote(note);
-                    listener.changeToTextEditor();
                 }
+            }
+
+            @Override
+            public void optionsClicked(final int position, View view) {
+
+                final Note note = notes.getValue().get(position);
+                PopupMenu popup = new PopupMenu(fragmentContext, view);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.note_click_menu);
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.changeTitleItem:
+                                listener.changeNameNote(note);
+                                return true;
+                            case R.id.removeItem:
+                                listener.deleteNote(note);
+                                return true;
+                            case R.id.shareItem:
+                                listener.shareNote(note);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                //displaying the popup
+                popup.show();
             }
         };
         this.notes = viewModel.getNotes();
@@ -88,42 +120,39 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
 
     interface PositionClickedListener {
         void itemClicked(int position);
+        void optionsClicked(int position, View view);
     }
 
-    class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
+    class NoteListViewHolder extends RecyclerView.ViewHolder{
         private TextView title, content;
-        private CardView cardView;
-        private PositionClickedListener listener;
+        private ImageButton button;
 
-        public NoteListViewHolder(@NonNull View itemView, PositionClickedListener listener) {
+        public NoteListViewHolder(@NonNull View itemView, final PositionClickedListener listener) {
             super(itemView);
 
             this.title = itemView.findViewById(R.id.card_title);
             this.content = itemView.findViewById(R.id.card_content);
-            this.cardView = itemView.findViewById(R.id.note);
+            this.button = itemView.findViewById(R.id.imageButton_options);
 
-            itemView.setOnClickListener(this);
-            cardView.setOnCreateContextMenuListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.itemClicked(getAdapterPosition());
+                }
+            });
 
-            this.listener = listener;
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.optionsClicked(getAdapterPosition(),v);
+
+                }
+            });
         }
 
         public void bind(Note note, Context context) {
             title.setText(note.getTitle());
             content.setText(note.getContent());
-        }
-
-        @Override
-        public void onClick(View view) {
-            listener.itemClicked(getAdapterPosition());
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            viewModel.postSelectedNote(notes.getValue().get(getAdapterPosition()));
-            menu.add(this.getAdapterPosition(), 121,0,R.string.remove_adapter_context);
-            menu.add(this.getAdapterPosition(),122,1,R.string.share_adapter_context);
-            menu.add(this.getAdapterPosition(),123,2,R.string.change_adapter_context);
         }
     }
 }
