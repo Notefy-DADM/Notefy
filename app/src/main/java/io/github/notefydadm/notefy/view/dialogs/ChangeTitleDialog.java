@@ -1,11 +1,9 @@
 package io.github.notefydadm.notefy.view.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,12 +12,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.databinding.ChangeTitleDialogBinding;
 import io.github.notefydadm.notefy.model.Note;
-import io.github.notefydadm.notefy.viewModel.NoteViewModel;
 
 public class ChangeTitleDialog extends DialogFragment {
     private ChangeTitleDialogBinding binding;
@@ -33,7 +29,7 @@ public class ChangeTitleDialog extends DialogFragment {
     }
 
     public interface ChangeTitleDialogCallback {
-        void onChangeTittleClick( String tittle);
+        void onChangeTitleClick(String tittle);
         void onCancelClick();
     }
 
@@ -43,11 +39,9 @@ public class ChangeTitleDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-
-
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),R.layout.change_title_dialog,null,false);
         String nameButtonChangeName;
-        if(addNewNote()){
+        if(addNewNote()) {
             nameButtonChangeName = getString(R.string.add_note);
         }else{
             nameButtonChangeName = getString(R.string.change_name);
@@ -60,7 +54,7 @@ public class ChangeTitleDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //  Send the event back to the host
-                        listener.onChangeTittleClick(binding.getTitle());
+                        listener.onChangeTitleClick(binding.getTitle());
                     }
                 })
                 .setNegativeButton(R.string.Ccancel_button_notelist_dialog, new DialogInterface.OnClickListener() {
@@ -79,12 +73,8 @@ public class ChangeTitleDialog extends DialogFragment {
         return inflater.inflate(R.layout.change_title_dialog, container, false);
     }
 
-    private boolean addNewNote (){
-        if(note==null||note.getNoteId()==null||note.getNoteId().isEmpty()){
-            return true;
-        }else{
-            return false;
-        }
+    private boolean addNewNote() {
+        return note == null || note.getNoteId() == null || note.getNoteId().isEmpty();
     }
 
 }

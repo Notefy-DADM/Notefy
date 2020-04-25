@@ -1,13 +1,10 @@
-package io.github.notefydadm.notefy.view;
+package io.github.notefydadm.notefy.view.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,8 +42,9 @@ public class SetNoteNameDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         // Get the layout inflater
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
@@ -63,7 +61,6 @@ public class SetNoteNameDialog extends DialogFragment {
                 .setPositiveButton(nameButtonChangeName, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-
                         callback.onClickSet(editTextName.getEditText().getText().toString());
                     }
                 })

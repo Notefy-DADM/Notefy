@@ -202,9 +202,9 @@ public class NoteListFragment extends Fragment{
         ChangeTitleDialog changeTitleDialog;
         ChangeTitleDialog.ChangeTitleDialogCallback listener = new ChangeTitleDialog.ChangeTitleDialogCallback() {
             @Override
-            public void onChangeTittleClick(String tittle) {
+            public void onChangeTitleClick(String title) {
                 if(note.getNoteId()==null || note.getNoteId().isEmpty()){
-                    noteViewModel.setSelectedNote(new Note(tittle, FirebaseAuth.getInstance().getUid()));
+                    noteViewModel.setSelectedNote(new Note(title, FirebaseAuth.getInstance().getUid()));
 
                 }else{
                     final LoadingDialog loadingDialog = new LoadingDialog();
@@ -223,7 +223,7 @@ public class NoteListFragment extends Fragment{
                         }
                     };
 
-                    note.setTitle(tittle);
+                    note.setTitle(title);
                     DatabaseHandler.addNoteToUser(note,callback);
 
                 }
