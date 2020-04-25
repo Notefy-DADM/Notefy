@@ -38,4 +38,8 @@
     <string name="SFailure">Fallo al guardar</string>
     <string name="SUser_no_exists">El usuario no existe</string>
     <string name="SUser_already_shared">El usuario ya está en la lista</string>
+    <string name="note_name">Nombre de la nota</string>
+    <string name="add_note">Crear nota</string>
+    <string name="cancel">Cancelar</string>
+    <string name="change_name">Cambiar nombre</string>
 </resources>
