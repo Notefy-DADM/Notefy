@@ -9,7 +9,7 @@
         android:layout_height="wrap_content">
 
         <CheckBox
-            android:id="@+id/checkBox_block"
+            android:id="@+id/checkBox_checkBoxBlock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="@={checkBoxBlock.checked}"
@@ -29,7 +29,7 @@
             app:onTextChanged="@{() -> callbacks.onItemModified.onItemModified()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/deleteCheckboxButton"
-            app:layout_constraintStart_toEndOf="@+id/checkBox_block"
+            app:layout_constraintStart_toEndOf="@+id/checkBox_checkBoxBlock"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
