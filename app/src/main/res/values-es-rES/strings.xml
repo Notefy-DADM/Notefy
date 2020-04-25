@@ -23,7 +23,7 @@
     <string name="Dcancel_button_notelist_dialog">Cancelar</string>
     <string name="Stitle_notelist_dialog">Compartir nota con</string>
     <string name="Ssignin_button_notelist_dialog">Registrarse</string>
-    <string name="Sshare_button_notelist_dialog">Compartir</string>
+    <string name="Sshare_button_notelist_dialog">Aceptar</string>
     <string name="Scancel_button_notelist_dialog">Cancelar</string>
     <string name="nav_share">Compartidas conmigo</string>
     <string name="change_adapter_context">Cambiar título</string>
@@ -34,7 +34,8 @@
     <string name="changeTitle_notelist_context">Título de nota cambiado</string>
     <string name="DSuccessful">Nota eliminada</string>
     <string name="DFailure">Fallo al eliminar</string>
-    <string name="SSuccessful">Nota compartida</string>
-    <string name="SFailure">Fallo al compartir</string>
+    <string name="SSuccessful">Cambios guardados</string>
+    <string name="SFailure">Fallo al guardar</string>
     <string name="SUser_no_exists">El usuario no existe</string>
+    <string name="SUser_already_shared">El usuario ya está en la lista</string>
 </resources>

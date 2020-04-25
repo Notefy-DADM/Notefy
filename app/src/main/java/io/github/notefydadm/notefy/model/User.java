@@ -1,20 +1,23 @@
 package io.github.notefydadm.notefy.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class User {
-    private String name;
+    private String userId;
     private String userName;
 
-    public User(String name, String userName) {
-        this.name = name;
+    public User(String userId, String userName) {
+        this.userId = userId;
         this.userName = userName;
     }
 
-    public String getName() {
-        return name;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -23,5 +26,16 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getUserName();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof User && userId.equals(((User) obj).userId);
     }
 }
