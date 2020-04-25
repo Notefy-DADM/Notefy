@@ -34,8 +34,8 @@ public class SingletonDatabase {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             final String userUid = user.getUid();
-            DatabaseHandler.userGetNoteListListener(DatabaseHandler.getNoteListListenerCallback(myNotes), userUid);
-            DatabaseHandler.sharedWithUserGetNoteListListener(DatabaseHandler.getNoteListListenerCallback(sharedWithMeNotes), userUid);
+            DatabaseHandler.userGetNoteListListener(DatabaseHandler.getListListenerCallback(myNotes), userUid);
+            DatabaseHandler.sharedWithUserGetNoteListListener(DatabaseHandler.getListListenerCallback(sharedWithMeNotes), userUid);
         }
     }
 
