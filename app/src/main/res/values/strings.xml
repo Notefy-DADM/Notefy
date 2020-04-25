@@ -1,3 +1,73 @@
 <resources>
+    <!--Manifest-->
     <string name="app_name">Notefy</string>
+    <string name="label_textEditor">Editor</string>
+
+    <!--fragment_note_edit-->
+    <string name="notSelected_noteText">Please, select a note!</string>
+    <string name="hint_text">Type here</string>
+
+    <!--drawer_menu.xml (NavigationDrawer)-->
+    <string name="nav_about">About</string>
+    <string name="nav_share">Shared with me</string>
+    <!--nav_header.xml (NavegationDrawer Header)-->
+
+    <!--TEMPORAL-->
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+
+    <!--MainActivity-->
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
+    <!--AboutActivity-->
+    <string name="text_about">Notefy Mobile App made by</string>
+    <string name="alejandro_about" translatable="false">Gómez Noé, Alejandro \n\nalgono@inf.upv.es</string>
+    <string name="andres_about" translatable="false">Sen Moya, Andrés \n\nansemo@inf.upv.es</string>
+    <string name="marcos_about" translatable="false">Haba Claramunt, Marcos \n\nmarhacla@inf.upv.es</string>
+    <string name="DADM_about" translatable="false">DADM \n\n2019-2020</string>
+
+    <!--Adapter-->
+    <string name="remove_adapter_context">Remove</string>
+    <string name="share_adapter_context">Share</string>
+    <string name="change_adapter_context">Change title</string>
+
+    <!-- Authentication -->
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="loading">Loading...</string>
+    <string name="authentication_failed">Authentication failed</string>
+    <string name="app_logo_description">App logo</string>
+    <string name="notes">Notes</string>
+    <string name="add_text">Add</string>
+    <string name="note_name">Note name</string>
+    <string name="add_note">Add note</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_name">Change name</string>
+
+    <!--Context Menu-->
+        <string name="changeTitle_notelist_context">Note title changed</string>
+        <!--Delete dialog-->
+        <string name="Dmessage_notelist_dialog">Are you sure you want to delete it?</string>
+        <string name="Ddelete_button_notelist_dialog">Delete</string>
+        <string name="Dcancel_button_notelist_dialog">Cancel</string>
+        <string name="DSuccessful">Note deleted</string>
+        <string name="DFailure">Failed to delete</string>
+        <!--Share dialog-->
+        <string name="Stitle_notelist_dialog">Share note with</string>
+        <string name="Ssignin_button_notelist_dialog">Sign in</string>
+        <string name="Sshare_button_notelist_dialog">OK</string>
+        <string name="Scancel_button_notelist_dialog">Cancel</string>
+        <string name="SSuccessful">Changes saved</string>
+        <string name="SFailure">Saving failed</string>
+        <string name="SUser_no_exists">User does not exist</string>
+        <string name="SUser_already_shared">The user is already in the list</string>
+        <!--Change dialog-->
+        <string name="Chint_notelist_dialog">New title</string>
+        <string name="Ctitle_notelist_dialog">Title</string>
+        <string name="Cchange_notelist_dialog">Save</string>
+        <string name="Ccancel_button_notelist_dialog">Cancel</string>
+
+
 </resources>

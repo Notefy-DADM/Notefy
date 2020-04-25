@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="layoutManager" type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
+        <variable name="adapter" type="io.github.notefydadm.notefy.view.fragments.noteBlocks.NoteBlocksListAdapter" />
+        <variable name="addNewTextBlock" type="android.view.View.OnClickListener" />
+        <variable name="addNewCheckBoxBlock" type="android.view.View.OnClickListener" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewBlocks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="@{layoutManager}"
+            app:adapter="@{adapter}"
+            app:hasFixedSize="@{true}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/multiple_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            fab:fab_labelStyle="@style/fab_labels_style"
+            fab:fab_addButtonColorNormal="@android:color/white"
+            fab:fab_addButtonColorPressed="@android:color/darker_gray"
+            fab:fab_addButtonPlusIconColor="@android:color/black">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/buttonAddText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{addNewTextBlock}"
+                fab:fab_colorNormal="@android:color/white"
+                fab:fab_colorPressed="@android:color/darker_gray"
+                fab:fab_icon="@drawable/icon_text_fields"
+                fab:fab_size="mini"
+                fab:fab_title="Text" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/buttonAddCheckbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{addNewCheckBoxBlock}"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@android:color/white"
+                fab:fab_colorPressed="@android:color/darker_gray"
+                fab:fab_icon="@drawable/icon_check_box"
+                fab:fab_title="Checkbox" />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

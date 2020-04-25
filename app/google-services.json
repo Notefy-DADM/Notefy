@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "36744424003",
+    "firebase_url": "https://dadm-notefy.firebaseio.com",
+    "project_id": "dadm-notefy",
+    "storage_bucket": "dadm-notefy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36744424003:android:50403e78e04f72c2c542f6",
+        "android_client_info": {
+          "package_name": "io.github.notefydadm.notefy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36744424003-agoe05le6i3pa6in7f7jcds4leh8tdj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd-wSqqLD9D_3jxiyY6GNxjigpIvenYqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36744424003-agoe05le6i3pa6in7f7jcds4leh8tdj4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

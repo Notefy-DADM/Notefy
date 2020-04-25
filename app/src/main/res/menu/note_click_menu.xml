@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+        <item
+            android:id="@+id/removeItem"
+            android:title="@string/remove_adapter_context" />
+        <item
+            android:id="@+id/shareItem"
+            android:title="@string/share_adapter_context" />
+        <item android:id="@+id/changeTitleItem"
+            android:title="@string/change_adapter_context" />
+
+</menu>
