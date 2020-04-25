@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView.Adapter;
 import java.util.List;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.databinding.CardListRowBinding;
 import io.github.notefydadm.notefy.model.Note;
 import io.github.notefydadm.notefy.view.activities.MainActivity;
 import io.github.notefydadm.notefy.viewModel.NoteViewModel;
@@ -98,9 +99,9 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
     @NonNull
     @Override
     public NoteListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_list_row, parent, false);
-        return new NoteListViewHolder(v, positionListener);
+        CardListRowBinding binding =
+                CardListRowBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new NoteListViewHolder(binding, positionListener);
     }
 
     @Override
@@ -123,36 +124,31 @@ public class NoteListAdapter extends Adapter<NoteListAdapter.NoteListViewHolder>
         void optionsClicked(int position, View view);
     }
 
-    class NoteListViewHolder extends RecyclerView.ViewHolder{
-        private TextView title, content;
-        private ImageButton button;
+    static class NoteListViewHolder extends RecyclerView.ViewHolder {
+        private CardListRowBinding binding;
 
-        public NoteListViewHolder(@NonNull View itemView, final PositionClickedListener listener) {
-            super(itemView);
+        NoteListViewHolder(@NonNull CardListRowBinding itemBinding, final PositionClickedListener listener) {
+            super(itemBinding.getRoot());
 
-            this.title = itemView.findViewById(R.id.card_title);
-            this.content = itemView.findViewById(R.id.card_content);
-            this.button = itemView.findViewById(R.id.imageButton_options);
+            this.binding = itemBinding;
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            binding.setOnClick(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.itemClicked(getAdapterPosition());
                 }
             });
 
-            button.setOnClickListener(new View.OnClickListener() {
+            binding.setOnOptionsClick(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.optionsClicked(getAdapterPosition(),v);
-
                 }
             });
         }
 
-        public void bind(Note note, Context context) {
-            title.setText(note.getTitle());
-            content.setText(note.getContent());
+        void bind(Note note, Context context) {
+            binding.setNote(note);
         }
     }
 }

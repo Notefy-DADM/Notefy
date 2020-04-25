@@ -6,10 +6,16 @@ import androidx.annotation.Nullable;
 public class User {
     private String userId;
     private String userName;
+    private String email;
 
     public User(String userId, String userName) {
         this.userId = userId;
         this.userName = userName;
+    }
+
+    public User(String userId, String userName, String email) {
+        this(userId, userName);
+        this.email = email;
     }
 
     public String getUserId() {
@@ -26,6 +32,14 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @NonNull

@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,10 +22,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.github.notefydadm.notefy.R;
+import io.github.notefydadm.notefy.database.DatabaseHandler;
 import io.github.notefydadm.notefy.database.SplashScreenActivity;
+import io.github.notefydadm.notefy.databinding.NavHeaderBinding;
 import io.github.notefydadm.notefy.model.Note;
+import io.github.notefydadm.notefy.model.User;
 import io.github.notefydadm.notefy.view.fragments.AboutFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteFragment;
 import io.github.notefydadm.notefy.view.fragments.NoteListFragment;
@@ -143,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    private void setToolbarDrawer(){
+    private void setToolbarDrawer() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -151,14 +156,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View headerView = navigationView.getHeaderView(0);
-        final ImageButton logOutButton = headerView.findViewById(R.id.buttonLogOut);
-        logOutButton.setOnClickListener(new View.OnClickListener() {
+        NavHeaderBinding headerBinding = NavHeaderBinding.bind(navigationView.getHeaderView(0));
+        headerBinding.setOnLogout(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logOut();
             }
         });
+
+        User user = DatabaseHandler.getCurrentUser();
+        if (user != null) {
+            headerBinding.setUser(user);
+        }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);

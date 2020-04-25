@@ -11,6 +11,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -229,6 +231,14 @@ public class DatabaseHandler {
                     }
                 }
             });
+    }
+
+    @Nullable
+    public static User getCurrentUser() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        return firebaseUser == null
+            ? null
+            : new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail());
     }
 
     public static void getUsersFromNames(final List<String> userNames, final Consumer<List<User>> callback) {
