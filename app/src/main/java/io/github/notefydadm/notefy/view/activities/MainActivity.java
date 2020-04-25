@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.database.SplashScreenActivity;
@@ -159,6 +161,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 logOut();
             }
         });
+
+        TextView textViewUserName = headerView.findViewById(R.id.textView_userName);
+        TextView textViewUserMail = headerView.findViewById(R.id.textView_userMail);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        textViewUserName.setText(user.getDisplayName());
+        textViewUserMail.setText(user.getEmail());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);
