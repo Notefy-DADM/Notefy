@@ -13,17 +13,17 @@
             android:id="@+id/editTextBlock"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/hint_text"
+            android:inputType="textMultiLine"
             android:singleLine="false"
             android:text="@={textBlock.text}"
-            app:onTextChanged="@{() -> callbacks.onItemModified.onItemModified()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/deleteTextButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:autofillHints=""
-            android:inputType="text" />
+            app:onTextChanged="@{() -> callbacks.onItemModified.onItemModified()}" />
 
         <ImageButton
             android:id="@+id/deleteTextButton"
