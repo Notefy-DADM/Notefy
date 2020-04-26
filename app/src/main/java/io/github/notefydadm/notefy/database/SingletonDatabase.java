@@ -30,6 +30,10 @@ public class SingletonDatabase {
         return instance;
     }
 
+    public static void destroyInstance() {
+        instance = null;
+    }
+
     public void init() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {

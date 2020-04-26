@@ -54,7 +54,6 @@ public class NoteViewModel extends ViewModel {
     }
 
     public void loadNotes() {
-        // TODO: Do an asynchronous operation to fetch notes from database
         if (databaseNotes != null) {
             databaseNotes.removeObserver(databaseNotesObserver);
         }

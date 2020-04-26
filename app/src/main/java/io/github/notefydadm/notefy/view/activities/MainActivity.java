@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.database.DatabaseHandler;
+import io.github.notefydadm.notefy.database.SingletonDatabase;
 import io.github.notefydadm.notefy.database.SplashScreenActivity;
 import io.github.notefydadm.notefy.databinding.NavHeaderBinding;
 import io.github.notefydadm.notefy.model.Note;
@@ -175,9 +176,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
+        SingletonDatabase.destroyInstance();
+
         Intent intent = new Intent(this, SplashScreenActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+
         MainActivity.this.finish();
     }
 
