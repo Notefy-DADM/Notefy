@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -76,7 +77,11 @@ public class NoteFragment extends Fragment {
         noteViewModel = new ViewModelProvider(requireActivity()).get(NoteViewModel.class);
 
         final Note note = noteViewModel.getSelectedNote().getValue();
-        if (note == null) throw new IllegalStateException("A note needs to be selected");
+        if (note == null) {
+            System.out.println("A NoteFragment with null selected note was being created. Removing from view");
+            requireFragmentManager().beginTransaction().remove(this).commit();
+            return null;
+        }
 
         FragmentNoteBinding binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_note, container,false);
@@ -85,6 +90,15 @@ public class NoteFragment extends Fragment {
             @Override
             public void onItemModified() {
                 showButtonSave();
+            }
+        });
+
+        noteViewModel.getSelectedNote().observe(this, new Observer<Note>() {
+            @Override
+            public void onChanged(Note note) {
+                if (note != null) {
+                    adapter.setBlocks(getCopyOfBlocks(note.getBlocks()));
+                }
             }
         });
 

@@ -64,14 +64,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         noteViewModel.getSelectedNote().observe(this, new Observer<Note>() {
             @Override
             public void onChanged(Note note) {
-                if(note!=null){
+                if (note != null) {
                     if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
-
                     } else {
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentPortraitContainer, noteFragment).addToBackStack(null).commit();
-
                     }
+                } else {
+                    getSupportFragmentManager().beginTransaction().remove(noteFragment).commit();
                 }
             }
         });
@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //  landscape
             //  first note as default selected note
             noteListFragment.setArguments(getIntent().getExtras());
-            //noteFragment.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).commit();
-            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
         } else {
             //  portrait
             //  If the activity was started with special instructions from an
@@ -202,14 +200,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void openNotesFragment(){
+    private void openNotesFragment() {
+        noteViewModel.setSelectedNote(null);
+
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //  landscape
-            //  first note as default selected note
             noteListFragment.setArguments(getIntent().getExtras());
-            //noteFragment.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteList, noteListFragment).commit();
-            //getSupportFragmentManager().beginTransaction().replace(R.id.fragNoteText, noteFragment).addToBackStack(null).commit();
         } else {
             //  portrait
             //  If the activity was started with special instructions from an

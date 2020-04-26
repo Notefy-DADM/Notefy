@@ -93,6 +93,11 @@ public class NoteBlocksListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return blockList;
     }
 
+    public void setBlocks(ArrayList<Block> blocks) {
+        blockList = blocks;
+        notifyDataSetChanged();
+    }
+
     public void deleteBlockAtPosition(int position) {
         blockList.remove(position);
         notifyDataSetChanged();
