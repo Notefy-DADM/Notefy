@@ -4,6 +4,7 @@
     <data>
         <variable name="layoutManager" type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
         <variable name="adapter" type="io.github.notefydadm.notefy.view.fragments.noteBlocks.NoteBlocksListAdapter" />
+        <variable name="itemTouchHelper" type="androidx.recyclerview.widget.ItemTouchHelper" />
         <variable name="addNewTextBlock" type="android.view.View.OnClickListener" />
         <variable name="addNewCheckBoxBlock" type="android.view.View.OnClickListener" />
     </data>
@@ -18,6 +19,7 @@
             android:layout_height="match_parent"
             app:layoutManager="@{layoutManager}"
             app:adapter="@{adapter}"
+            app:itemTouchHelper="@{itemTouchHelper}"
             app:hasFixedSize="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

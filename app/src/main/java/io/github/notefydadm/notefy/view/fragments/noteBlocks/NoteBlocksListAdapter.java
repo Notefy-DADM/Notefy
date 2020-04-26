@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import io.github.notefydadm.notefy.R;
 import io.github.notefydadm.notefy.databinding.NoteCheckboxBlockBinding;
@@ -100,6 +101,13 @@ public class NoteBlocksListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void addBlock(Block block) {
         blockList.add(block);
         notifyDataSetChanged();
+    }
+
+    public void swapBlocks(int positionSource, int positionTarget) {
+        Collections.swap(blockList, positionSource, positionTarget);
+        notifyItemMoved(positionSource, positionTarget);
+
+        itemModifiedCallback.onItemModified();
     }
 
     @FunctionalInterface

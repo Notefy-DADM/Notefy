@@ -29,9 +29,22 @@
             android:text="@={checkBoxBlock.text}"
             app:onTextChanged="@{() -> callbacks.onItemModified.onItemModified()}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/deleteCheckboxButton"
+            app:layout_constraintEnd_toStartOf="@+id/drag_drop_checkboxBlock"
             app:layout_constraintStart_toEndOf="@+id/checkBox_checkBoxBlock"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/drag_drop_checkboxBlock"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:rotation="90"
+            android:paddingHorizontal="8dp"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/deleteCheckboxButton"
+            app:layout_constraintStart_toEndOf="@+id/editText_checkboxBlock"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_more" />
 
         <ImageButton
             android:id="@+id/deleteCheckboxButton"

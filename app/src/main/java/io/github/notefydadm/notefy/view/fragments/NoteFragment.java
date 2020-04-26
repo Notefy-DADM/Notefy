@@ -12,6 +12,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -89,6 +90,22 @@ public class NoteFragment extends Fragment {
 
         binding.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
         binding.setAdapter(adapter);
+        binding.setItemTouchHelper(new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int positionViewHolder = viewHolder.getAdapterPosition();
+                int positionTarget = target.getAdapterPosition();
+
+                adapter.swapBlocks(positionViewHolder, positionTarget);
+
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        }));
 
         initFab(binding);
 
@@ -98,6 +115,11 @@ public class NoteFragment extends Fragment {
     @BindingAdapter("hasFixedSize")
     public static void setHasFixedSize(RecyclerView recyclerView, boolean hasFixedSize) {
         recyclerView.setHasFixedSize(hasFixedSize);
+    }
+
+    @BindingAdapter("itemTouchHelper")
+    public static void setItemTouchHelper(RecyclerView recyclerView, ItemTouchHelper helper) {
+        helper.attachToRecyclerView(recyclerView);
     }
 
     private void initFab(FragmentNoteBinding binding) {
