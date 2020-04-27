@@ -126,6 +126,12 @@ public class NoteFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onDetach() {
+        hideButtonSave();
+        super.onDetach();
+    }
+
     @BindingAdapter("hasFixedSize")
     public static void setHasFixedSize(RecyclerView recyclerView, boolean hasFixedSize) {
         recyclerView.setHasFixedSize(hasFixedSize);
