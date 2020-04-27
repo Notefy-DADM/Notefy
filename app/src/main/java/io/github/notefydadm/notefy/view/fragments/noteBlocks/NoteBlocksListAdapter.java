@@ -37,13 +37,11 @@ public class NoteBlocksListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public int getItemViewType(int position) {
         Block block = blockList.get(position);
-
         if (block instanceof CheckBoxBlock) {
             return NoteBlocksViewTypes.CHECK_BOX_BLOCK;
         } else if (block instanceof TextBlock) {
             return NoteBlocksViewTypes.TEXT_BLOCK;
         }
-
         return super.getItemViewType(position);
     }
 
