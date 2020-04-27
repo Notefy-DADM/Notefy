@@ -15,8 +15,9 @@
             android:layout_height="wrap_content"
             android:buttonTint="@color/colorAccent"
             android:onClick="@{() -> callbacks.onItemModified.onItemModified()}"
+            android:checked="@={checkBoxBlock.checked}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/drag_drop_checkboxBlock"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
@@ -24,27 +25,25 @@
             android:layout_width="0dp"
             android:layout_height="43dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="@string/hint_text"
+            android:inputType="textPersonName"
             android:text="@={checkBoxBlock.text}"
-            app:onTextChanged="@{() -> callbacks.onItemModified.onItemModified()}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/drag_drop_checkboxBlock"
+            app:layout_constraintEnd_toStartOf="@+id/deleteCheckboxButton"
             app:layout_constraintStart_toEndOf="@+id/checkBox_checkBoxBlock"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:onTextChanged="@{() -> callbacks.onItemModified.onItemModified()}" />
 
         <ImageView
             android:id="@+id/drag_drop_checkboxBlock"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:rotation="90"
-            android:paddingHorizontal="8dp"
             android:background="?attr/selectableItemBackground"
+            android:paddingHorizontal="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/deleteCheckboxButton"
-            app:layout_constraintStart_toEndOf="@+id/editText_checkboxBlock"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_more" />
+            app:srcCompat="@drawable/icon_drag" />
 
         <ImageButton
             android:id="@+id/deleteCheckboxButton"
